@@ -147,9 +147,11 @@ else
 	$total_row = mysql_num_rows($result);
 }
 
-echo "Page Index : ".$page = $_REQUEST['page'];
-echo "<br>";
+$page = $_REQUEST['page'];
+
 if ($page < 1) $page = 1;
+echo "Page Index : ".$page;
+echo "<br>";
 echo "Number of Pages : ".$numberOfPages = numberofpages();
 echo "<br>";
 echo "Result Per Page : ".$resultsPerPage = resultperpage();
