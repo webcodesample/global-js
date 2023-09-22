@@ -252,6 +252,7 @@ if($totalPages > $numberOfPages)
         <option value="All">All</option>
         <?php 
         $select_search1 = "select cust_id  from goods_details  group BY cust_id ";
+        //$select_search1 = "select cust_id  from customer where(type = 'customer')";
     $search_result1 = mysql_query($select_search1) or die('error in query select gst_subdivision query '.mysql_error().$select_search1);
     $select_total1 = mysql_num_rows($search_result1);
         while($search_data1 = mysql_fetch_array($search_result1))

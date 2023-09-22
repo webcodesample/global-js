@@ -1,6 +1,9 @@
 <?php session_start();
 
 include_once("../connection.php");
+
+print_r($_REQUEST);
+
 if($_REQUEST['msg'] != "")
 {
 	$msg = $_REQUEST['msg'];
@@ -16,6 +19,23 @@ if($_REQUEST['error_msg'] != "")
 else
 {
 	$error_msg = "";
+}
+
+if(isset($_POST['trans_id_combind']) && $_POST['trans_id_combind'] != "")
+{
+
+    $trans_id = $_POST['trans_id_combind'];
+    $payment_id = $_POST['payment_id'];
+    $del_query = "delete from payment_plan where trans_id = '".$trans_id."'";
+    $del_result = mysql_query($del_query) or die("error in Transaction delete query ".mysql_error());
+    
+    $del_query = "delete from invoice_due_info where pp_linkid_1 = '".$payment_id."'";
+    $del_result = mysql_query($del_query) or die("error in Transaction delete query ".mysql_error());
+    
+    $del_query = "delete from gst_due_info where pp_linkid_1 = '".$payment_id."'";
+    $del_result = mysql_query($del_query) or die("error in Transaction delete query ".mysql_error());
+    
+    $msg = "Transaction Deleted Successfully.";
 }
 
 if(isset($_POST['trans_id']) && $_POST['trans_id'] != "")
@@ -763,16 +783,25 @@ else
                         //$bal_1=$select_data3_1['total_credit']-$select_data3_1['total_debit'];
                         ?>
 						<td class="data noExl" nowrap="nowrap">
+
+                        <?php //code by amit
+                        if($select_data['trans_type_name']=="combind_payment")
+                        { ?>
+                        <?php if($select_data['payment_id'] != "" && $select_data['payment_id'] != 0) { ?>
+                        &nbsp;<a href="javascript:account_transaction_combind(<?php echo $select_data['trans_id'] ?>,<?php echo $select_data['payment_id'] ?>);"><img src="mos-css/img/delete.png" title="Delete" ></a>
+                        <?php    
+                        }} else {?>
 						
 						<?php if($select_data['trans_id'] != "" && $select_data['trans_id'] != 0) { ?>
 						&nbsp;<a href="javascript:account_transaction(<?php echo $select_data['trans_id'] ?>);"><img src="mos-css/img/delete.png" title="Delete" ></a>
-						<?php } ?>
+						<?php } }?>
 						&nbsp;<a href="javascript:void(0);" title="Attach File" onClick="return attach_file_function('<?php echo $select_data['payment_id']; ?>');" ><img src="images/images.jpg" width="20" ></a>
                         <?php
                         if($select_data['trans_type_name']=="make_payment")
                         {  ?>
                         <a href="edit_make_payment.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "supplier-ledger"; ?>"><img src="mos-css/img/edit.png" title="Edit"></a>
                  <?php  } ?>
+
                  <?php
                         if($select_data['trans_type_name']=="receive_goods")
                         {  ?>
@@ -871,6 +900,11 @@ else
 		
 		<input type="hidden" name="trans_id" id="trans_id" value="" >
 		</form>
+
+<form name="trans_form_combind" id="trans_form_combind" action="" method="post" >        
+        <input type="hidden" name="trans_id_combind" id="trans_id_combind" value="" >
+        <input type="hidden" name="payment_id" id="payment_id" value="" >
+</form>
         
 <form name="trans_form_1" id="trans_form_1" action="" method="post" >
         
@@ -984,6 +1018,18 @@ function account_transaction(trans_id)
 		return true;
 	}
 }
+
+function account_transaction_combind(trans_id,payment_id)
+{
+    if(confirm("Are you sure want to delete?!!!!!......"))
+    {
+        $("#trans_id_combind").val(trans_id);
+        $("#payment_id").val(payment_id);
+        $("#trans_form_combind").submit();
+        return true;
+    }
+}
+
 function account_transaction_1(trans_id_1)
 {
     if(confirm("Are you sure want to delete?!!!!!......"))

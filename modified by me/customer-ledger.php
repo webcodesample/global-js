@@ -1,5 +1,8 @@
 <?php session_start();
 include_once("../connection.php");
+
+//print_r($_REQUEST);
+
 if($_REQUEST['msg'] != "")
 {
     $msg = $_REQUEST['msg'];

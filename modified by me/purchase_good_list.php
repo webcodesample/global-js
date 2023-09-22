@@ -205,7 +205,6 @@ if($totalPages > $numberOfPages)
                     </td>
                     <td width="280">
                     <input type="text"  name="to_date" id="to_date" value="<?php echo $_REQUEST['to_date']; ?>" style="width:250px; height: 25px;" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('to_date')" style="cursor:pointer"/>
-                  <!--  <input type="text" name="to_date" id="to_date" value="<?php echo $_REQUEST['to_date']; ?>"  readonly="" style="width:120px;" >-->
                  </td>
                 </tr>
                 <tr>
@@ -215,13 +214,12 @@ if($totalPages > $numberOfPages)
                         <select name="cust_id" id="cust_id" style="width:250px; height: 25px;">
         <option value="All">All</option>
         <?php 
-        $select_search1 = "select cust_id  from payment_plan where trans_type_name in('receive_goods','inst_receive_goods') and cust_id>0  group BY cust_id ";
+        //$select_search1 = "select cust_id  from payment_plan where trans_type_name in('receive_goods','inst_receive_goods') and cust_id>0  group BY cust_id ";
+    $select_search1 = "select cust_id  from customer where(type = 'supplier')";
     $search_result1 = mysql_query($select_search1) or die('error in query select gst_subdivision query '.mysql_error().$select_search1);
     $select_total1 = mysql_num_rows($search_result1);
         while($search_data1 = mysql_fetch_array($search_result1))
                 { 
-                    // $project1_nm = get_field_value("name","project","id",$row_series['project_id']); 
-                    //$subdivision1_nm = get_field_value("name","subdivision","id",$row_series['subdivision']);  
                     $customer_nm = get_field_value("full_name","customer","cust_id",$search_data1['cust_id']);  
                     ?>
                 <option  value="<?php echo $search_data1['cust_id']; ?>"  <?php if($_REQUEST['cust_id']==$search_data1['cust_id']){ echo "selected='selected'"; } ?>><?php echo $customer_nm; ?></option>
