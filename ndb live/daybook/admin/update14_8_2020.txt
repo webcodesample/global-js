@@ -1,0 +1,46 @@
+
+ALTER TABLE `payment_plan` ADD `gst_subdivision` INT( 11 ) NOT NULL AFTER `subdivision` ;
+ALTER TABLE `payment_plan` ADD `gst_amount` INT NOT NULL AFTER `credit` ;
+ALTER TABLE `payment_plan` CHANGE `gst_amount` `gst_amount` DECIMAL( 11 ) NOT NULL ;
+ALTER TABLE `payment_plan` CHANGE `gst_amount` `gst_amount` DECIMAL( 15, 2 ) NOT NULL ;
+ALTER TABLE `payment_plan` ADD `goods_detail_id` TEXT NOT NULL AFTER `link3_id` ;
+ALTER TABLE `payment_plan` ADD `invoice_id` INT( 11 ) NOT NULL AFTER `project_id` ;
+ALTER TABLE `payment_plan` ADD `multi_project_id` TEXT NOT NULL AFTER `link3_id` ;
+
+CREATE TABLE IF NOT EXISTS `goods_details` (
+  `id` int(50) NOT NULL AUTO_INCREMENT,
+  `invoice_id` int(11) NOT NULL,
+  `trans_id` int(11) NOT NULL,
+  `cust_id` int(11) NOT NULL,
+  `project_id` int(11) NOT NULL,
+  `subdivision` int(11) NOT NULL,
+  `gst_subdivision` int(11) NOT NULL,
+  `link1_id` int(11) NOT NULL,
+  `link2_id` int(11) NOT NULL,
+  `link3_id` int(11) NOT NULL,
+  `link4_id` int(11) NOT NULL,
+  `description` text NOT NULL,
+  `qty` int(11) NOT NULL,
+  `unit_price` int(11) NOT NULL,
+  `gst_per` int(11) NOT NULL,
+  `gst_amount` decimal(15,2) NOT NULL,
+  `sub_total` int(11) NOT NULL,
+  `trans_type` int(11) NOT NULL,
+  `trans_type_name` varchar(50) NOT NULL,
+  `payment_date` int(11) NOT NULL,
+  `create_date` datetime NOT NULL,
+  `update_date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS `gst_subdivision` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` text NOT NULL,
+  `type` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+

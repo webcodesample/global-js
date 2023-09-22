@@ -1,0 +1,2 @@
+INSERT INTO `onlinedaybook`.`menu` (`id`, `parent_id`, `name`) VALUES (NULL, '40', 'Customer Outstanding Report'), (NULL, '40', 'Supplier Outstanding Report');
+INSERT INTO `onlinedaybook`.`menu` (`id`, `parent_id`, `name`) VALUES (NULL, '19', 'Receive Good List');

@@ -1,0 +1,53 @@
+
+CREATE TABLE IF NOT EXISTS `loan_advance_payment` (
+  `id` int(50) NOT NULL AUTO_INCREMENT,
+  `loan_id` int(11) DEFAULT NULL,
+  `bank_id` int(50) DEFAULT NULL,
+  `client_id` int(50) DEFAULT NULL,
+  `invoice_id` int(11) NOT NULL,
+  `debit` decimal(15,2) DEFAULT NULL,
+  `credit` decimal(15,2) DEFAULT NULL,
+  `interest_per` decimal(15,2) NOT NULL,
+  `description` text,
+  `payment_flag` int(11) NOT NULL DEFAULT '0',
+  `payment_date` int(11) DEFAULT NULL,
+  `payment_method` varchar(25) NOT NULL,
+  `payment_checkno` varchar(100) NOT NULL,
+  `invoice_issuer_id` int(11) NOT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime NOT NULL,
+  `trans_type` int(10) NOT NULL,
+  `trans_type_name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
+
+CREATE TABLE IF NOT EXISTS `loan_attach_file` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `attach_id` int(11) NOT NULL,
+  `link_id` int(11) NOT NULL,
+  `file_name` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
+
+
+CREATE TABLE IF NOT EXISTS `loan_advance` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `type_id` int(11) NOT NULL,
+  `mobile` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `current_address` text NOT NULL,
+  `company_name` varchar(50) NOT NULL,
+  `opening_balance` decimal(15,2) NOT NULL,
+  `opening_balance_date` int(11) NOT NULL,
+  `another_contact_name` varchar(50) NOT NULL,
+  `another_mobile` varchar(255) NOT NULL,
+  `create_date` datetime NOT NULL,
+  `update_date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;

@@ -1,0 +1,3 @@
+
+ALTER TABLE `customer` ADD `opening_balance` DECIMAL( 15, 2 ) NOT NULL AFTER `type` ,
+ADD `opening_balance_date` INT( 11 ) NOT NULL AFTER `opening_balance` ;
