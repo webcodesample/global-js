@@ -21,6 +21,387 @@ else
 	$error_msg = "";
 }
 
+
+//code by smit 25092023
+
+/*  --------      gst DUE WORK        -----------------------  */
+    
+if(mysql_real_escape_string(trim($_REQUEST['file_button_gst'])) == "Submit")
+{
+    $tds_cerf_1=mysql_real_escape_string(trim($_REQUEST['gst_cerf']));
+    $tds_due_date_1=mysql_real_escape_string(trim($_REQUEST['gst_due_date']));
+    $tds_due_amount_1=mysql_real_escape_string(trim($_REQUEST['gst_due_amount']));
+    $tds_due_des_1=mysql_real_escape_string(trim($_REQUEST['gst_due_des']));
+    $tds_due_flag_value_1=mysql_real_escape_string(trim($_REQUEST['gst_due_flag_value']));
+    $due_trans_id_1=mysql_real_escape_string(trim($_REQUEST['gst_trans_id']));
+    $due_payment_id_1=mysql_real_escape_string(trim($_REQUEST['gst_payment_id']));
+    $due_invoice_id_1=mysql_real_escape_string(trim($_REQUEST['gst_invoice_id']));
+    $due_amount_pay_1=mysql_real_escape_string(trim($_REQUEST['gst_amount_pay']));
+    $tds_due_date_1_n=strtotime($tds_due_date_1);
+    $clearall_due_flag=mysql_real_escape_string(trim($_REQUEST['clearall_due_flag']));
+    $gst_due_amount_new_total=mysql_real_escape_string(trim($_REQUEST['gst_due_amount_new_total']));
+    $clear_gst_due=mysql_real_escape_string(trim($_REQUEST['clear_gst_due']));
+    $clear_gstdue_desc=mysql_real_escape_string(trim($_REQUEST['clear_gstdue_desc']));
+
+    $tds_due_des_1_extra = "GST Paid for invoice : ".$due_invoice_id_1.""; 
+          $clear_gst_due_des_1_extra = "GST Clear Amount for invoice : ".$due_invoice_id_1."";  
+    
+            $pay_from_arr = explode(" -",$_REQUEST['gst_pay_form']);
+            $pay_bank_id = get_field_value("id","bank","bank_account_name",$pay_from_arr[0]);
+    
+                  $sql_pay 	= "select * from `payment_plan` where id ='".$due_payment_id_1."'";
+                  $query_pay_1 	= mysql_query($sql_pay);
+                  $row_pay = mysql_fetch_array($query_pay_1);
+                  $trans_id=$row_pay['trans_id'];
+                  $cust_id = $row_pay['cust_id'];
+                  $invoice_idnew = $row_pay['invoice_id'];
+                  $payment_flag = $row_pay['payment_flag'];
+                  $subdivision = $row_pay['subdivision'];
+                  $gst_subdivision_n = $row_pay['gst_subdivision'];
+                  $tds_subdivision_n = $row_pay['tds_subdivision'];
+                  $gst_amount_tot = $row_pay['gst_amount'];
+                  $tds_amount_tot = $row_pay['tds_amount'];
+                  $invoice_pay_amount = $row_pay['invoice_pay_amount'];
+                  $invoice_issuer_id = $row_pay['invoice_issuer_id'];
+                  $pay_method = $row_pay['payment_method'];
+                  $pay_checkno = $row_pay['payment_checkno'];
+                  $trans_type_pay_gst = 51;
+                  $trans_type_name_pay_gst= "gst_receive_payment" ;
+                  $hsn_code_gstpay= $row_pay['hsn_code'];
+                  $multi_invoice_flag_gstpay= $row_pay['multi_invoice_flag'];
+                  $multi_invoice_detail_gstpay= $row_pay['multi_invoice_detail'];
+                  $multi_invoice_id_gstpay= $row_pay['multi_invoice_id'];
+                  
+                  $invoice_pay_id_gstpay= $row_pay['invoice_pay_id'];
+                  $invoice_due_pay_id_gstpay= $row_pay['invoice_due_pay_id'];
+
+                  $gst_id_gstpay= $row_pay['gst_id'];
+                  $gst_due_id_gstpay =$row_pay['gst_due_id'];
+
+                  $tds_id_gstpay = $row_pay['tds_id'];
+                  $tds_due_id_gstpay = $row_pay['tds_due_id'];
+                  
+                  $tds_flag_gstpay = $row_pay['tds_flag'];
+                  $gst_flag_gstpay = $row_pay['gst_flag'];
+                  $invoice_flag_gstpay = $row_pay['invoice_flag'];
+                  $clear_invoice_flag_gstpay = $row_pay['clear_invoice_flag'];
+                  $clear_gst_flag_gstpay = $row_pay['clear_gst_flag'];
+                  $clear_tds_flag_gstpay = $row_pay['clear_tds_flag'];
+
+                if($clearall_due_flag=="2")
+                {
+                    $query2_pay_gst="insert into payment_plan set userid_create = '".$_SESSION['userId']."', trans_id = '".$trans_id."', cust_id = '".$cust_id."',invoice_id = '".$due_invoice_id_1."', credit = '".$due_amount_pay_1."', description = '(".$clear_gst_due_des_1_extra.") ".$clear_gstdue_desc."', on_project = '".$project_id."', payment_flag = '".$payment_flag."',payment_date = '".strtotime($_REQUEST['clear_pay_payment_date_gst'])."' ,payment_method = '".$pay_method."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_due_pay_id = '".$invoice_due_pay_id_gstpay."', payment_checkno = '".$pay_checkno."',link3_id = '".$due_payment_id_1."',trans_type = '".$trans_type_pay_gst."', trans_type_name = '".$trans_type_name_pay_gst."',hsn_code= '".$hsn_code_gstpay."',multi_invoice_flag= '".$multi_invoice_flag_gstpay."',multi_invoice_detail= '".$multi_invoice_detail_gstpay."',multi_invoice_id= '".$multi_invoice_id_gstpay."',invoice_pay_id= '".$invoice_pay_id_gstpay."',gst_id= '".$gst_id_gstpay."',tds_id = '".$tds_id_gstpay."',gst_due_id = '".$gst_due_id_gstpay."',tds_due_id = '".$tds_due_id_gstpay."',tds_flag = '".$tds_flag_gstpay."',gst_flag = '".$gst_flag_gstpay."',invoice_flag = '".$invoice_flag_gstpay."',clear_invoice_flag = '".$clear_invoice_flag_gstpay."',clear_gst_flag = '".$clear_gst_flag_gstpay."',clear_tds_flag = '".$clear_tds_flag_gstpay."' ,create_date = '".getTime()."'";
+                    $result2_pay_gst= mysql_query($query2_pay_gst) or die('error in query '.mysql_error().$query2_pay_gst);
+                    $link_id_2_pay_gst_clear = mysql_insert_id();  
+        
+        
+                    $query3_clear="insert into gst_due_info set userid_create = '".$_SESSION['userId']."',  pp_linkid_1 = '".$link_id_2_pay_gst_clear."',invoice_id = '".$due_invoice_id_1."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',	due_date = '".strtotime($_REQUEST['clear_pay_payment_date_gst'])."',description = '(".$clear_gst_due_des_1_extra.") ".$clear_gstdue_desc."', received_amount = '".$due_amount_pay_1."',clear_due_flag=1 ,create_date = '".getTime()."'";
+                    $result3_clear= mysql_query($query3_clear) or die('error in query '.mysql_error().$query3_clear);
+                    $link_id_4_clear = mysql_insert_id();
+
+                   $query_clear_gst="insert into `clear_due_amount`  set pp_linkid_1 = '".$link_id_2_pay_gst_clear."',invoice_id  = '".$due_invoice_id_1."',description='".$clear_gstdue_desc."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',due_amount = '".$receiv_amount_gst."', cust_id = '".$cust_id."', user_id = '".$_SESSION['userId']."',due_date = '".strtotime($_REQUEST['clear_pay_payment_date_gst'])."', type = 'GST',create_time = '".getTime()."'";
+                   $result_clear_gst= mysql_query($query_clear_gst) or die('error in query '.mysql_error().$query_clear_gst);
+                   $link_id_2_clear_gst = mysql_insert_id();  
+        
+                   $query_gst1_clear="update payment_plan set gst_flag = '1',clear_gst_flag='1' where invoice_id = '".$due_invoice_id_1."'";
+                   $result_gst1_clear= mysql_query($query_gst1_clear) or die('error in query '.mysql_error().$query_gst1_clear);
+        
+                   $query_gst2_clear="update payment_plan set clear_table_link_id = '".$link_id_2_clear_gst."' where id = '".$link_id_2_pay_gst_clear."'";
+                   $result_gst2_clear= mysql_query($query_gst2_clear) or die('error in query '.mysql_error().$query_gst2_clear);
+                }
+                else{
+
+                if($tds_due_flag_value_1=="1")
+                {
+                    $query3="insert into gst_due_info set userid_create = '".$_SESSION['userId']."', invoice_id = '".$due_invoice_id_1."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',	due_date = '".strtotime($_REQUEST['gst_due_date'])."',description = '(".$tds_due_des_1_extra.") ".$tds_due_des_1."', received_amount = '".$tds_due_amount_1."',create_date = '".getTime()."'";
+                    $result3= mysql_query($query3) or die('error in query '.mysql_error().$query3);
+                    $link_id_4 = mysql_insert_id();
+                    
+                    if($_FILES["gst_due_attach_file"]["name"] != "")
+                     {
+                        $attach_file_name="gst_certificate";
+                        $temp = explode(".", $_FILES["gst_due_attach_file"]["name"]);
+                         $arr_size = count($temp);
+                        $extension = end($temp);
+                        $new_file_name = $attach_file_name.'_'.$link_id_4.'_'.date("d_M_Y").'.'.$extension;
+                        move_uploaded_file($_FILES["gst_due_attach_file"]["tmp_name"],"gst_files/" . $new_file_name);
+                        $query1_1="update gst_due_info set cert_file_name = '".$new_file_name."' where id = '".$link_id_4."'";
+                        $result1_1= mysql_query($query1_1) or die('error in query '.mysql_error().$query1_1);
+                     }
+                            
+            $query_pay_gst ="insert into payment_plan set userid_create = '".$_SESSION['userId']."', trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', debit = '".$tds_due_amount_1."',  description = '(".$tds_due_des_1_extra.") ".$tds_due_des_1."', on_customer = '".$cust_id."', invoice_id = '".$invoice_idnew."',payment_flag = '".$payment_flag."', payment_date = '".strtotime($_REQUEST['gst_due_date'])."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_due_pay_id = '".$invoice_due_pay_id_gstpay."',invoice_issuer_id = '".$invoice_issuer_id."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link3_id = '".$due_payment_id_1."', trans_type = '".$trans_type_pay_gst."', trans_type_name = '".$trans_type_name_pay_gst."',hsn_code= '".$hsn_code_gstpay."',multi_invoice_flag= '".$multi_invoice_flag_gstpay."',multi_invoice_detail= '".$multi_invoice_detail_gstpay."',multi_invoice_id= '".$multi_invoice_id_gstpay."',invoice_pay_id= '".$invoice_pay_id_gstpay."',gst_id= '".$gst_id_gstpay."',tds_id = '".$tds_id_gstpay."',gst_due_id = '".$gst_due_id_gstpay."',tds_due_id = '".$tds_due_id_gstpay."',tds_flag = '".$tds_flag_gstpay."',gst_flag = '".$gst_flag_gstpay."',invoice_flag = '".$invoice_flag_gstpay."',clear_invoice_flag = '".$clear_invoice_flag_gstpay."',clear_gst_flag = '".$clear_gst_flag_gstpay."',clear_tds_flag = '".$clear_tds_flag_gstpay."',create_date = '".getTime()."'";
+            $result_pay_gst= mysql_query($query_pay_gst) or die('error in query '.mysql_error().$query_pay_gst);
+
+            $link_id_1_pay_gst = mysql_insert_id();
+
+            $query2_pay_gst="insert into payment_plan set userid_create = '".$_SESSION['userId']."', trans_id = '".$trans_id."', cust_id = '".$cust_id."',invoice_id = '".$invoice_idnew."', credit = '".$tds_due_amount_1."', description = '(".$tds_due_des_1_extra.") ".$tds_due_des_1."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_flag = '".$payment_flag."',payment_date = '".strtotime($_REQUEST['gst_due_date'])."' ,payment_method = '".$pay_method."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_due_pay_id = '".$invoice_due_pay_id_gstpay."', payment_checkno = '".$pay_checkno."',link3_id = '".$due_payment_id_1."',link_id = '".$link_id_1_pay_gst."',trans_type = '".$trans_type_pay_gst."', trans_type_name = '".$trans_type_name_pay_gst."',hsn_code= '".$hsn_code_gstpay."',multi_invoice_flag= '".$multi_invoice_flag_gstpay."',multi_invoice_detail= '".$multi_invoice_detail_gstpay."',multi_invoice_id= '".$multi_invoice_id_gstpay."',invoice_pay_id= '".$invoice_pay_id_gstpay."',gst_id= '".$gst_id_gstpay."',tds_id = '".$tds_id_gstpay."',gst_due_id = '".$gst_due_id_gstpay."',tds_due_id = '".$tds_due_id_gstpay."',tds_flag = '".$tds_flag_gstpay."',gst_flag = '".$gst_flag_gstpay."',invoice_flag = '".$invoice_flag_gstpay."',clear_invoice_flag = '".$clear_invoice_flag_gstpay."',clear_gst_flag = '".$clear_gst_flag_gstpay."',clear_tds_flag = '".$clear_tds_flag_gstpay."' ,create_date = '".getTime()."'";
+            $result2_pay_gst= mysql_query($query2_pay_gst) or die('error in query '.mysql_error().$query2_pay_gst);
+
+            $link_id_2_pay_gst = mysql_insert_id();  
+
+            $query_gst_update="update gst_due_info set  pp_linkid_1 = '".$link_id_2_pay_gst."',pp_linkid_2 = '".$link_id_1_pay_gst."'  where id = '".$link_id_4."'";
+            $result5_gst_update= mysql_query($query_gst_update) or die('error in query '.mysql_error().$query_gst_update);
+    
+                    if($gst_id_gstpay=="")
+                    {
+                        $gst_id_gstpay=$link_id_2_pay_gst;
+                    }
+                    else{
+                        $gst_id_gstpay=$gst_id_gstpay.','.$link_id_2_pay_gst;
+                    }
+
+                    if($gst_due_id_gstpay=="")
+                    {
+                            $gst_due_id_gstpay = $link_id_4;
+                    }else{
+                        $gst_due_id_gstpay=$gst_due_id_gstpay.','.$link_id_4;
+                    }
+
+            $query5_pay_gst="update payment_plan set link_id = '".$link_id_2_pay_gst."' ,gst_flag = '1',gst_id='".$gst_id_gstpay."',gst_due_id='".$gst_due_id_gstpay."' where id = '".$link_id_1_pay_gst."'";
+            $result5_pay_gst= mysql_query($query5_pay_gst) or die('error in query '.mysql_error().$query5_pay_gst);
+
+            $query5_pay_gst="update payment_plan set gst_flag = '1',gst_id='".$gst_id_gstpay."',gst_due_id='".$gst_due_id_gstpay."' where id = '".$link_id_2_pay_gst."'";
+            $result5_pay_gst= mysql_query($query5_pay_gst) or die('error in query '.mysql_error().$query5_pay_gst);
+
+            $query1_2="update payment_plan set gst_flag = '1',gst_id='".$gst_id_gstpay."',gst_due_id='".$gst_due_id_gstpay."' where id = '".$due_payment_id_1."'";
+            $result1_2= mysql_query($query1_2) or die('error in query '.mysql_error().$query1_2); 
+        
+            if($clear_gst_due=="yes"){
+            
+            $receiv_amount_gst=$due_amount_pay_1 - $tds_due_amount_1;
+          
+            if($receiv_amount_gst>0)
+            {
+            
+            $query2_pay_gst="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."',invoice_id = '".$due_invoice_id_1."', credit = '".$receiv_amount_gst."', description = '(".$clear_gst_due_des_1_extra.") ".$clear_gstdue_desc."', on_project = '".$project_id."', payment_flag = '".$payment_flag."',payment_date = '".strtotime($_REQUEST['clear_pay_payment_date_gst'])."' ,payment_method = '".$pay_method."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_due_pay_id = '".$invoice_due_pay_id_gstpay."', payment_checkno = '".$pay_checkno."',link3_id = '".$due_payment_id_1."',trans_type = '".$trans_type_pay_gst."', trans_type_name = '".$trans_type_name_pay_gst."',hsn_code= '".$hsn_code_gstpay."',multi_invoice_flag= '".$multi_invoice_flag_gstpay."',multi_invoice_detail= '".$multi_invoice_detail_gstpay."',multi_invoice_id= '".$multi_invoice_id_gstpay."',invoice_pay_id= '".$invoice_pay_id_gstpay."',gst_id= '".$gst_id_gstpay."',tds_id = '".$tds_id_gstpay."',gst_due_id = '".$gst_due_id_gstpay."',tds_due_id = '".$tds_due_id_gstpay."',tds_flag = '".$tds_flag_gstpay."',gst_flag = '".$gst_flag_gstpay."',invoice_flag = '".$invoice_flag_gstpay."',clear_invoice_flag = '".$clear_invoice_flag_gstpay."',clear_gst_flag = '".$clear_gst_flag_gstpay."',clear_tds_flag = '".$clear_tds_flag_gstpay."' ,userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
+            $result2_pay_gst= mysql_query($query2_pay_gst) or die('error in query '.mysql_error().$query2_pay_gst);
+            $link_id_2_pay_gst_clear = mysql_insert_id();  
+    
+            $query3_clear="insert into gst_due_info set pp_linkid_1 = '".$link_id_2_pay_gst_clear."',invoice_id = '".$due_invoice_id_1."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',	due_date = '".strtotime($_REQUEST['clear_pay_payment_date_gst'])."',description = '(".$clear_gst_due_des_1_extra.") ".$clear_gstdue_desc."', received_amount = '".$receiv_amount_gst."',clear_due_flag=1 ,userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
+            $result3_clear= mysql_query($query3_clear) or die('error in query '.mysql_error().$query3_clear);
+            $link_id_4_clear = mysql_insert_id();
+            //clear_table_link_id           
+            $query_clear_gst="insert into `clear_due_amount`  set pp_linkid_1 = '".$link_id_2_pay_gst_clear."',invoice_id  = '".$due_invoice_id_1."',description='".$clear_gstdue_desc."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',due_amount = '".$receiv_amount_gst."', cust_id = '".$cust_id."', user_id = '".$_SESSION['userId']."',due_date = '".strtotime($_REQUEST['clear_pay_payment_date_gst'])."', type = 'GST',create_time = '".getTime()."'";
+            $result_clear_gst= mysql_query($query_clear_gst) or die('error in query '.mysql_error().$query_clear_gst);
+            $link_id_2_clear_gst = mysql_insert_id();  
+    
+            $query_gst1_clear="update payment_plan set gst_flag = '1',clear_gst_flag='1' where invoice_id = '".$due_invoice_id_1."'";
+            $result_gst1_clear= mysql_query($query_gst1_clear) or die('error in query '.mysql_error().$query_gst1_clear);
+    
+            $query_gst2_clear="update payment_plan set clear_table_link_id = '".$link_id_2_clear_gst."' where id = '".$link_id_2_pay_gst_clear."'";
+            $result_gst2_clear= mysql_query($query_gst2_clear) or die('error in query '.mysql_error().$query_gst2_clear);
+            
+            $query_gst1="update payment_plan set gst_flag = '1',clear_gst_flag='1' ,gst_id='".$gst_id_gstpay."',gst_due_id='".$gst_due_id_gstpay."' where invoice_id = '".$due_invoice_id_1."'";
+            $result_gst1= mysql_query($query_gst1) or die('error in query '.mysql_error().$query_gst1);
+            }          
+
+            }         
+        }
+            }
+}
+
+/* ---------------   GST DUE WORK END   -----------------------------*/
+
+        
+
+/*  --------      INVOICE DUE WORK        -----------------------  */
+if(mysql_real_escape_string(trim($_REQUEST['file_button_invoice'])) == "Submit")
+{
+    print_r($_REQUEST);
+    die();
+   $invoice_cerf_1=mysql_real_escape_string(trim($_REQUEST['invoice_cerf']));
+   $invoice_due_date_1=mysql_real_escape_string(trim($_REQUEST['pay_payment_date']));
+   $pay_amount_1=mysql_real_escape_string(trim($_REQUEST['pay_amount']));
+   $invoice_due_des_1=mysql_real_escape_string(trim($_REQUEST['invoice_due_des']));
+   $invoice_due_flag_value_1=mysql_real_escape_string(trim($_REQUEST['invoice_due_flag_value']));
+   $due_trans_id_1=mysql_real_escape_string(trim($_REQUEST['invoice_trans_id']));
+   $due_payment_id_1=mysql_real_escape_string(trim($_REQUEST['invoice_payment_id']));
+   $due_invoice_id_1=mysql_real_escape_string(trim($_REQUEST['invoice_invoice_id']));
+   $due_amount_pay_1=mysql_real_escape_string(trim($_REQUEST['invoice_amount_pay']));
+   $pay_form=mysql_real_escape_string(trim($_REQUEST['pay_form']));
+   $invoice_due_date_1_n=strtotime($invoice_due_date_1);
+   
+   $clearall_due_flag_invoice=mysql_real_escape_string(trim($_REQUEST['clearall_due_flag_invoice']));
+   $invoice_due_amount_new_total=mysql_real_escape_string(trim($_REQUEST['invoice_due_amount_new_total']));
+   $clear_invoice_due=mysql_real_escape_string(trim($_REQUEST['clear_invoice_due']));
+   $clear_invoicedue_desc=mysql_real_escape_string(trim($_REQUEST['clear_invoicedue_desc']));
+    $pay_from_arr = explode(" -",$_REQUEST['pay_form']);
+    $pay_bank_id = get_field_value("id","bank","bank_account_name",$pay_from_arr[0]);
+   
+    $sql_pay 	= "select * from `payment_plan` where id ='".$due_payment_id_1."'";
+    $query_pay_1 	= mysql_query($sql_pay);
+    $row_pay = mysql_fetch_array($query_pay_1);
+    $trans_id=$row_pay['trans_id'];
+           
+    $subdivision = $row_pay['subdivision'];
+    $gst_subdivision_n = $row_pay['gst_subdivision'];
+    $tds_subdivision_n = $row_pay['tds_subdivision'];
+    $gst_amount_tot = $row_pay['gst_amount'];
+    $tds_amount_tot = $row_pay['tds_amount'];
+    $invoice_pay_amount = $row_pay['invoice_pay_amount'];
+    $invoice_issuer_id = $row_pay['invoice_issuer_id'];
+    $pay_method = $row_pay['payment_method'];
+    $pay_checkno = $row_pay['payment_checkno'];
+    //$link_id_2 = $row_pay[''];
+    $trans_type_pay_invoice = 22;
+    $trans_type_name_pay_invoice= "instmulti_receive_payment_invoice" ;
+    $cust_id = $row_pay['cust_id'];
+    $invoice_idnew = $row_pay['invoice_id'];
+               
+    $hsn_code_gstpay= $row_pay['hsn_code'];
+    $multi_invoice_flag_gstpay= $row_pay['multi_invoice_flag'];
+    $multi_invoice_detail_gstpay= $row_pay['multi_invoice_detail'];
+    $multi_invoice_id_gstpay= $row_pay['multi_invoice_id'];
+           
+    $invoice_pay_id_gstpay= $row_pay['invoice_pay_id'];
+    $invoice_due_pay_id_gstpay= $row_pay['invoice_due_pay_id'];
+    $payment_flag = $row_pay['payment_flag'];
+
+    $gst_id_gstpay= $row_pay['gst_id'];
+    $gst_due_id_gstpay =$row_pay['gst_due_id'];
+
+    $tds_id_gstpay = $row_pay['tds_id'];
+    $tds_due_id_gstpay = $row_pay['tds_due_id'];
+           
+    $tds_flag_gstpay = $row_pay['tds_flag'];
+    $gst_flag_gstpay = $row_pay['gst_flag'];
+    $invoice_flag_gstpay = $row_pay['invoice_flag'];
+    $clear_invoice_flag_gstpay = $row_pay['clear_invoice_flag'];
+    $clear_gst_flag_gstpay = $row_pay['clear_gst_flag'];
+    $clear_tds_flag_gstpay = $row_pay['clear_tds_flag'];
+    $invoice_due_des_1_extra = "Amount Paid for invoice : ".$due_invoice_id_1."";     
+    $clear_invoice_due_des_1_extra = "Clear Amount for invoice : ".$due_invoice_id_1."";  
+
+       if($clearall_due_flag_invoice=="2")
+       {
+        $query2_pay_invoice="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."',invoice_id = '".$invoice_idnew."', credit = '".$invoice_due_amount_new_total."', description = '(".$clear_invoice_due_des_1_extra.") ".$clear_invoicedue_desc."', on_project = '".$project_id."', payment_flag = '".$payment_flag."',payment_date = '".strtotime($_REQUEST['clear_pay_payment_date'])."' ,payment_method = '".$pay_method."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_due_pay_id = '".$invoice_due_pay_id_gstpay."', payment_checkno = '".$pay_checkno."',link3_id = '".$due_payment_id_1."',trans_type = '".$trans_type_pay_invoice."', trans_type_name = '".$trans_type_name_pay_invoice."',hsn_code= '".$hsn_code_gstpay."',multi_invoice_flag= '".$multi_invoice_flag_gstpay."',multi_invoice_detail= '".$multi_invoice_detail_gstpay."',multi_invoice_id= '".$multi_invoice_id_gstpay."',invoice_pay_id= '".$invoice_pay_id_gstpay."',gst_id= '".$gst_id_gstpay."',tds_id = '".$tds_id_gstpay."',gst_due_id = '".$gst_due_id_gstpay."',tds_due_id = '".$tds_due_id_gstpay."',tds_flag = '".$tds_flag_gstpay."',gst_flag = '".$gst_flag_gstpay."',invoice_flag = '".$invoice_flag_gstpay."',clear_invoice_flag = '".$clear_invoice_flag_gstpay."',clear_gst_flag = '".$clear_gst_flag_gstpay."',clear_tds_flag = '".$clear_tds_flag_gstpay."' ,userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
+        $result2_pay_invoice= mysql_query($query2_pay_invoice) or die('error in query '.mysql_error().$query2_pay_invoice);
+        $link_id_2_pay_invoice_clear = mysql_insert_id();  
+
+
+        $query3_clear="insert into invoice_due_info set pp_linkid_1 = '".$link_id_2_pay_invoice_clear."',invoice_id = '".$invoice_idnew."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',	due_date = '".strtotime($_REQUEST['clear_pay_payment_date'])."',description = '(".$clear_invoice_due_des_1_extra.") ".$clear_invoicedue_desc."',amount = '".$due_amount_pay_1."', received_amount = '".$invoice_due_amount_new_total."',clear_due_flag=1 ,userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
+        $result3_clear= mysql_query($query3_clear) or die('error in query '.mysql_error().$query3_clear);
+        $link_id_4_clear = mysql_insert_id();
+        //clear_table_link_id           
+           $query_clear_invoice="insert into `clear_due_amount`  set pp_linkid_1 = '".$link_id_2_pay_invoice_clear."',invoice_id  = '".$invoice_idnew."',description='".$clear_invoicedue_desc."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',due_amount = '".$invoice_due_amount_new_total."', cust_id = '".$cust_id."', user_id = '".$_SESSION['userId']."',due_date = '".strtotime($_REQUEST['clear_pay_payment_date'])."', type = 'Invoice',create_time = '".getTime()."'";
+           $result_clear_invoice= mysql_query($query_clear_invoice) or die('error in query '.mysql_error().$query_clear_invoice);
+           $link_id_2_clear_invoice = mysql_insert_id();  
+
+           $query_invoice1_clear="update payment_plan set invoice_flag = '1',clear_invoice_flag='1' where invoice_id = '".$invoice_idnew."'";
+           $result_invoice1_clear= mysql_query($query_invoice1_clear) or die('error in query '.mysql_error().$query_invoice1_clear);
+
+           $query_invoice2_clear="update payment_plan set clear_table_link_id = '".$link_id_2_clear_invoice."' where id = '".$link_id_2_pay_invoice_clear."'";
+           $result_invoice2_clear= mysql_query($query_invoice2_clear) or die('error in query '.mysql_error().$query_invoice2_clear);
+           
+       }
+       else{
+
+             
+             if($invoice_due_flag_value_1=="1")
+               {                  
+                   $query3="insert into invoice_due_info set invoice_id = '".$invoice_idnew."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',	due_date = '".strtotime($_REQUEST['pay_payment_date'])."',description = '(".$invoice_due_des_1_extra.") ".$invoice_due_des_1."',amount = '".$due_amount_pay_1."', received_amount = '".$pay_amount_1."',userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
+                   $result3= mysql_query($query3) or die('error in query '.mysql_error().$query3);
+                   $link_id_4 = mysql_insert_id();
+                   
+                   if($_FILES["invoice_due_attach_file"]["name"] != "")
+                    {
+                       $attach_file_name="invoice_certificate";
+                       $temp = explode(".", $_FILES["invoice_due_attach_file"]["name"]);
+                        $arr_size = count($temp);
+                       $extension = end($temp);
+                       $new_file_name = $attach_file_name.'_'.$link_id_4.'_'.date("d_M_Y").'.'.$extension;
+                       move_uploaded_file($_FILES["invoice_due_attach_file"]["tmp_name"],"invoice_files/" . $new_file_name);
+                       $query1_1="update invoice_due_info set cert_file_name = '".$new_file_name."' where id = '".$link_id_4."'";
+                       $result1_1= mysql_query($query1_1) or die('error in query '.mysql_error().$query1_1);
+                    }
+                   
+                           
+           $query_pay_invoice ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', debit = '".$pay_amount_1."',  description = '(".$invoice_due_des_1_extra.") ".$invoice_due_des_1."', on_customer = '".$cust_id."', invoice_id = '".$invoice_idnew."',payment_flag = '".$payment_flag."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_due_pay_id = '".$invoice_due_pay_id_gstpay."',invoice_issuer_id = '".$invoice_issuer_id."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link3_id = '".$due_payment_id_1."', trans_type = '".$trans_type_pay_invoice."', trans_type_name = '".$trans_type_name_pay_invoice."',hsn_code= '".$hsn_code_gstpay."',multi_invoice_flag= '".$multi_invoice_flag_gstpay."',multi_invoice_detail= '".$multi_invoice_detail_gstpay."',multi_invoice_id= '".$multi_invoice_id_gstpay."',invoice_pay_id= '".$invoice_pay_id_gstpay."',gst_id= '".$gst_id_gstpay."',tds_id = '".$tds_id_gstpay."',gst_due_id = '".$gst_due_id_gstpay."',tds_due_id = '".$tds_due_id_gstpay."',tds_flag = '".$tds_flag_gstpay."',gst_flag = '".$gst_flag_gstpay."',invoice_flag = '".$invoice_flag_gstpay."',clear_invoice_flag = '".$clear_invoice_flag_gstpay."',clear_gst_flag = '".$clear_gst_flag_gstpay."',clear_tds_flag = '".$clear_tds_flag_gstpay."',userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
+           $result_pay_invoice= mysql_query($query_pay_invoice) or die('error in query '.mysql_error().$query_pay_invoice);
+
+
+           $link_id_1_pay_invoice = mysql_insert_id();
+
+
+           $query2_pay_invoice="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."',invoice_id = '".$invoice_idnew."', credit = '".$pay_amount_1."', description = '(".$invoice_due_des_1_extra.") ".$invoice_due_des_1."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_flag = '".$payment_flag."',payment_date = '".strtotime($_REQUEST['pay_payment_date'])."' ,payment_method = '".$pay_method."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_due_pay_id = '".$invoice_due_pay_id_gstpay."', payment_checkno = '".$pay_checkno."',link3_id = '".$due_payment_id_1."',link_id = '".$link_id_1_pay_invoice."',trans_type = '".$trans_type_pay_invoice."', trans_type_name = '".$trans_type_name_pay_invoice."',hsn_code= '".$hsn_code_gstpay."',multi_invoice_flag= '".$multi_invoice_flag_gstpay."',multi_invoice_detail= '".$multi_invoice_detail_gstpay."',multi_invoice_id= '".$multi_invoice_id_gstpay."',invoice_pay_id= '".$invoice_pay_id_gstpay."',gst_id= '".$gst_id_gstpay."',tds_id = '".$tds_id_gstpay."',gst_due_id = '".$gst_due_id_gstpay."',tds_due_id = '".$tds_due_id_gstpay."',tds_flag = '".$tds_flag_gstpay."',gst_flag = '".$gst_flag_gstpay."',invoice_flag = '".$invoice_flag_gstpay."',clear_invoice_flag = '".$clear_invoice_flag_gstpay."',clear_gst_flag = '".$clear_gst_flag_gstpay."',clear_tds_flag = '".$clear_tds_flag_gstpay."' ,userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
+           $result2_pay_invoice= mysql_query($query2_pay_invoice) or die('error in query '.mysql_error().$query2_pay_invoice);
+
+           $link_id_2_pay_invoice = mysql_insert_id();  
+
+           
+        $query_invoice_update="update invoice_due_info set  pp_linkid_1 = '".$link_id_2_pay_invoice."',pp_linkid_2 = '".$link_id_1_pay_invoice."'  where id = '".$link_id_4."'";
+        $result5_invoice_update= mysql_query($query_invoice_update) or die('error in query '.mysql_error().$query_invoice_update);
+
+
+      
+        if($invoice_pay_id_gstpay=="")
+        {
+           $invoice_pay_id_gstpay=$link_id_2_pay_invoice;
+        }
+        else
+        {
+           $invoice_pay_id_gstpay=$invoice_pay_id_gstpay.','.$link_id_2_pay_invoice;
+        }
+
+        if($invoice_due_pay_id_gstpay=="")
+        {
+           $invoice_due_pay_id_gstpay = $link_id_4;
+        }
+        else
+        {
+           $invoice_due_pay_id_gstpay=$invoice_due_pay_id_gstpay.','.$link_id_4;
+        }
+
+           $query5_pay_invoice="update payment_plan set link_id = '".$link_id_2_pay_invoice."' ,invoice_flag = '1',invoice_pay_id='".$invoice_pay_id_gstpay."',invoice_due_pay_id='".$invoice_due_pay_id_gstpay."' where id = '".$link_id_1_pay_invoice."'";
+           $result5_pay_invoice= mysql_query($query5_pay_invoice) or die('error in query '.mysql_error().$query5_pay_invoice);
+
+           $query5_pay_invoice="update payment_plan set invoice_flag = '1',invoice_pay_id='".$invoice_pay_id_gstpay."',invoice_due_pay_id='".$invoice_due_pay_id_gstpay."' where id = '".$link_id_2_pay_invoice."'";
+           $result5_pay_invoice= mysql_query($query5_pay_invoice) or die('error in query '.mysql_error().$query5_pay_invoice);
+
+           $query1_2="update payment_plan set invoice_flag = '1',invoice_pay_id='".$invoice_pay_id_gstpay."',invoice_due_pay_id='".$invoice_due_pay_id_gstpay."' where id = '".$due_payment_id_1."'";
+           $result1_2= mysql_query($query1_2) or die('error in query '.mysql_error().$query1_2); 
+       
+           if($clear_invoice_due=="yes"){
+            $receiv_amount_invoice=$due_amount_pay_1 - $pay_amount_1;
+          if($receiv_amount_invoice>0)
+          {
+            $query2_pay_invoice_clear="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."',invoice_id = '".$invoice_idnew."', credit = '".$receiv_amount_invoice."', description = '(".$clear_invoice_due_des_1_extra.") ".$clear_invoicedue_desc."', on_project = '".$project_id."', payment_flag = '".$payment_flag."',payment_date = '".strtotime($_REQUEST['clear_pay_payment_date'])."' ,payment_method = '".$pay_method."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_due_pay_id = '".$invoice_due_pay_id_gstpay."', payment_checkno = '".$pay_checkno."',link3_id = '".$due_payment_id_1."',trans_type = '".$trans_type_pay_invoice."', trans_type_name = '".$trans_type_name_pay_invoice."',hsn_code= '".$hsn_code_gstpay."',multi_invoice_flag= '".$multi_invoice_flag_gstpay."',multi_invoice_detail= '".$multi_invoice_detail_gstpay."',multi_invoice_id= '".$multi_invoice_id_gstpay."',invoice_pay_id= '".$invoice_pay_id_gstpay."',gst_id= '".$gst_id_gstpay."',tds_id = '".$tds_id_gstpay."',gst_due_id = '".$gst_due_id_gstpay."',tds_due_id = '".$tds_due_id_gstpay."',tds_flag = '".$tds_flag_gstpay."',gst_flag = '".$gst_flag_gstpay."',invoice_flag = '".$invoice_flag_gstpay."',clear_invoice_flag = '".$clear_invoice_flag_gstpay."',clear_gst_flag = '".$clear_gst_flag_gstpay."',clear_tds_flag = '".$clear_tds_flag_gstpay."' ,userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
+            $result2_pay_invoice_clear= mysql_query($query2_pay_invoice_clear) or die('error in query '.mysql_error().$query2_pay_invoice_clear);
+            $link_id_2_pay_invoice_clear = mysql_insert_id();  
+
+
+            $query3_clear="insert into invoice_due_info set pp_linkid_1 = '".$link_id_2_pay_invoice_clear."',invoice_id = '".$invoice_idnew."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',	due_date = '".strtotime($_REQUEST['clear_pay_payment_date'])."',description = '(".$clear_invoice_due_des_1_extra.") ".$clear_invoicedue_desc."',amount = '".$due_amount_pay_1."', received_amount = '".$receiv_amount_invoice."',clear_due_flag=1 ,userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
+            $result3_clear= mysql_query($query3_clear) or die('error in query '.mysql_error().$query3_clear);
+            $link_id_4_clear = mysql_insert_id();
+                  
+           $query_clear_invoice="insert into `clear_due_amount`  set pp_linkid_1 = '".$link_id_2_pay_invoice_clear."',invoice_id  = '".$invoice_idnew."',description='".$clear_invoicedue_desc."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',due_amount = '".$receiv_amount_invoice."', cust_id = '".$cust_id."', user_id = '".$_SESSION['userId']."',due_date = '".strtotime($_REQUEST['clear_pay_payment_date'])."', type = 'Invoice',create_time = '".getTime()."'";
+           $result_clear_invoice= mysql_query($query_clear_invoice) or die('error in query '.mysql_error().$query_clear_invoice);
+           $link_id_2_clear_invoice = mysql_insert_id();  
+
+           $query_invoice2_clear="update payment_plan set clear_table_link_id = '".$link_id_2_clear_invoice."' where id = '".$link_id_2_pay_invoice_clear."'";
+           $result_invoice2_clear= mysql_query($query_invoice2_clear) or die('error in query '.mysql_error().$query_invoice2_clear);
+        
+
+           $query_invoice1="update payment_plan set invoice_flag = '1',clear_invoice_flag='1' ,invoice_pay_id='".$invoice_pay_id_gstpay."',invoice_due_pay_id='".$invoice_due_pay_id_gstpay."' where invoice_id = '".$invoice_idnew."'";
+           $result_invoice1= mysql_query($query_invoice1) or die('error in query '.mysql_error().$query_invoice1);
+
+          }
+           }
+           }
+
+
+       }
+
+    
+}
+
+/* ---------------   INVOICE DUE WORK END   -----------------------------*/
+
+//code by amit
+
+
+
+
 if(isset($_POST['trans_id_combind']) && $_POST['trans_id_combind'] != "")
 {
     $trans_id = $_POST['trans_id_combind'];
@@ -815,6 +1196,12 @@ else
                         {  ?>
                         <a href="edit-instant-receive-goods.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "supplier-ledger-inst-make-payment"; ?>"><img src="mos-css/img/edit.png" title="Edit"></a>
                  <?php  } ?>
+                 <?php //code by amit 25092023
+                        if($select_data['trans_type_name']=="gst_receive_payment")
+                        { 
+                        if($select_data['invoice_id'] != "" && $select_data['invoice_id'] != 0) { ?>
+                        &nbsp;<a href="javascript:account_transaction_invoice_gst(<?php echo $select_data['invoice_id']; ?>,<?php echo $select_data['payment_id']; ?>,'GST')"><img src="mos-css/img/delete.png" title="Delete" ></a>
+                <?php  } }?>
                   <?php
                         $total_rows_view=0;
                         $query_view="select *  from attach_file where attach_id = '".$select_data['payment_id']."'";
@@ -907,6 +1294,253 @@ else
         
         <input type="hidden" name="trans_id_1" id="trans_id_1" value="" >
         </form>
+
+        <!---  Due GST Attchment Div   -->
+ <!-- /// attach_div  ,attach_form ,  attach_form ,  attach_validation , attach_file_id   , invoice_flag  -->    
+<div id="gst_due_div" style="position:absolute;top:30%; left:40%; width:580px; height:480px; margin:-100px 0 0 -50px;z-index:100; display:none; background-color:#FFFFFF; border:8px solid #999999;" >
+<form name="gst_due_form" id="gst_due_form" method="post" action="" onSubmit="return gst_validation();" enctype="multipart/form-data" >
+<table cellpadding="0" cellspacing="0" border="1px" width="100%" >
+    <tr><td valign="top" align="right"  ><img src="images/close.gif" onClick="return close_gst_div();" ></td></tr>
+                <tr>
+                    <td valign="top" style="color:#FF0000; font-weight:bold;"  >GST Due Amount
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                       
+                    <input type="text" id="gst_due_amount_new_total" style="width:100px;color:red; border:0; " readonly="readonly"  name="gst_due_amount_new_total" value="" /></td>
+                </tr>
+                <tr>
+                    <td valign="top" style="color:#blue; "  >
+                    
+                    <table width="100%" cellpadding="0" cellspacing="0" >
+                        <tr>
+                            <td colspan="2" align="left"  style="color:#blue; " ><b>Clear GST Due :</b>&nbsp;&nbsp;<input type="checkbox" id="clear_gst_due" onClick="return clear_gst_desc();" name="clear_gst_due" value="yes"></td>
+                           
+                        </tr>
+                    <tr><td>
+                    <table>
+                        <tr id="clear_desc_display_gst" style="display:none;">
+                            <td width="150px">Description</td>
+                            <td width=""><input type='text' style="display:none; width:180px;font-size:12px;" name='clear_gstdue_desc' align='right' id='clear_gstdue_desc' />
+                    </tr></table>         
+                    </td>
+                    <td>
+                    <table>
+                        <tr id="clear_date_display_gst" style="display:none;">
+                        <td width="140px">Payment Date : </td>
+                        <td><input type='text' style="" name='clear_pay_payment_date_gst' align='right' id='clear_pay_payment_date_gst'  autocomplete="off" placeholder="Type clear due Payment Date here"/></td>
+                        <td><img src="js/images2/cal.gif" onClick="javascript:NewCssCal('clear_pay_payment_date_gst')" style="cursor:pointer"/></td>
+                        </tr>
+        </table>
+        </tr></tr>  
+                    </table>
+                        
+                </td>
+                </tr>
+                
+            
+            <tr><td valign="top"  align="left" ><b>Paid gst :</b>&nbsp;&nbsp;&nbsp;<input type="radio" name="gst_cerf" id="gst_cerf" value="1" onClick="return close_gst_div2('1');" >&nbsp;&nbsp;YES&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="radio" name="gst_cerf" id="gst_cerf"  checked=true value="0" onClick="return close_gst_div2('0');" >&nbsp;&nbsp;NO
+            </td>
+        </tr>
+        <tr>  
+            <td valign="top"  align="left" id="gst-due_div2" style=" display:none; width:100%">
+                <table width="100%" border="2" style="border:2px;">  
+                <tr>
+                    <td valign="top"  width="180px">Paid From</td>
+                    <td>
+                        <!--<input type="text" id="invoice_due_des" style="width:260px;"  name="invoice_due_des" value="" autocomplete="off"/>
+        -->
+        <input type="text" id="gst_pay_form"  name="gst_pay_form" value="" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span> 
+                </td>
+                </tr>
+
+                <tr>    <td valign="top"  width="180px" >Date</td>
+                    <td><input type="text"  name="gst_due_date" id="gst_due_date" value="<?php //echo $_REQUEST['tds_due_date']; ?>" style="width:250px;" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('gst_due_date')" style="cursor:pointer"/></td>
+                </tr>
+                
+                <tr>
+                    <td valign="top" >Amount Paid</td>
+                    <td><input type="text" id="gst_due_amount" style="width:250px;"  name="gst_due_amount" value="" onkeydown="gst_due_calculation()" onkeyup="gst_due_calculation()" onkeypress="gst_due_calculation()" />
+                    <span id=""  style="color:red;" >(Due :<input type="text" id="gst_due_amount_new_due" style="width:60px;color:red;border:0;" readonly="readonly"  name="gst_due_amount_new_due" value="" /></span>
+                </td>
+                </tr>
+                <tr>
+                    <td valign="top" >GST File Attachment</td>
+                    <td><input type="file" name="gst_due_attach_file" style="width:250px;"   id="gst_due_attach_file" value="" ></td>
+                </tr>
+                <tr>
+                    <td valign="top" >Discription</td>
+                    <td><input type="text" id="gst_due_des" style="width:250px;"  name="gst_due_des" value="" autocomplete="off"/></td>
+                </tr>
+            </table>
+            </td>
+        </tr>    
+         
+    <input type="hidden" id="clearall_due_flag"  name="clearall_due_flag" value="" />
+    
+    <input type="hidden" id="gst_due_flag_value"  name="gst_due_flag_value" value="0" />
+    <input type="hidden" id="gst_payment_id"  name="gst_payment_id" value="" />
+    <input type="hidden" id="gst_attach_file_id"  name="gst_attach_file_id" value="" />
+    <input type="hidden" id="invoice_flag"  name="invoice_flag" value="" />
+    <input type="hidden" id="gst_trans_id"  name="gst_trans_id" value="" />
+    <input type="hidden" id="gst_invoice_id"  name="gst_invoice_id" value="" />
+    <input type="hidden" id="gst_amount_pay"  name="gst_amount_pay" value="" />
+    <tr>
+        <td valign="bottom" align="center" colspan="2"><input type="submit" class="button" name="file_button_gst" id="file_button_gst" value="Submit" ></td></tr>
+</table>
+
+</form>
+</div>
+
+        <!--      /// Due GST Attachment Div     --->
+
+                <!---  Due INVOICE Attchment Div   -->
+ <!-- /// attach_div  ,attach_form ,  attach_form ,  attach_validation , attach_file_id   , invoice_flag  -->    
+<div id="invoice_due_div" style="position:absolute;top:30%; left:40%; width:570px; height:550px; margin:-100px 0 0 -50px;z-index:100; display:none; background-color:#FFFFFF; border:8px solid #999999;" >
+<form name="invoice_due_form" id="invoice_due_form" method="post" action="" onSubmit="return invoice_validation();" enctype="multipart/form-data" >
+  
+
+<table cellpadding="0" cellspacing="0" border="1px" width="100%" >
+<tr><td valign="top" align="left" style="color:#FF0000; font-weight:bold;"  >Invoice Due Amount
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                       
+                    <input type="text" id="invoice_due_amount_new_total" style="width:100px;color:red; border:0; " readonly="readonly"  name="invoice_due_amount_new_total" value="" /></td>
+<td valign="top" align="right"  ><img src="images/close.gif" onClick="return close_invoice_div();" ></td></tr>
+                <tr height="20px">
+                    <td valign="top" colspan="2" align="left"  ><b>Clear Invoice Due :</b>&nbsp;&nbsp;<input type="checkbox" id="clear_invoice_due" name="clear_invoice_due" onClick="return clear_invoice_desc();" value="yes"></td>
+                </tr>
+                    
+                <tr>
+                    <td valign="top" colspan="2"  >
+                    <table width="100%" cellpadding="0"  cellspacing="0">
+                        <tr><td><table>
+                        <tr id="clear_desc_display" style="display:none;">
+                            <td width="110px">Description</td>
+                            <td><input type='text' style="display:none; " name='clear_invoicedue_desc' align='right' id='clear_invoicedue_desc' width="140px" />
+                        </tr></table></td>
+                        <td><table>
+                        <tr id="clear_date_display" style="display:none;">
+                        <td width="100px">Payment Date</td>
+                        <td align="left" ><input type='text' style="display:none; " name='clear_pay_payment_date' align='right' id='clear_pay_payment_date' width="140px" autocomplete="off" /></td>
+                        <td><img src="js/images2/cal.gif" onClick="javascript:NewCssCal('clear_pay_payment_date')" style="cursor:pointer"/></td>
+                        </tr>
+        </table></td></tr>
+                    </table>
+                    
+                    
+                </td>
+                    
+                </tr>
+                
+<tr><td valign="top" width="300px" align="left" colspan="2" >&nbsp;&nbsp;<b>Received Due Invoice Amount</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="invoice_cerf" id="invoice_cerf" value="1" onClick="return close_invoice_div2('1');" >&nbsp;&nbsp;YES&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="radio" name="invoice_cerf" id="invoice_cerf" checked=true value="0" onClick="return close_invoice_div2('0');" >&nbsp;&nbsp;NO
+            </td>
+        </tr>
+        <tr>  
+            <td valign="top" colspan="2" align="left" id="invoice-due_div2" style=" display:none; width:100%">
+                <table width="100%" border="2" style="border:2px;">  
+                <tr>    <td valign="top"  width="150px" >Payment Date</td>
+                    <td><input type="text"  name="pay_payment_date" id="pay_payment_date" value="<?php //echo $_REQUEST['tds_due_date']; ?>" style="width:250px;" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('pay_payment_date')" style="cursor:pointer"/></td>
+                </tr>
+                <tr>
+                    <td valign="top" >Amount Paid</td>
+                    <td><input type="text" id="pay_amount" style="width:250px;"  name="pay_amount" value="" onkeydown="invoice_due_calculation()" onkeyup="invoice_due_calculation()" onkeypress="invoice_due_calculation()" />
+                    <span id=""  style="color:red;" >(Due :<input type="text" id="invoice_due_amount_new_due" style="width:60px;color:red;border:0;" readonly="readonly"  name="invoice_due_amount_new_due" value="" /></span>
+                </td>
+                </tr>
+                
+                <tr>
+                    <td valign="top" >Payment File Attachment</td>
+                    <td><input type="file" name="invoice_due_attach_file" width="250px" id="invoice_due_attach_file" value="" ></td>
+                </tr>
+                <tr>
+                    <td valign="top" >Paid From</td>
+                    <td>
+                        <!--<input type="text" id="invoice_due_des" style="width:260px;"  name="invoice_due_des" value="" autocomplete="off"/>
+        -->
+        <input type="text" id="pay_form"  name="pay_form" value="" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span> 
+                </td>
+                </tr>
+                <tr>
+                    <td valign="top" >Description</td>
+                    <td><input type="text" id="invoice_due_des" style="width:250px;"  name="invoice_due_des" value="" autocomplete="off"/></td>
+                </tr>
+                <tr>
+                    <td valign="top" >Payment Method</td>
+                    <td>
+                    <input type="radio" id="pay_method" name="pay_method"  onchange=" return checkno_create();" value="check">
+            <label for="male">Cheque</label>&nbsp;&nbsp;
+            <input type="radio" id="pay_method" name="pay_method" checked=true onchange="return checkno_create1();" value="bank">
+            <label for="female">Bank</label>&nbsp;&nbsp;
+            <input type="radio" id="pay_method" name="pay_method"  onchange="return checkno_create1();" value="cash">
+            <label for="other">Cash</label>
+            
+
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top" colspan="2">
+                    <div id="pay_check" align="left"  style="display:none; " >
+                    <table>
+                        <tr>
+                            <td width="180px">Cheque No.</td>
+                            <td><input type="text" width="180px" name="pay_checkno" id="pay_checkno" value="" /><br></td>
+                        </tr>
+                    </table>
+                     
+                    </div>
+                    </td>
+                </tr>
+                
+            </table>
+            </td>
+        </tr>    
+      
+        <input type="hidden" id="clearall_due_flag_invoice"  name="clearall_due_flag_invoice" value="" />
+    <input type="hidden" id="invoice_due_flag_value"  name="invoice_due_flag_value" value="0" />
+    <input type="hidden" id="invoice_payment_id"  name="invoice_payment_id" value="" />
+    <input type="hidden" id="invoice_attach_file_id"  name="invoice_attach_file_id" value="" />
+    <input type="hidden" id="invoice_flag"  name="invoice_invoice_flag" value="" />
+    <input type="hidden" id="invoice_trans_id"  name="invoice_trans_id" value="" />
+    <input type="hidden" id="invoice_invoice_id"  name="invoice_invoice_id" value="" />
+    <input type="hidden" id="invoice_amount_pay"  name="invoice_amount_pay" value="" />
+    <tr>
+        <td valign="bottom" align="center" colspan="2"><input type="submit" class="button" name="file_button_invoice" id="file_button_invoice" value="Submit" ></td></tr>
+</table>
+
+</form>
+
+</div>
+
+
+<form name="edit_invoice_form" id="edit_invoice_form" action="edit_invoice_ledger_invoice.php" method="post" >
+<!--edit_tds_form ,  info_tb_id, trsns_pname ,invoice_no , payment_id  -->
+        
+        <input type="hidden" name="info_tb_id_invoice" id="info_tb_id_invoice" value="" >
+        <input type="hidden" name="trsns_pname_invoice" id="trsns_pname_invoice" value="" >
+        <input type="hidden" name="invoice_no_invoice" id="invoice_no_invoice" value="" >
+        <input type="hidden" name="payment_id_invoice" id="payment_id_invoice" value="" >
+        </form>
+
+        <form name="edit_gst_form" id="edit_gst_form" action="edit_invoice_ledger_gst.php" method="post" >
+<!--edit_tds_form ,  info_tb_id, trsns_pname ,invoice_no , payment_id  -->
+        
+        <input type="hidden" name="info_tb_id_gst" id="info_tb_id_gst" value="" >
+        <input type="hidden" name="trsns_pname_gst" id="trsns_pname_gst" value="" >
+        <input type="hidden" name="invoice_no_gst" id="invoice_no_gst" value="" >
+        <input type="hidden" name="payment_id_gst" id="payment_id_gst" value="" >
+        </form>
+        
+<form name="edit_tds_form" id="edit_tds_form" action="edit_invoice_ledger_tds.php" method="post" >
+<!--edit_tds_form ,  info_tb_id, trsns_pname ,invoice_no , payment_id  -->
+        
+        <input type="hidden" name="info_tb_id_tds" id="info_tb_id_tds" value="" >
+        <input type="hidden" name="trsns_pname_tds" id="trsns_pname_tds" value="" >
+        <input type="hidden" name="invoice_no_tds" id="invoice_no_tds" value="" >
+        <input type="hidden" name="payment_id_tds" id="payment_id_tds" value="" >
+        </form>
+
+        <!-- Due Invoice Attachment Div -->
+
 </body>
 </html>
 <script src="https://cdn.jsdelivr.net/gh/webcodesample/global-js@main/sup-ledg-1.js"></script>

@@ -150,15 +150,19 @@ else
 $page = $_REQUEST['page'];
 
 if ($page < 1) $page = 1;
-echo "Page Index : ".$page;
-echo "<br>";
-echo "Number of Pages : ".$numberOfPages = numberofpages();
-echo "<br>";
-echo "Result Per Page : ".$resultsPerPage = resultperpage();
-echo "<br>";
-echo "Start Index : ".$startResults = ($page - 1) * $resultsPerPage;
-echo "<br>";
-echo "Total Pages : ".$totalPages = ceil($total_row / $resultsPerPage);
+//echo "Page Index : ".$page;
+//echo "<br>";
+//echo "Number of Pages : ".
+$numberOfPages = numberofpages();
+//echo "<br>";
+//echo "Result Per Page : ".
+$resultsPerPage = resultperpage();
+//echo "<br>";
+//echo "Start Index : ".
+$startResults = ($page - 1) * $resultsPerPage;
+//echo "<br>";
+//echo "Total Pages : ".
+$totalPages = ceil($total_row / $resultsPerPage);
 
 //
 if(mysql_real_escape_string(trim($_REQUEST['supplier_search'])) != "")
