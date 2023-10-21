@@ -1,0 +1,2 @@
+
+ALTER TABLE `payment_plan` ADD `payment_flag` INT( 11 ) NOT NULL DEFAULT '0' AFTER `on_bank` ;

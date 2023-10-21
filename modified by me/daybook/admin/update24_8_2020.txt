@@ -1,0 +1,8 @@
+ALTER TABLE `customer` ADD `client_gst` VARCHAR( 50 ) NOT NULL AFTER `client_name` ;
+ALTER TABLE `customer` ADD `project` VARCHAR( 255 ) NOT NULL AFTER `client_mobile` ;
+ALTER TABLE `customer` ADD `client_email` VARCHAR( 255 ) NOT NULL AFTER `client_mobile` ;
+ALTER TABLE `customer` ADD `client_contact_per` VARCHAR( 255 ) NOT NULL AFTER `client_name` ;
+ALTER TABLE `customer` ADD `bank_attachment` INT( 50 ) NOT NULL AFTER `type` ;
+
+ALTER TABLE `bank` ADD `ifsc_code` VARCHAR( 255 ) NOT NULL AFTER `bank_name` ;
+

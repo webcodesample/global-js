@@ -1,0 +1,61 @@
+
+            RENAME TABLE `onlinedaybook`.`menu`
+                  TO `onlinedaybook`.`menu_old`;
+                  
+                  
+CREATE TABLE IF NOT EXISTS `menu` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
+INSERT INTO `menu` (`id`, `parent_id`, `name`) VALUES
+(1, 0, 'Admin'),
+(2, 1, 'User'),
+(3, 1, 'Invoice Issuer'),
+(4, 0, 'Cash'),
+(5, 4, 'Cash'),
+(6, 0, 'Bank'),
+(7, 6, 'Bank'),
+(8, 0, 'Project'),
+(9, 8, 'Project'),
+(10, 0, 'Customer'),
+(11, 10, 'Customer'),
+(12, 0, 'Supplier'),
+(13, 12, 'Supplier'),
+(14, 0, 'Internal Transfer'),
+(15, 14, 'Internal Transfer'),
+(16, 0, 'Payment'),
+(17, 16, 'Make Payment'),
+(18, 16, 'Receive Payment'),
+(19, 0, 'Purchase Goods'),
+(20, 19, 'Receive Goods'),
+(21, 19, 'Instant Receive Goods'),
+(22, 0, 'Sale Invoice'),
+(23, 22, 'Sale Invoice'),
+(24, 22, 'multiple Instant Sale Invoice'),
+(25, 22, 'Invoice List'),
+(26, 0, 'Loan & Advance'),
+(27, 26, 'All Parties'),
+(28, 26, 'Make Payment'),
+(29, 26, 'Receive Payment'),
+(30, 0, 'Subdivision'),
+(31, 30, 'Subdivision'),
+(32, 0, 'GST'),
+(33, 32, 'Input GST'),
+(34, 32, 'Output GST'),
+(35, 32, 'GST List'),
+(36, 32, 'HSN Code List'),
+(37, 0, 'Documents'),
+(38, 37, 'Add Category'),
+(39, 37, 'Document List'),
+(40, 0, 'Reports'),
+(41, 40, 'Bank Report'),
+(42, 40, 'Customer Report'),
+(43, 40, 'Supplier Report'),
+(44, 40, 'Project Report'),
+(45, 40, 'Project Report');
+
+                  
