@@ -102,19 +102,17 @@ $wi = 0;
        $gst_amount_tot=$_REQUEST['gst_amount_tot'];
        $tds_amount_tot=$_REQUEST['tds_amount_tot'];
        $invoice_pay_amount=$_REQUEST['pay_amount_final'];
+       $invoice_id_print = $_REQUEST['invoice_id_print'];
        
-      ////gst_subdivision_1, tds_subdivision_1 
-      //gst_cerf,gst_due_date_new,gst_due_amount_new_total,gst_due_amount_new,gst_due_amount_new_due,gst_due_attach_file,gst_due_flag_value
-      //tds_cerf,tds_due_date_new,tds_due_amount_new_total,tds_due_amount_new,tds_due_amount_new_due,tds_due_attach_file,tds_due_flag_value
     /* goods detail end  */
-    //gst_subdivision_n , tds_subdivision_n, gst_amount_tot,tds_amount_tot
-	 $trans_type = 24;
-    $trans_type_name = "instmulti_sale_goods" ;
+
+     $trans_type = 24;
+     $trans_type_name = "instmulti_sale_goods" ;
      $trans_id = mysql_real_escape_string(trim($trans_id_new));
-    $invoice_idnew = mysql_real_escape_string(trim($invoice_idnew_new));
+     $invoice_idnew = mysql_real_escape_string(trim($invoice_idnew_new));
      $date_new_new=$multi_date[$in];
-      $payment_date_n=strtotime($date_new_new);
-    $query2="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."', credit = '".$total_tot."',description = '".$description."', invoice_id = '".$invoice_idnew."', payment_date = '".$payment_date_n."',link_id = '".$link_id_1."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',trans_type = '".$trans_type."', trans_type_name = '".$trans_type_name."', create_date = '".getTime()."'";
+     $payment_date_n=strtotime($date_new_new);
+    $query2="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."', credit = '".$total_tot."',description = '".$description."', invoice_id = '".$invoice_idnew."', payment_date = '".$payment_date_n."',link_id = '".$link_id_1."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',trans_type = '".$trans_type."', trans_type_name = '".$trans_type_name."', create_date = '".getTime()."',printable_invoice_number ='".$invoice_id_print."',invoice_type = '".$_REQUEST['invoice_type']."'";
     //echo $query2;
     
     $result2= mysql_query($query2) or die('error in query '.mysql_error().$query2);
@@ -131,14 +129,14 @@ $wi = 0;
    //gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',
     if($in==0){
     if($payment_flag==1){
-    $query_pay ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', credit = '".$pay_amount."',  description = '(Invoice Amount Received ): ".$description."', on_customer = '".$cust_id."', invoice_id = '".$invoice_idnew."',payment_flag = '".$payment_flag."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_issuer_id = '".$invoice_issuer_id."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."', trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."',create_date = '".getTime()."'";
+    $query_pay ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', credit = '".$pay_amount."',  description = '(Invoice Amount Received ): ".$description."', on_customer = '".$cust_id."', invoice_id = '".$invoice_idnew."',payment_flag = '".$payment_flag."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_issuer_id = '".$invoice_issuer_id."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."', trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."',create_date = '".getTime()."',printable_invoice_number ='".$invoice_id_print."',invoice_type = '".$_REQUEST['invoice_type']."'";
     $result_pay= mysql_query($query_pay) or die('error in query '.mysql_error().$query_pay);
     
    
     $link_id_1_pay = mysql_insert_id();
     $pp_linkid_2_invoice=$link_id_1_pay; 
     
-    $query2_pay="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."',invoice_id = '".$invoice_idnew."', debit = '".$pay_amount."', description = '(Invoice Amount Received ): ".$description."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_flag = '".$payment_flag."',payment_date = '".strtotime($_REQUEST['pay_payment_date'])."' ,payment_method = '".$pay_method."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."', invoice_pay_amount='".$invoice_pay_amount."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."',link_id = '".$link_id_1_pay."',trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."', create_date = '".getTime()."'";
+    $query2_pay="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."',invoice_id = '".$invoice_idnew."', debit = '".$pay_amount."', description = '(Invoice Amount Received ): ".$description."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_flag = '".$payment_flag."',payment_date = '".strtotime($_REQUEST['pay_payment_date'])."' ,payment_method = '".$pay_method."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."', invoice_pay_amount='".$invoice_pay_amount."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."',link_id = '".$link_id_1_pay."',trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."', create_date = '".getTime()."',printable_invoice_number ='".$invoice_id_print."',invoice_type = '".$_REQUEST['invoice_type']."'";
     $result2_pay= mysql_query($query2_pay) or die('error in query '.mysql_error().$query2_pay);
     
     $link_id_2_pay = mysql_insert_id();   
@@ -158,10 +156,10 @@ $wi = 0;
     
 
     $query5_pay_invoice="update payment_plan set invoice_flag = '1',invoice_pay_id='".$pp_linkid_1_invoice."',invoice_due_pay_id='".$link_id_4_invoice."' where id = '".$link_id_2_pay."'";
-    $result5_pay_invoice= mysql_query($query5_pay_invoice) or die('error in query '.mysql_error().$query5_pay_invoice);
+        $result5_pay_invoice= mysql_query($query5_pay_invoice) or die('error in query '.mysql_error().$query5_pay_invoice);
 
-    $query5_pay_invoice="update payment_plan set invoice_flag = '1',invoice_pay_id='".$pp_linkid_1_invoice."',invoice_due_pay_id='".$link_id_4_invoice."' where id = '".$link_id_2_pay."'";
-    $result5_pay_invoice= mysql_query($query5_pay_invoice) or die('error in query '.mysql_error().$query5_pay_invoice);
+        $query5_pay_invoice="update payment_plan set invoice_flag = '1',invoice_pay_id='".$pp_linkid_1_invoice."',invoice_due_pay_id='".$link_id_4_invoice."' where id = '".$link_id_2_pay."'";
+        $result5_pay_invoice= mysql_query($query5_pay_invoice) or die('error in query '.mysql_error().$query5_pay_invoice);
 
         //$query1_2="update payment_plan set invoice_flag = '1',invoice_pay_id='".$pp_linkid_1_invoice."',invoice_due_pay_id='".$link_id_4_invoice."' where id = '".$due_payment_id_1."'";
         //$result1_2= mysql_query($query1_2) or die('error in query '.mysql_error().$query1_2);
@@ -214,7 +212,7 @@ $wi = 0;
     $tds_per_amount1=($sub_tot_perproject*$tds_per_perproject)/100;
     $tot_tds_amount=$tot_tds_amount+$tds_per_amount1;
     //gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',
-    $query="insert into payment_plan set trans_id = '".$trans_id."', project_id = '".$project_id."',  invoice_id = '".$invoice_idnew."', debit = '".$sub_tot_perproject."', tds_per = '".$tds_per_perproject."', tds_amount = '".$tds_per_amount1."', gst_amount = '".$gst_amount_perproject."',invoice_pay_amount='".$invoice_pay_amount."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."', description = '".$desc_t[$i]."', hsn_code = '".$hsn_code[$i]."',on_customer = '".$cust_id."', payment_flag = '".$payment_flag."',payment_date = '".$payment_date_n."',subdivision = '".$subdivision."',invoice_issuer_id = '".$invoice_issuer_id."',trans_type = '".$trans_type."', trans_type_name = '".$trans_type_name."', create_date = '".getTime()."'";
+    $query="insert into payment_plan set trans_id = '".$trans_id."', project_id = '".$project_id."',  invoice_id = '".$invoice_idnew."', debit = '".$sub_tot_perproject."', tds_per = '".$tds_per_perproject."', tds_amount = '".$tds_per_amount1."', gst_amount = '".$gst_amount_perproject."',invoice_pay_amount='".$invoice_pay_amount."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."', description = '".$desc_t[$i]."', hsn_code = '".$hsn_code[$i]."',on_customer = '".$cust_id."', payment_flag = '".$payment_flag."',payment_date = '".$payment_date_n."',subdivision = '".$subdivision."',invoice_issuer_id = '".$invoice_issuer_id."',trans_type = '".$trans_type."', trans_type_name = '".$trans_type_name."', create_date = '".getTime()."',printable_invoice_number ='".$invoice_id_print."',invoice_type = '".$_REQUEST['invoice_type']."'";
     
     $result= mysql_query($query) or die('error in query '.mysql_error().$query);
     
@@ -239,22 +237,22 @@ $wi = 0;
 }
 
  
-            $subdivision="";
-            $gst_subdivision="";
-            $query_goods="update payment_plan set goods_detail_id = '".$goods_details_idlist."' ,multi_project_id= '".$multi_project_id."',tds_amount= '".$tot_tds_amount."' ,description = '".$desc_total_n."' where id = '".$link_id_2."'";
-            $result_goods= mysql_query($query_goods) or die('error in query '.mysql_error().$query_goods);
+          $subdivision="";
+       $gst_subdivision="";
+          $query_goods="update payment_plan set goods_detail_id = '".$goods_details_idlist."' ,multi_project_id= '".$multi_project_id."',tds_amount= '".$tot_tds_amount."' ,description = '".$desc_total_n."' where id = '".$link_id_2."'";
+          $result_goods= mysql_query($query_goods) or die('error in query '.mysql_error().$query_goods);
    
-            if($in==0){
-            $query5_pay="update payment_plan set link_id = '".$link_id_2_pay."' where id = '".$link_id_1_pay."'";
+           if($in==0){
+           $query5_pay="update payment_plan set link_id = '".$link_id_2_pay."' where id = '".$link_id_1_pay."'";
             $result5_pay= mysql_query($query5_pay) or die('error in query '.mysql_error().$query5_pay);
     
             $query5="update payment_plan set link2_id = '".$link_id_1_pay."',link3_id = '".$link_id_2_pay."' where id = '".$link_id_2."'";
             $result5= mysql_query($query5) or die('error in query '.mysql_error().$query5);
         
-            $query_goods="update payment_plan set goods_detail_id = '".$goods_details_idlist."' ,multi_project_id= '".$multi_project_id."' , description = '".$desc_total_n."' where id = '".$link_id_1_pay."'";
-            $result_goods= mysql_query($query_goods) or die('error in query '.mysql_error().$query_goods);
-            $query_goods="update payment_plan set goods_detail_id = '".$goods_details_idlist."' , multi_project_id= '".$multi_project_id."' ,description = '".$desc_total_n."' where id = '".$link_id_2_pay."'";
-            $result_goods= mysql_query($query_goods) or die('error in query '.mysql_error().$query_goods);
+          $query_goods="update payment_plan set goods_detail_id = '".$goods_details_idlist."' ,multi_project_id= '".$multi_project_id."' , description = '".$desc_total_n."' where id = '".$link_id_1_pay."'";
+          $result_goods= mysql_query($query_goods) or die('error in query '.mysql_error().$query_goods);
+          $query_goods="update payment_plan set goods_detail_id = '".$goods_details_idlist."' , multi_project_id= '".$multi_project_id."' ,description = '".$desc_total_n."' where id = '".$link_id_2_pay."'";
+          $result_goods= mysql_query($query_goods) or die('error in query '.mysql_error().$query_goods);
            }
     /*     goods detail end   */
     
@@ -320,14 +318,14 @@ $wi = 0;
         $trans_type_pay_gst = 51;
         $trans_type_name_pay_gst= "gst_receive_payment" ;
        
-        $query_pay_gst ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', credit = '".$due_amount_pay_1."',  description = '".$tds_due_des_1."', on_customer = '".$cust_id."', invoice_id = '".$invoice_idnew."',payment_flag = '".$payment_flag."', payment_date = '".strtotime($_REQUEST['gst_due_date_new'])."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_issuer_id = '".$invoice_issuer_id."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link3_id = '".$link_id_2."', trans_type = '".$trans_type_pay_gst."', trans_type_name = '".$trans_type_name_pay_gst."',create_date = '".getTime()."'";
+        $query_pay_gst ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', credit = '".$due_amount_pay_1."',  description = '".$tds_due_des_1."', on_customer = '".$cust_id."', invoice_id = '".$invoice_idnew."',payment_flag = '".$payment_flag."', payment_date = '".strtotime($_REQUEST['gst_due_date_new'])."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_issuer_id = '".$invoice_issuer_id."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link3_id = '".$link_id_2."', trans_type = '".$trans_type_pay_gst."', trans_type_name = '".$trans_type_name_pay_gst."',create_date = '".getTime()."',printable_invoice_number ='".$invoice_id_print."',invoice_type = '".$_REQUEST['invoice_type']."'";
         $result_pay_gst= mysql_query($query_pay_gst) or die('error in query '.mysql_error().$query_pay_gst);
         
         
         $link_id_1_pay_gst = mysql_insert_id();
         
         
-        $query2_pay_gst="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."',invoice_id = '".$invoice_idnew."', debit = '".$due_amount_pay_1."', description = '".$tds_due_des_1."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_flag = '".$payment_flag."',payment_date = '".strtotime($_REQUEST['gst_due_date_new'])."' ,payment_method = '".$pay_method."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."', payment_checkno = '".$pay_checkno."',link3_id = '".$link_id_2."',link_id = '".$link_id_1_pay_gst."',trans_type = '".$trans_type_pay_gst."', trans_type_name = '".$trans_type_name_pay_gst."', create_date = '".getTime()."'";
+        $query2_pay_gst="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."',invoice_id = '".$invoice_idnew."', debit = '".$due_amount_pay_1."', description = '".$tds_due_des_1."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_flag = '".$payment_flag."',payment_date = '".strtotime($_REQUEST['gst_due_date_new'])."' ,payment_method = '".$pay_method."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."', payment_checkno = '".$pay_checkno."',link3_id = '".$link_id_2."',link_id = '".$link_id_1_pay_gst."',trans_type = '".$trans_type_pay_gst."', trans_type_name = '".$trans_type_name_pay_gst."', create_date = '".getTime()."',printable_invoice_number ='".$invoice_id_print."',invoice_type = '".$_REQUEST['invoice_type']."'";
         $result2_pay_gst= mysql_query($query2_pay_gst) or die('error in query '.mysql_error().$query2_pay_gst);
         
         $link_id_2_pay_gst = mysql_insert_id();  
@@ -395,7 +393,7 @@ $wi = 0;
         $trans_type_name_pay_tds= "tds_receive_payment" ;
        
        // $query_pay_tds ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', credit = '".$due_amount_pay_1."',  description = '".$tds_due_des_1."', on_customer = '".$cust_id."', invoice_id = '".$invoice_idnew."',payment_flag = '".$payment_flag."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."',subdivision = '".$subdivision."',tds_subdivision = '".$tds_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  tds_amount = '".$tds_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_issuer_id = '".$invoice_issuer_id."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link3_id = '".$link_id_2."', trans_type = '".$trans_type_pay_tds."', trans_type_name = '".$trans_type_name_pay_tds."',create_date = '".getTime()."'";
-       $query_pay_tds ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', credit = '".$due_amount_pay_1."',  description = '".$tds_due_des_1."', on_customer = '".$cust_id."', invoice_id = '".$invoice_idnew."',payment_flag = '".$payment_flag."', payment_date = '".strtotime($_REQUEST['tds_due_date_new'])."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_issuer_id = '".$invoice_issuer_id."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link3_id = '".$link_id_2."', trans_type = '".$trans_type_pay_tds."', trans_type_name = '".$trans_type_name_pay_tds."',create_date = '".getTime()."'";
+       $query_pay_tds ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', credit = '".$due_amount_pay_1."',  description = '".$tds_due_des_1."', on_customer = '".$cust_id."', invoice_id = '".$invoice_idnew."',payment_flag = '".$payment_flag."', payment_date = '".strtotime($_REQUEST['tds_due_date_new'])."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_issuer_id = '".$invoice_issuer_id."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link3_id = '".$link_id_2."', trans_type = '".$trans_type_pay_tds."', trans_type_name = '".$trans_type_name_pay_tds."',create_date = '".getTime()."',printable_invoice_number ='".$invoice_id_print."',invoice_type = '".$_REQUEST['invoice_type']."'";
      
        $result_pay_tds= mysql_query($query_pay_tds) or die('error in query '.mysql_error().$query_pay_tds);
         
@@ -404,7 +402,7 @@ $wi = 0;
         
         //trans_id , cust_id ,, invoice_idnew ,,
         //$query2_pay_tds="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."',invoice_id = '".$invoice_idnew."', debit = '".$due_amount_pay_1."', description = '".$tds_due_des_1."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_flag = '".$payment_flag."',payment_date = '".strtotime($_REQUEST['pay_payment_date'])."' ,payment_method = '".$pay_method."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',tds_subdivision = '".$tds_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  tds_amount = '".$tds_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."', payment_checkno = '".$pay_checkno."',link3_id = '".$link_id_2."',link_id = '".$link_id_1_pay_tds."',trans_type = '".$trans_type_pay_tds."', trans_type_name = '".$trans_type_name_pay_tds."', create_date = '".getTime()."'";
-        $query2_pay_tds="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."',invoice_id = '".$invoice_idnew."', debit = '".$due_amount_pay_1."', description = '".$tds_due_des_1."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_flag = '".$payment_flag."',payment_date = '".strtotime($_REQUEST['tds_due_date_new'])."' ,payment_method = '".$pay_method."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."', payment_checkno = '".$pay_checkno."',link3_id = '".$link_id_2."',link_id = '".$link_id_1_pay_tds."',trans_type = '".$trans_type_pay_tds."', trans_type_name = '".$trans_type_name_pay_tds."', create_date = '".getTime()."'";
+        $query2_pay_tds="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."',invoice_id = '".$invoice_idnew."', debit = '".$due_amount_pay_1."', description = '".$tds_due_des_1."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_flag = '".$payment_flag."',payment_date = '".strtotime($_REQUEST['tds_due_date_new'])."' ,payment_method = '".$pay_method."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."', payment_checkno = '".$pay_checkno."',link3_id = '".$link_id_2."',link_id = '".$link_id_1_pay_tds."',trans_type = '".$trans_type_pay_tds."', trans_type_name = '".$trans_type_name_pay_tds."', create_date = '".getTime()."',printable_invoice_number ='".$invoice_id_print."',invoice_type = '".$_REQUEST['invoice_type']."'";
     
         $result2_pay_tds= mysql_query($query2_pay_tds) or die('error in query '.mysql_error().$query2_pay_tds);
         
@@ -723,9 +721,7 @@ padding:10px;
         var ij=1;
         var ijj=2;
         var invoice_idnew_12 = $("#invoice_idnew").val();
- //record,snum,no_check,desc_t,qty_t,unit_price_1,sub_total,gst,total,gst_amount
- //qty_tot,unit_price_tot,sub_total_tot,total_tot,gst_amount_tot
-  //project,subdivision,gst_subdivision
+ 
         $(".add-row").click(function()
         {
             
@@ -1020,30 +1016,76 @@ function finddate_new_id()
 		<table valign="top" width="98%" border="0">
             <tr><td colspan="2" valign="top"><h4 class="u-text-2 u-text-palette-1-base1 " style="padding:0px; margin:0px;">Instant Sale Goods</h4></td></tr>
                                                            
-			<tr><td width="125px">Transaction ID</td>
+			<tr>
+            <td width="125px">Transaction ID</td>
 			<td style="color:#FF0000; font-weight:bold;"><input type="hidden" id="trans_id"  name="trans_id" value="<?php echo $trans_id; ?>"/>&nbsp;<?php echo $trans_id; ?></td></tr>
-            <tr><td width="125px">Invoice No.</td>
-            <td style="color:#FF0000; font-weight:bold;"><input type="hidden" id="invoice_idnew"  name="invoice_idnew" value="<?php echo $invoice_idnew; ?>"/>&nbsp;<?php echo $invoice_idnew; ?></td></tr>
-			<tr><td width="125px">Invoice Issuer</td>
-            <td><input type="text" id="invoice_issuer"  name="invoice_issuer" value="" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
-            <!--<tr><td width="125px">Project Name</td>
-			<td><input type="text" id="project"  name="project" value="" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr> -->
-			
+
+            <tr>
+            <td width="125px">NDB Sr. No.</td>
+            <td style="color:#FF0000; font-weight:bold;">
+            <input type="hidden" id="invoice_idnew"  name="invoice_idnew" value="<?php echo $invoice_idnew; ?>"/>&nbsp;<?php echo $invoice_idnew; ?></td>
+            </tr>
+
 			<tr><td >Customer Name</td>
-			<td><input type="text" id="from"  name="from" value="" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
-			<!--<tr><td >Sub Division Name</td>
+			<td><input type="text" id="from"  name="from" value="" onblur="setPrintInvoiceNo()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+
+			<tr><td width="125px">Invoice Issuer</td>
+            <td><input type="text" id="invoice_issuer"  name="invoice_issuer" value="" onblur="setPrintInvoiceNo()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+
+			<tr>
+            <td width="125px">Invoice Type</td>
+			<td style="font-weight:bold;">
+            <Select id="invoice_type" name="invoice_type" onChange="setPrintInvoiceNo()">
+            <option value="">Select Invoice Type</option>
+            <option value="R">GST Rent</option>
+            <option value="M">GST Maintenance</option>
+            <option value="S">GST Sales</option>
+            <option value="RN">Reimbursement Note</option>
+            </select>
+            </td>
+            </tr>
+
+			<tr>
+            <td width="125px">Invoice Month</td>
+			<td style="font-weight:bold;">
+            <Select id="invoice_month" name="invoice_month" onChange="setPrintInvoiceNo()">
+            <option value="">Select Month</option>            
+            <option value="/01">April</option>
+            <option value="/02">May</option>
+            <option value="/03">June</option>
+            <option value="/04">July</option>
+            <option value="/05">August</option>
+            <option value="/06">September</option>
+            <option value="/07">October</option>
+            <option value="/08">November</option>
+            <option value="/09">December</option>
+            <option value="/10">January</option>
+            <option value="/11">February</option>
+            <option value="/12">March</option>
+            </select>
+            </td>
+            </tr>
+
+			<tr>
+            <td width="125px">Invoice Year</td>
+			<td style="font-weight:bold;">
+            <Select id="invoice_fy" name="invoice_fy" onChange="setPrintInvoiceNo()">
+            <option value="">Select Year</option>            
+            <option value="/22">22-23</option>
+            <option value="/23">23-24</option>
+            <option value="/24">24-25</option>
+            <option value="/25">25-26</option>
+            </select>
+            </td>
+            </tr>
+
+            <tr>
+            <td width="125px"><div id="inv_label">Invoice No.</div></td>
             <td>
-             <input type="text" id="subdivision"  name="subdivision" value="" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >
-            &nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span>
-            
-            </td></tr>
-            
-            <tr><td >GST Division Name</td>
-            <td>
-             <input type="text" id="gst_subdivision"  name="gst_subdivision" value="" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >
-            &nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span>
-            
-            </td></tr> -->
+            <input type="text" style="color:#FF0000; font-weight:bold;" id="invoice_id_print"  name="invoice_id_print" value="" maxlength="16" readonly/>
+            </td>
+            </tr>
+
             <tr><td align="left" valign="top" >Date</td>
         
             <td><input type="text"  name="payment_date" id="payment_date" style="width:250px;" onchange="finddate_new_id();" onblur="finddate_new_id();" value="<?php echo $_REQUEST['payment_date']; ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('payment_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>          
@@ -1477,6 +1519,54 @@ function finddate_new_id()
         </body>
 </html>
 <script>
+
+function setPrintInvoiceNo()
+{
+    //function coded by amit
+    CustomerShortName = "";
+    InvoiceIssuer = "";
+    InvoiceType = "";
+    InvoiceMonth = document.getElementById('invoice_month').value;
+    InvoiceFY = document.getElementById('invoice_fy').value;
+
+    if(document.getElementById('invoice_type').value == "M")
+    {
+        InvoiceType = "/M";
+    }
+    
+    if(document.getElementById('invoice_type').value == "S")
+    {
+        InvoiceMonth = "/" + document.getElementById('invoice_idnew').value;
+    }
+    
+    if(document.getElementById('invoice_type').value == "RN")
+    {
+        document.getElementById('inv_label').innerHTML = "Reimbursement Note";
+    }
+    else
+    {
+        document.getElementById('inv_label').innerHTML = "Invoice No.";
+    }
+
+    if(document.getElementById('invoice_issuer').value)
+    {
+        if(document.getElementById('invoice_type').value == "M" || document.getElementById('invoice_type').value == "S")
+        InvoiceIssuer = "/" + document.getElementById('invoice_issuer').value.substring(0,2);
+        else
+        InvoiceIssuer = "/" + document.getElementById('invoice_issuer').value.substring(0,3);
+    }
+
+    if(document.getElementById('from').value)
+    {
+        //CustomerShortName = document.getElementById('from').value.substring(0,4).toUpperCase();
+        CNameLength = document.getElementById('from').value.length;
+        CustomerShortName = document.getElementById('from').value.substr(CNameLength-4,4).toUpperCase();
+    }
+
+    document.getElementById('invoice_id_print').value = CustomerShortName+InvoiceIssuer+InvoiceType+InvoiceMonth+InvoiceFY;	
+    //alert(document.getElementById('invoice_id_print').value);
+}
+
 function checkpay_flag()
 {
     //pay_form,pay_payment_date,pay_method,pay_checkno,pay_amount

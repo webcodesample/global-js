@@ -360,6 +360,7 @@ if($totalPages > $numberOfPages)
             <thead class="report-header">
                 <th class="data" width="30px">S.No.</th>
                 <th class="data">Invoice. No.</th>
+                <th class="data">Print Invoice. No.</th>
                 <th class="data">Customer Name</th>
                 <th class="data">Issuer Name</th>
                 <th class="data">Date </th>
@@ -378,6 +379,20 @@ if($totalPages > $numberOfPages)
                     <tr class="data">
                         <td class="data" width="30px"><?php echo $ii; ?></td>
                         <td class="data"><?php echo $select_data['invoice_id']; ?></td>
+                        <td class="data" align="center">
+                        <?php 
+                        //code by amit
+                        $pin_query = "Select printable_invoice_number from payment_plan where invoice_id='".$select_data['invoice_id']."'";
+                        $pin_result = mysql_query($pin_query);
+	                    $pin_data = mysql_fetch_assoc($pin_result);
+
+                        if($pin_data['printable_invoice_number'])
+                        echo $pin_data['printable_invoice_number'];
+                        else
+                        echo $select_data['invoice_id'];
+
+                        ?>
+                        </td>
                         <td class="data"><?php //echo $select_data['cust_id'];
                         $customer_nm = get_field_value("full_name","customer","cust_id",$select_data['cust_id']); 
                         echo $customer_nm;

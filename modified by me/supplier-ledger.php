@@ -207,8 +207,7 @@ if(mysql_real_escape_string(trim($_REQUEST['file_button_gst'])) == "Submit")
 /*  --------      INVOICE DUE WORK        -----------------------  */
 if(mysql_real_escape_string(trim($_REQUEST['file_button_invoice'])) == "Submit")
 {
-    print_r($_REQUEST);
-    die();
+   // print_r($_REQUEST);    die();
    $invoice_cerf_1=mysql_real_escape_string(trim($_REQUEST['invoice_cerf']));
    $invoice_due_date_1=mysql_real_escape_string(trim($_REQUEST['pay_payment_date']));
    $pay_amount_1=mysql_real_escape_string(trim($_REQUEST['pay_amount']));
@@ -274,12 +273,12 @@ if(mysql_real_escape_string(trim($_REQUEST['file_button_invoice'])) == "Submit")
 
        if($clearall_due_flag_invoice=="2")
        {
-        $query2_pay_invoice="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."',invoice_id = '".$invoice_idnew."', credit = '".$invoice_due_amount_new_total."', description = '(".$clear_invoice_due_des_1_extra.") ".$clear_invoicedue_desc."', on_project = '".$project_id."', payment_flag = '".$payment_flag."',payment_date = '".strtotime($_REQUEST['clear_pay_payment_date'])."' ,payment_method = '".$pay_method."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_due_pay_id = '".$invoice_due_pay_id_gstpay."', payment_checkno = '".$pay_checkno."',link3_id = '".$due_payment_id_1."',trans_type = '".$trans_type_pay_invoice."', trans_type_name = '".$trans_type_name_pay_invoice."',hsn_code= '".$hsn_code_gstpay."',multi_invoice_flag= '".$multi_invoice_flag_gstpay."',multi_invoice_detail= '".$multi_invoice_detail_gstpay."',multi_invoice_id= '".$multi_invoice_id_gstpay."',invoice_pay_id= '".$invoice_pay_id_gstpay."',gst_id= '".$gst_id_gstpay."',tds_id = '".$tds_id_gstpay."',gst_due_id = '".$gst_due_id_gstpay."',tds_due_id = '".$tds_due_id_gstpay."',tds_flag = '".$tds_flag_gstpay."',gst_flag = '".$gst_flag_gstpay."',invoice_flag = '".$invoice_flag_gstpay."',clear_invoice_flag = '".$clear_invoice_flag_gstpay."',clear_gst_flag = '".$clear_gst_flag_gstpay."',clear_tds_flag = '".$clear_tds_flag_gstpay."' ,userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
+        $query2_pay_invoice="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."',invoice_id = '".$invoice_idnew."', credit = '".$invoice_due_amount_new_total."', description = '(".$clear_invoice_due_des_1_extra.") ".$clear_invoicedue_desc."', on_project = '".$project_id."', payment_flag = '".$payment_flag."',payment_date = '".strtotime($_REQUEST['clear_pay_payment_date'])."' ,payment_method = '".$pay_method."',invoice_issuer_id = '".$invoice_issuer_id."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  invoice_pay_amount='".$invoice_pay_amount."',invoice_due_pay_id = '".$invoice_due_pay_id_gstpay."', payment_checkno = '".$pay_checkno."',link3_id = '".$due_payment_id_1."',trans_type = '".$trans_type_pay_invoice."', trans_type_name = '".$trans_type_name_pay_invoice."',hsn_code= '".$hsn_code_gstpay."',multi_invoice_flag= '".$multi_invoice_flag_gstpay."',multi_invoice_detail= '".$multi_invoice_detail_gstpay."',multi_invoice_id= '".$multi_invoice_id_gstpay."',invoice_pay_id= '".$invoice_pay_id_gstpay."',gst_id= '".$gst_id_gstpay."',tds_id = '".$tds_id_gstpay."',gst_due_id = '".$gst_due_id_gstpay."',tds_due_id = '".$tds_due_id_gstpay."',tds_flag = '".$tds_flag_gstpay."',gst_flag = '".$gst_flag_gstpay."',invoice_flag = '".$invoice_flag_gstpay."',clear_invoice_flag = '".$clear_invoice_flag_gstpay."',clear_gst_flag = '".$clear_gst_flag_gstpay."',clear_tds_flag = '".$clear_tds_flag_gstpay."' ,userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
         $result2_pay_invoice= mysql_query($query2_pay_invoice) or die('error in query '.mysql_error().$query2_pay_invoice);
         $link_id_2_pay_invoice_clear = mysql_insert_id();  
 
 
-        $query3_clear="insert into invoice_due_info set pp_linkid_1 = '".$link_id_2_pay_invoice_clear."',invoice_id = '".$invoice_idnew."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',	due_date = '".strtotime($_REQUEST['clear_pay_payment_date'])."',description = '(".$clear_invoice_due_des_1_extra.") ".$clear_invoicedue_desc."',amount = '".$due_amount_pay_1."', received_amount = '".$invoice_due_amount_new_total."',clear_due_flag=1 ,userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
+        $query3_clear="insert into invoice_due_info set pp_linkid_1 = '".$link_id_2_pay_invoice_clear."',invoice_id = '".$invoice_idnew."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',	due_date = '".strtotime($_REQUEST['clear_pay_payment_date'])."',description = '(".$clear_invoice_due_des_1_extra.") ".$clear_invoicedue_desc."', received_amount = '".$invoice_due_amount_new_total."',clear_due_flag=1 ,userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
         $result3_clear= mysql_query($query3_clear) or die('error in query '.mysql_error().$query3_clear);
         $link_id_4_clear = mysql_insert_id();
         //clear_table_link_id           
@@ -299,7 +298,7 @@ if(mysql_real_escape_string(trim($_REQUEST['file_button_invoice'])) == "Submit")
              
              if($invoice_due_flag_value_1=="1")
                {                  
-                   $query3="insert into invoice_due_info set invoice_id = '".$invoice_idnew."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',	due_date = '".strtotime($_REQUEST['pay_payment_date'])."',description = '(".$invoice_due_des_1_extra.") ".$invoice_due_des_1."',amount = '".$due_amount_pay_1."', received_amount = '".$pay_amount_1."',userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
+                   $query3="insert into invoice_due_info set invoice_id = '".$invoice_idnew."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',	due_date = '".strtotime($_REQUEST['pay_payment_date'])."',description = '(".$invoice_due_des_1_extra.") ".$invoice_due_des_1."', received_amount = '".$pay_amount_1."',userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
                    $result3= mysql_query($query3) or die('error in query '.mysql_error().$query3);
                    $link_id_4 = mysql_insert_id();
                    
@@ -370,7 +369,7 @@ if(mysql_real_escape_string(trim($_REQUEST['file_button_invoice'])) == "Submit")
             $link_id_2_pay_invoice_clear = mysql_insert_id();  
 
 
-            $query3_clear="insert into invoice_due_info set pp_linkid_1 = '".$link_id_2_pay_invoice_clear."',invoice_id = '".$invoice_idnew."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',	due_date = '".strtotime($_REQUEST['clear_pay_payment_date'])."',description = '(".$clear_invoice_due_des_1_extra.") ".$clear_invoicedue_desc."',amount = '".$due_amount_pay_1."', received_amount = '".$receiv_amount_invoice."',clear_due_flag=1 ,userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
+            $query3_clear="insert into invoice_due_info set pp_linkid_1 = '".$link_id_2_pay_invoice_clear."',invoice_id = '".$invoice_idnew."',payment_plan_id = '".$due_payment_id_1."',trans_id = '".$due_trans_id_1."',	due_date = '".strtotime($_REQUEST['clear_pay_payment_date'])."',description = '(".$clear_invoice_due_des_1_extra.") ".$clear_invoicedue_desc."', received_amount = '".$receiv_amount_invoice."',clear_due_flag=1 ,userid_create = '".$_SESSION['userId']."',create_date = '".getTime()."'";
             $result3_clear= mysql_query($query3_clear) or die('error in query '.mysql_error().$query3_clear);
             $link_id_4_clear = mysql_insert_id();
                   
@@ -870,6 +869,7 @@ else
 				
 				while($select_data = mysql_fetch_array($select_result))
 				{
+                    //print_r($select_data);
 					if($i > 1)
 					{
 						$select_query4 = "select debit,credit from payment_plan where cust_id = '".$_REQUEST['cust_id']."' and id = '".$temp_payment_id."' LIMIT 0,1  ";
@@ -955,8 +955,12 @@ else
                         if($select_data['debit'] > 0)
                         {
                             $pay_date = $select_data['payment_date'];
+                            $cutoff_date = mktime(0,0,0,9,1,2023); // by amit
+                            //echo $cutoff_date;
+                            //$tz=date_timezone_get(date_create());
+                            //echo timezone_name_get($tz);
                             //print_r($select_data);
-                            if($pay_date > "1648665000"){
+                            if($pay_date > $cutoff_date){
                         if($select_data['gst_amount']!=0)
                         { ?>
                             
@@ -1036,9 +1040,9 @@ else
                         if($select_data['debit'] > 0)
                         {
                             $pay_date = $select_data['payment_date'];
+                            $cutoff_date = mktime(0,0,0,9,1,2023);//by amit
                             //echo $select_data['invoice_pay_amount'];
-                            //echo $pay_date;
-                            if($pay_date >"1648665000"){
+                            if($pay_date > $cutoff_date){
                             if($select_data['invoice_pay_amount']!=0)
                             { ?>
                                 <?php
