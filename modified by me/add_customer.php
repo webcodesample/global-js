@@ -211,7 +211,7 @@ if(trim($_REQUEST['action_perform']) == "add_customer")
             <td><input type="text" id="email" name="email"  style="width: 250px;" value="<?php echo $_REQUEST['email']; ?>" tabindex="4"/></td></tr>
             <tr><td >Date</td>
             <td>
-            <input type="text"  name="opening_balance_date"  style="width: 250px;" id="opening_balance_date" value="<?php echo $_REQUEST['opening_balance_date']; ?>" tabindex="6" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
+            <input type="text"  name="opening_balance_date"  style="width: 250px;" id="opening_balance_date" value="<?php echo $_REQUEST['opening_balance_date']; ?>" onkeyup="setDateFormat()" tabindex="6" autocomplete="off" maxlength="10" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
             &nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
             
             <tr><td >Same as Current</td>
@@ -328,6 +328,17 @@ if(trim($_REQUEST['action_perform']) == "add_customer")
 </html>
 <script src="amit.js"></script>
 <script>
+
+function setDateFormat()
+{    
+    if($('#opening_balance_date').val().length == 2)
+    $('#opening_balance_date').val($('#opening_balance_date').val()+'-');
+
+    if($('#opening_balance_date').val().length == 5)
+    $('#opening_balance_date').val($('#opening_balance_date').val()+'-');
+
+}
+
 function add_div()
 {
 	$("#adddiv").toggle("slow");
