@@ -211,7 +211,7 @@ if(trim($_REQUEST['action_perform']) == "add_customer")
             <td><input type="text" id="email" name="email"  style="width: 250px;" value="<?php echo $_REQUEST['email']; ?>" tabindex="4"/></td></tr>
             <tr><td >Date</td>
             <td>
-            <input type="text"  name="opening_balance_date"  style="width: 250px;" id="opening_balance_date" value="<?php echo $_REQUEST['opening_balance_date']; ?>" onkeyup="setDateFormat()" tabindex="6" autocomplete="off" maxlength="10" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
+            <input type="text"  name="opening_balance_date"  style="width: 250px;" id="opening_balance_date" value="DD-MM-YY" onkeydown="setDateFormat(event,this.id)" tabindex="6" autocomplete="off" maxlength="10" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
             &nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
             
             <tr><td >Same as Current</td>
@@ -329,15 +329,75 @@ if(trim($_REQUEST['action_perform']) == "add_customer")
 <script src="amit.js"></script>
 <script>
 
-function setDateFormat()
-{    
-    if($('#opening_balance_date').val().length == 2)
-    $('#opening_balance_date').val($('#opening_balance_date').val()+'-');
+function setDateFormat(event,event_field) 
+{
+//code by amit
+  if (event.key !== 'Backspace' && event.key !=='Tab')
+  { 
+  	if(isNaN(event.key) || event.key==' ')
+    {
+    	alert("Please press a numeric key");
+        event.preventDefault();
+    }
+    else
+    {
+    if(document.getElementById(event_field).value.length == 2)
+	document.getElementById(event_field).value = document.getElementById(event_field).value+'-';
 
-    if($('#opening_balance_date').val().length == 5)
-    $('#opening_balance_date').val($('#opening_balance_date').val()+'-');
-
+	if(document.getElementById(event_field).value.length == 5)
+	document.getElementById(event_field).value = document.getElementById(event_field).value+'-';
+    }
+  }
+  else if(event.key == 'Tab')
+  { 
+      if(document.getElementById(event_field).value.length==1)
+    {
+    	document.getElementById(event_field).value = 0+document.getElementById(event_field).value+'-';
+        event.preventDefault();
+    }
+    else if(document.getElementById(event_field).value.length==4)
+    {
+      const dateArray = document.getElementById(event_field).value.split("-");
+      if(dateArray[1].length==1)
+      {
+          dateArray[1] = 0+dateArray[1];
+      }
+      document.getElementById(event_field).value = dateArray.join("-") + "-";
+      event.preventDefault();
+    }
+  	else if(document.getElementById(event_field).value.length>7)
+    {
+    const dateArray = document.getElementById(event_field).value.split("-");
+	if(dateArray[2].length==3)
+    {
+    	alert("Date format should be dd/mm/yy OR dd/mm/yyyy");
+        event.preventDefault();
+    }
+    
+    if(dateArray[2].length==2)
+    {
+    	let current_year = new Date().getFullYear().toString().substr(2);
+    	if(dateArray[2] >= 0 && dateArray[2] <= current_year)
+        {
+        	dateArray[2] = 20 + dateArray[2];
+            document.getElementById(event_field).value = dateArray.join("-");
+        }
+        else
+        {
+        	dateArray[2] = 19 + dateArray[2];
+            document.getElementById(event_field).value = dateArray.join("-");
+        }
+    }
+    }
+    else
+    {
+    	alert("Date format should be dd/mm/yy OR dd/mm/yyyy");
+        event.preventDefault();
+    }
+    
+  }
 }
+
 
 function add_div()
 {
