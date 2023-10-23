@@ -211,7 +211,7 @@ if(trim($_REQUEST['action_perform']) == "add_customer")
             <td><input type="text" id="email" name="email"  style="width: 250px;" value="<?php echo $_REQUEST['email']; ?>" tabindex="4"/></td></tr>
             <tr><td >Date</td>
             <td>
-            <input type="text"  name="opening_balance_date"  style="width: 250px;" id="opening_balance_date" value="DD-MM-YY" onkeydown="setDateFormat(event,this.id)" tabindex="6" autocomplete="off" maxlength="10" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
+            <input type="text"  name="opening_balance_date"  style="width: 250px;" id="opening_balance_date" onkeydown="setDateFormat(event,this.id)" tabindex="6" autocomplete="off" maxlength="10" placeholder="DD-MM-YY"/>&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
             &nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
             
             <tr><td >Same as Current</td>
@@ -362,7 +362,8 @@ function setDateFormat(event,event_field)
       {
           dateArray[1] = 0+dateArray[1];
       }
-      document.getElementById(event_field).value = dateArray.join("-") + "-";
+      document.getElementById(event_field).value = dateArray.join("-");
+      document.getElementById(event_field).value = document.getElementById(event_field).value + "-";
       event.preventDefault();
     }
   	else if(document.getElementById(event_field).value.length>7)

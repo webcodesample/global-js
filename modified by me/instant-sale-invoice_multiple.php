@@ -1518,54 +1518,9 @@ function finddate_new_id()
         <?php include_once ("footer.php"); ?>
         </body>
 </html>
+
+<script src="amit.js"></script>
 <script>
-
-function setPrintInvoiceNo()
-{
-    //function coded by amit
-    CustomerShortName = "";
-    InvoiceIssuer = "";
-    InvoiceType = "";
-    InvoiceMonth = document.getElementById('invoice_month').value;
-    InvoiceFY = document.getElementById('invoice_fy').value;
-
-    if(document.getElementById('invoice_type').value == "M")
-    {
-        InvoiceType = "/M";
-    }
-    
-    if(document.getElementById('invoice_type').value == "S")
-    {
-        InvoiceMonth = "/" + document.getElementById('invoice_idnew').value;
-    }
-    
-    if(document.getElementById('invoice_type').value == "RN")
-    {
-        document.getElementById('inv_label').innerHTML = "Reimbursement Note";
-    }
-    else
-    {
-        document.getElementById('inv_label').innerHTML = "Invoice No.";
-    }
-
-    if(document.getElementById('invoice_issuer').value)
-    {
-        if(document.getElementById('invoice_type').value == "M" || document.getElementById('invoice_type').value == "S")
-        InvoiceIssuer = "/" + document.getElementById('invoice_issuer').value.substring(0,2);
-        else
-        InvoiceIssuer = "/" + document.getElementById('invoice_issuer').value.substring(0,3);
-    }
-
-    if(document.getElementById('from').value)
-    {
-        //CustomerShortName = document.getElementById('from').value.substring(0,4).toUpperCase();
-        CNameLength = document.getElementById('from').value.length;
-        CustomerShortName = document.getElementById('from').value.substr(CNameLength-4,4).toUpperCase();
-    }
-
-    document.getElementById('invoice_id_print').value = CustomerShortName+InvoiceIssuer+InvoiceType+InvoiceMonth+InvoiceFY;	
-    //alert(document.getElementById('invoice_id_print').value);
-}
 
 function checkpay_flag()
 {
