@@ -69,18 +69,27 @@ if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
     
     $to_date = strtotime(mysql_real_escape_string(trim($_REQUEST['to_date'])));
 
-    if($_REQUEST['cust_id']!="All"){
-        $customerdata ="and cust_id='".$_REQUEST['cust_id']."'";
-    }else { $customerdata=""; }
+    if($_REQUEST['cust_id'])
+    {
+        //modify by amit
+        $customer_info = explode(" - ",$_REQUEST['cust_id']);
+        $customerdata ="and cust_id='".$customer_info[1]."'";
+    }
+    else { $customerdata=""; }
     
     if($_REQUEST['project_id']!="All"){
         $projectdata ="and project_id='".$_REQUEST['project_id']."'";
     }else { $projectdata=""; }
     
-    if($_REQUEST['invoice_id']!="All"){
+    if($_REQUEST['invoice_id']){
         $invoice_iddata ="and invoice_id='".$_REQUEST['invoice_id']."'";
+    }
+    elseif($_REQUEST['printable_invoice_number'])
+    {
+        //code by amit
+        $print_inv_data = explode(" - ",$_REQUEST['printable_invoice_number']);
+        $invoice_iddata ="and invoice_id='".$print_inv_data[1]."'";
     }else { $invoice_iddata=""; }
-    
     
     if($from_date!=""){
         $from_datedata ="and payment_date >= '".$from_date."'";
@@ -119,18 +128,27 @@ if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
     
     $to_date = strtotime(mysql_real_escape_string(trim($_REQUEST['to_date'])));
 
-    if($_REQUEST['cust_id']!="All"){
-        $customerdata ="and cust_id='".$_REQUEST['cust_id']."'";
-    }else { $customerdata=""; }
+    if($_REQUEST['cust_id'])
+    {
+        //modify by amit
+        $customer_info = explode(" - ",$_REQUEST['cust_id']);
+        $customerdata ="and cust_id='".$customer_info[1]."'";
+    }
+    else { $customerdata=""; }
     
     if($_REQUEST['project_id']!="All"){
         $projectdata ="and project_id='".$_REQUEST['project_id']."'";
     }else { $projectdata=""; }
     
-    if($_REQUEST['invoice_id']!="All"){
+    if($_REQUEST['invoice_id']){
         $invoice_iddata ="and invoice_id='".$_REQUEST['invoice_id']."'";
+    }
+    elseif($_REQUEST['printable_invoice_number'])
+    {
+        //code by amit
+        $print_inv_data = explode(" - ",$_REQUEST['printable_invoice_number']);
+        $invoice_iddata ="and invoice_id='".$print_inv_data[1]."'";
     }else { $invoice_iddata=""; }
-    
     
     if($from_date!=""){
         $from_datedata ="and payment_date >= '".$from_date."'";
@@ -139,10 +157,10 @@ if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
     if($to_date!=""){
         $to_datedata ="and payment_date <= '".$to_date."'";
     }else { $to_datedata=""; }
-    
+  
     // and payment_date >= '".$from_date."' and payment_date <= '".$to_date."' 
-    $select_query  = "select *  from goods_details where  invoice_id > '0' ".$customerdata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." group by invoice_id ORDER BY invoice_id ASC ";
     
+    $select_query  = "select *  from goods_details where  invoice_id > '0' ".$customerdata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." group by invoice_id ORDER BY invoice_id ASC ";
     
     $select_result = mysql_query($select_query) or die('error in query select bank query '.mysql_error().$select_query);
     $select_total = mysql_num_rows($select_result);
@@ -227,18 +245,14 @@ if($totalPages > $numberOfPages)
 <table width="" border="1" align="left" cellpadding="0" cellspacing="0">
                 <tr>
                 
-                    <td width="80">
-                    &nbsp;&nbsp;From Date
-                    </td>
+                    <td width="80">From Date</td>
                     <td width="280">
                     <input type="text"  name="from_date" id="from_date" value="<?php echo $_REQUEST['from_date']; ?>" style="width:250px; height: 25px;" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('from_date')" style="cursor:pointer"/>
                     
                    <!-- <input type="text" name="from_date" id="from_date" value="<?php echo $_REQUEST['from_date']; ?>"  readonly="" style="width:120px;" >-->
                  </td>
                 
-                 <td width="80">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To Date
-                    </td>
+                 <td width="80">To Date</td>
                     <td width="280">
                     <input type="text"  name="to_date" id="to_date" value="<?php echo $_REQUEST['to_date']; ?>" style="width:250px; height: 25px;" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('to_date')" style="cursor:pointer"/>
                   <!--  <input type="text" name="to_date" id="to_date" value="<?php echo $_REQUEST['to_date']; ?>"  readonly="" style="width:120px;" >-->
@@ -246,70 +260,60 @@ if($totalPages > $numberOfPages)
                 </tr>
                 <tr>
                     
-                    <td width="80px;">Customer List</td>
+                    <td width="80px;" nowrap>Customer Name</td>
                     <td width="280px;">
-                        <select name="cust_id" id="cust_id" style="width:250px; height: 25px;">
-        <option value="All">All</option>
-        <?php 
-        $select_search1 = "select cust_id  from goods_details  group BY cust_id ";
-        //$select_search1 = "select cust_id  from customer where(type = 'customer')";
-    $search_result1 = mysql_query($select_search1) or die('error in query select gst_subdivision query '.mysql_error().$select_search1);
-    $select_total1 = mysql_num_rows($search_result1);
-        while($search_data1 = mysql_fetch_array($search_result1))
-                { 
-                    // $project1_nm = get_field_value("name","project","id",$row_series['project_id']); 
-                    //$subdivision1_nm = get_field_value("name","subdivision","id",$row_series['subdivision']);  
-                    $customer_nm = get_field_value("full_name","customer","cust_id",$search_data1['cust_id']);  
-                    ?>
-                <option  value="<?php echo $search_data1['cust_id']; ?>"  <?php if($_REQUEST['cust_id']==$search_data1['cust_id']){ echo "selected='selected'"; } ?>><?php echo $customer_nm; ?></option>
-              <?php   }
-         ?>
-    </select>
+                        <input type="text" name="cust_id" id="cust_id" style="width:250px; height: 25px;">
                     </td>
                     
                     <td width="80">Project List</td>
                     <td width="280px;">
                         <select name="project_id" id="project_id" style="width:250px; height: 25px;">
-        <option value="All">All</option>
-        <?php 
-        $select_search2 = "select project_id  from goods_details  group BY project_id ";
-    $search_result2 = mysql_query($select_search2) or die('error in query select gst_subdivision query '.mysql_error().$select_search2);
-    $select_total2 = mysql_num_rows($search_result2);
-        while($search_data2 = mysql_fetch_array($search_result2))
-                {  
-                    $project1_nm = get_field_value("name","project","id",$search_data2['project_id']); 
-                    ?>
-                <option value="<?php echo $search_data2['project_id']; ?>" <?php if($_REQUEST['project_id']==$search_data2['project_id']){ echo "selected='selected'"; } ?>><?php echo $project1_nm; ?></option>
-              <?php   }
-         ?>
-    </select>
+                            <option value="All">All</option>
+                            <?php 
+                            $select_search2 = "select project_id  from goods_details  group BY project_id ";
+                            $search_result2 = mysql_query($select_search2) or die('error in query select gst_subdivision query '.mysql_error().$select_search2);
+                            $select_total2 = mysql_num_rows($search_result2);
+                            while($search_data2 = mysql_fetch_array($search_result2))
+                            {  
+                            $project1_nm = get_field_value("name","project","id",$search_data2['project_id']); 
+                            ?>
+                            <option value="<?php echo $search_data2['project_id']; ?>" <?php if($_REQUEST['project_id']==$search_data2['project_id']){ echo "selected='selected'"; } ?>><?php echo $project1_nm; ?></option>
+                            <?php   }
+                            ?>
+                        </select>
                     </td>
                 </tr>
                 
                 <tr>
                     
-                    <td width="80">Invoice No</td>
+                    <td width="80">NDB Sr. No.</td>
                     <td width="280px;">
-                        <select name="invoice_id" id="invoice_id" style="width:250px; height: 25px;">
-        <option value="All">All</option>
-        <?php 
-        $select_search3 = "select invoice_id  from goods_details  group BY invoice_id ";
-    $search_result3 = mysql_query($select_search3) or die('error in query select  query '.mysql_error().$select_search3);
-    $select_total3 = mysql_num_rows($search_result3);
-        while($search_data3 = mysql_fetch_array($search_result3))
-                { 
-                   // $subdivision1_nm = get_field_value("name","subdivision","id",$search_data3['subdivision']);  
-                    ?>
-                <option value="<?php echo $search_data3['invoice_id']; ?>" <?php if($_REQUEST['invoice_id']==$search_data3['invoice_id']){ echo "selected='selected'"; } ?> ><?php echo $search_data3['invoice_id']; ?></option>
-              <?php   }
-         ?>
-    </select>
+                        <input type="text" name="invoice_id" id="invoice_id" onblur="setVisibility(this.id)" style="width:250px; height: 25px;">
+                    </td>
+                    <td width="80px;" nowrap>Printable Invoice No.</td>
+                    <td width="280px;">
+                        <input type="text" name="printable_invoice_number" id="printable_invoice_number" onblur="setVisibility(this.id)" style="width:250px; height: 25px;">
+                    </td>
+                </tr>
+
+                <tr>
+                    
+                    <td width="80">Invoice Type</td>
+                    <td width="280px;">
+                    <select name="invoice_type" id="invoice_type" style="width:250px; height: 25px;">
+                    <option value="">All</option>
+                    <option value="R">GST Rent</option>
+                    <option value="M">GST Maintenance</option>
+                    <option value="S">GST Sale</option>
+                    <option value="RN">Reimbursement Note</option>
+                    </select>
     
                     </td>
                     <td width="80px;"></td>
                     <td width="280px;"> <input type="button" name="search_button1" id="search_button1" value="search " onClick="return search_date();" class="button" >&nbsp;<input type="button" name="refresh" id="refresh" value="Refresh" class="button" onClick="window.location='invoice-list.php?gst_subdivision_id=<?php echo $_REQUEST['gst_subdivision_id']; ?>';"  />&nbsp;
                     </td>
                 </tr>
+
                 <tr><td colspan="4">&nbsp;</td></tr>
             </table>
             
@@ -359,8 +363,9 @@ if($totalPages > $numberOfPages)
             <tr >
             <thead class="report-header">
                 <th class="data" width="30px">S.No.</th>
-                <th class="data">Invoice. No.</th>
+                <th class="data">NDB Sr. No.</th>
                 <th class="data">Print Invoice. No.</th>
+                <th class="data">Invoice Type</th>
                 <th class="data">Customer Name</th>
                 <th class="data">Issuer Name</th>
                 <th class="data">Date </th>
@@ -374,7 +379,22 @@ if($totalPages > $numberOfPages)
                 $i=1;
                 while($select_data = mysql_fetch_array($select_result))
                 {
-                    $ii=$i+$startResults;    
+                    $inv_type_count=1;
+
+                    if($_REQUEST['invoice_type'])
+                    {
+                        $inv_type_query = "Select invoice_type from payment_plan where invoice_id='".$select_data['invoice_id']."' GROUP BY invoice_type";
+                        $inv_type_result = mysql_query($inv_type_query);
+                        $inv_type = mysql_fetch_assoc($inv_type_result);
+                        if($inv_type['invoice_type'] == $_REQUEST['invoice_type'])
+                        $inv_type_count=1;
+                        else
+                        $inv_type_count=0;
+                    }
+                    $ii=$i+$startResults;
+
+                    if($inv_type_count==1)
+                    {                    
                      ?>
                     <tr class="data">
                         <td class="data" width="30px"><?php echo $ii; ?></td>
@@ -382,7 +402,7 @@ if($totalPages > $numberOfPages)
                         <td class="data" align="center">
                         <?php 
                         //code by amit
-                        $pin_query = "Select printable_invoice_number from payment_plan where invoice_id='".$select_data['invoice_id']."'";
+                        $pin_query = "Select printable_invoice_number,invoice_type from payment_plan where invoice_id='".$select_data['invoice_id']."'";
                         $pin_result = mysql_query($pin_query);
 	                    $pin_data = mysql_fetch_assoc($pin_result);
 
@@ -393,6 +413,24 @@ if($totalPages > $numberOfPages)
 
                         ?>
                         </td>
+
+                        <td class="data" align="center">
+                        <?php 
+                        //code by amit
+                        if($pin_data['invoice_type'] == 'R')
+                        echo 'GST Rent';
+                        elseif ($pin_data['invoice_type'] == 'S')
+                        echo 'GST Sale';
+                        elseif ($pin_data['invoice_type'] == 'M')
+                        echo 'GST Maintenance';
+                        elseif ($pin_data['invoice_type'] == 'RN')
+                        echo 'Reimbursement Note';
+                        else
+                        echo 'Manual Invoice';
+
+                        ?>
+                        </td>
+
                         <td class="data"><?php //echo $select_data['cust_id'];
                         $customer_nm = get_field_value("full_name","customer","cust_id",$select_data['cust_id']); 
                         echo $customer_nm;
@@ -420,6 +458,16 @@ if($totalPages > $numberOfPages)
                     </tr>
                 <?php
                     $i++;
+                    }
+                }
+
+                if($inv_type_count==0)
+                {
+                    ?>
+                    <tr class="data" >
+                        <td  width="30px" colspan="9" class="record_not_found" align="center">Record Not Available</td>
+                    </tr>
+                    <?php
                 }
                 
             }
@@ -427,7 +475,7 @@ if($totalPages > $numberOfPages)
             {
                 ?>
                 <tr class="data" >
-                    <td  width="30px" colspan="7" class="record_not_found" >Record Not Found</td>
+                    <td  width="30px" colspan="9" class="record_not_found" align="center">Record Not Found</td>
                 </tr>
                 <?php
             }
@@ -485,24 +533,15 @@ if($totalPages > $numberOfPages)
         <?php include_once ("footer.php"); ?>
         </body>
 </html>
+
+<script src="js/jquery-ui.js"></script>
+
 <script>
 
 $(document).ready(function(){
-    $("#export_to_excel").click(function(){
-        //document.getElementById("hid1").style.visibility = "hidden";    
-         //$("td:hidden,th:hidden","#my_table").remove();
-
-//newWin.document.write(getHeader());
-
-        // $('table td').find('td:eq(5)').hide();
-         //$("#thead").hide(); 
-         //$("td:hidden,th:hidden","#my_table").remove();
-
-
+    $("#export_to_excel").click(function()
+    {
         $("#my_table").table2excel({        
-
-
-
 
             exclude: ".noExl",
             name: "Developer data",
@@ -512,11 +551,41 @@ $(document).ready(function(){
             exclude_links: true,
             exclude_inputs: true            
         });  
-        // $("#thead").show();
     });
-   // $('table td').find('td:eq(6)').show();
-   
+    
+    $("#cust_id").autocomplete({
+			source: "customer-ajax.php"
+		});
+    $("#invoice_id").autocomplete({
+			source: "srno-ajax.php"
+		});
+    $("#printable_invoice_number").autocomplete({
+			source: "pin-ajax.php"
+		});
 });
+
+function setVisibility(inv_box)
+{
+    //code by amit
+
+    if(inv_box == 'invoice_id')
+    {
+        if(document.getElementById(inv_box).value)
+            document.getElementById('printable_invoice_number').disabled = true;
+        else
+            document.getElementById('printable_invoice_number').disabled = false;
+    }
+
+    if(inv_box == 'printable_invoice_number')
+    {
+        if(document.getElementById(inv_box).value)
+            document.getElementById('invoice_id').disabled = true;
+        else
+            document.getElementById('invoice_id').disabled = false;
+    }
+
+}
+
 function show_records(getno)
 {
     //alert(getno);
@@ -526,18 +595,15 @@ function show_records(getno)
 
 function search_date()
 {
-    //document.getElementById("search_action").value="withoutdate";
-    
         $("#search_action").val("enddate");
-        $("#search_form").submit();
-    
+        $("#search_form").submit();    
 }
 
 function print_data()
 {
 
-     var print_header1 = $("#print_header").val();           
-   var divToPrint1 = document.getElementById("ledger_data");
+var print_header1 = $("#print_header").val();           
+var divToPrint1 = document.getElementById("ledger_data");
 var divToPrint = divToPrint1;
 divToPrint.border = 3;
 divToPrint.cellSpacing = 0;

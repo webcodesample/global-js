@@ -1518,7 +1518,6 @@ function finddate_new_id()
         <?php include_once ("footer.php"); ?>
         </body>
 </html>
-
 <script src="amit.js"></script>
 <script>
 
