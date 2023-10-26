@@ -21,9 +21,6 @@ include_once("../connection.php");
         
         $invoice_details = $select_pay_plan["invoice_issuer_id"];
         $customer_nm = get_field_value("full_name","customer","cust_id",$data1['cust_id']); 
-         //$project1_nm = get_field_value("name","project","id",$row_series['project_id']); 
-        //$subdivision1_nm = get_field_value("name","subdivision","id",$row_series['subdivision']);  
-        //$gst_subdivision1_nm = get_field_value("name","gst_subdivision","id",$row_series['gst_subdivision']);  
         $query_issuer="select * from invoice_issuer where id = '".$invoice_details."'";
         $result_issuer= mysql_query($query_issuer) ;
         $select_issuer = mysql_fetch_array($result_issuer);
@@ -49,7 +46,9 @@ include_once("../connection.php");
                 <td align="center" valign="middle" width="440" height="100">
                   <table width="100%">
                   <tr>
-                  <td><img src="mos-css/img/logo3.png" height="80" width="80" title="Edit"></td>
+                  <td>
+                  <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($select_issuer['logo']); ?>" style="border-radius:50%; hieght:80px; width:80px;"/> 
+                  </td>
                   <td valign="middle"><font face="arial" size="4 " color=""><b><?php echo $select_issuer['company_name']; ?> </b></font><br>
                     <font face="arial" size="2 " color=""><b><?php echo $select_issuer['address']; ?></b></font>
                   </td>
