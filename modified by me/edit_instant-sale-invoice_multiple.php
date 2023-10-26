@@ -196,7 +196,7 @@ if(trim($_REQUEST['action_perform']) == "add_project")
                   //exit;
     $result2= mysql_query($query) or die('error in query '.mysql_error().$query);
     //$link_id_2 = $id_first_cust;
-              $query="update goods_details set  cust_id = '".$cust_id."',payment_date = '".strtotime($_REQUEST['payment_date'])."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."', update_date = '".getTime()."' where  id = '".$link_goods_details."'";
+              $query="update goods_details set  cust_id = '".$cust_id."',payment_date = '".strtotime($_REQUEST['payment_date'])."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."', update_date = '".getTime()."', invoice_type='".$_REQUEST['invoice_type']."' where  id = '".$link_goods_details."'";
     $result2= mysql_query($query) or die('error in query '.mysql_error().$query);   
    /* if($payment_flag==1){
     $query5="update payment_plan set payment_flag = '".$payment_flag."', link2_id = '".$link_id_1_pay."',link3_id = '".$link_id_2_pay."' where id = '".$old_link2_id[$i]."'";

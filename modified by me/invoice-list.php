@@ -63,6 +63,7 @@ if($_REQUEST['action_perform'] == "delete_user")
     $msg = "user Deleted Successfully.";
     
 }
+/*blocked by amit
 if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
 { 
     $from_date = strtotime(mysql_real_escape_string(trim($_REQUEST['from_date'])));
@@ -80,6 +81,10 @@ if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
     if($_REQUEST['project_id']!="All"){
         $projectdata ="and project_id='".$_REQUEST['project_id']."'";
     }else { $projectdata=""; }
+
+    if($_REQUEST['invoice_type']!="All"){//code by amit
+        $invoice_type ="and invoice_type='".$_REQUEST['invoice_type']."'";
+    }else { $invoice_type=""; }
     
     if($_REQUEST['invoice_id']){
         $invoice_iddata ="and invoice_id='".$_REQUEST['invoice_id']."'";
@@ -101,7 +106,7 @@ if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
   
     // and payment_date >= '".$from_date."' and payment_date <= '".$to_date."' 
     
-    $query = "select *  from goods_details where  invoice_id > '0' ".$customerdata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." group by invoice_id ORDER BY invoice_id ASC ";
+    $query = "select *  from goods_details where  invoice_id > '0' ".$customerdata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." ".$invoice_type." group by invoice_id ORDER BY invoice_id ASC ";
     
     $result = mysql_query($query) or die('error in query select invoice_issuer query '.mysql_error().$query);
     //$total_row = mysql_num_rows($result);
@@ -112,7 +117,7 @@ else
     $result = mysql_query($query) or die('error in query select invoice_issuer query '.mysql_error().$query);
     $total_row = mysql_num_rows($result);
     //echo $total_row;
-}
+}*/
 
 $page = $_REQUEST['page'];
 if ($page < 1) $page = 1;
@@ -139,6 +144,10 @@ if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
     if($_REQUEST['project_id']!="All"){
         $projectdata ="and project_id='".$_REQUEST['project_id']."'";
     }else { $projectdata=""; }
+
+        if($_REQUEST['invoice_type']!="All"){//code by amit
+        $invoice_type ="and invoice_type='".$_REQUEST['invoice_type']."'";
+    }else { $invoice_type=""; }
     
     if($_REQUEST['invoice_id']){
         $invoice_iddata ="and invoice_id='".$_REQUEST['invoice_id']."'";
@@ -160,14 +169,14 @@ if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
   
     // and payment_date >= '".$from_date."' and payment_date <= '".$to_date."' 
     
-    $select_query  = "select *  from goods_details where  invoice_id > '0' ".$customerdata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." group by invoice_id ORDER BY invoice_id ASC ";
+    $select_query = "select *  from goods_details where  invoice_id > '0' ".$customerdata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." ".$invoice_type." group by invoice_id ORDER BY invoice_id DESC ";
     
     $select_result = mysql_query($select_query) or die('error in query select bank query '.mysql_error().$select_query);
     $select_total = mysql_num_rows($select_result);
 }
 else
 {
-    $select_query = "select * from goods_details where invoice_id > '0' group by invoice_id ORDER BY invoice_id ASC LIMIT $startResults, $resultsPerPage";
+    $select_query = "select * from goods_details where invoice_id > '0' group by invoice_id ORDER BY invoice_id DESC LIMIT $startResults, $resultsPerPage";
     $select_result = mysql_query($select_query) or die('error in query select user query '.mysql_error().$select_query);
     $select_total = mysql_num_rows($select_result);
 }
@@ -284,13 +293,12 @@ if($totalPages > $numberOfPages)
                     </td>
                 </tr>
                 
-                <tr>
-                    
+                <tr>                    
                     <td width="80">NDB Sr. No.</td>
                     <td width="280px;">
                         <input type="text" name="invoice_id" id="invoice_id" onblur="setVisibility(this.id)" style="width:250px; height: 25px;">
                     </td>
-                    <td width="80px;" nowrap>Printable Invoice No.</td>
+                    <td width="80px;" nowrap>Invoice No.</td>
                     <td width="280px;">
                         <input type="text" name="printable_invoice_number" id="printable_invoice_number" onblur="setVisibility(this.id)" style="width:250px; height: 25px;">
                     </td>
@@ -360,17 +368,17 @@ if($totalPages > $numberOfPages)
 			<td colspan="4"></td>
         </tr>    
        
-            <tr >
+            <tr>
             <thead class="report-header">
-                <th class="data" width="30px">S.No.</th>
-                <th class="data">NDB Sr. No.</th>
-                <th class="data">Print Invoice. No.</th>
-                <th class="data">Invoice Type</th>
-                <th class="data">Customer Name</th>
-                <th class="data">Issuer Name</th>
-                <th class="data">Date </th>
-                <th class="data noExl" width="50px" id="header2">&nbsp;</th>
-                <th class="data noExl" width="75px" id="header1">Action</th>
+                <th class="data" width="30px" align="center">S.No.</th>
+                <th class="data" align="center">NDB Sr. No.</th>
+                <th class="data" align="center">Invoice No.</th>
+                <th class="data" align="center">Invoice Type</th>
+                <th class="data" align="center">Customer Name</th>
+                <th class="data" align="center">Issuer Name</th>
+                <th class="data" align="center">Date </th>
+                <th class="data noExl" width="50px" id="header2" align="center">&nbsp;</th>
+                <th class="data noExl" width="75px" id="header1" align="center">Action</th>
                 </thead>
             </tr>
             <?php
@@ -379,24 +387,10 @@ if($totalPages > $numberOfPages)
                 $i=1;
                 while($select_data = mysql_fetch_array($select_result))
                 {
-                    $inv_type_count=1;
-
-                    if($_REQUEST['invoice_type'])
-                    {
-                        $inv_type_query = "Select invoice_type from payment_plan where invoice_id='".$select_data['invoice_id']."' GROUP BY invoice_type";
-                        $inv_type_result = mysql_query($inv_type_query);
-                        $inv_type = mysql_fetch_assoc($inv_type_result);
-                        if($inv_type['invoice_type'] == $_REQUEST['invoice_type'])
-                        $inv_type_count=1;
-                        else
-                        $inv_type_count=0;
-                    }
                     $ii=$i+$startResults;
 
-                    if($inv_type_count==1)
-                    {                    
                      ?>
-                    <tr class="data">
+                    <tr class="data" align="center">
                         <td class="data" width="30px"><?php echo $ii; ?></td>
                         <td class="data"><?php echo $select_data['invoice_id']; ?></td>
                         <td class="data" align="center">
@@ -417,13 +411,13 @@ if($totalPages > $numberOfPages)
                         <td class="data" align="center">
                         <?php 
                         //code by amit
-                        if($pin_data['invoice_type'] == 'R')
+                        if($select_data['invoice_type'] == 'R')
                         echo 'GST Rent';
-                        elseif ($pin_data['invoice_type'] == 'S')
+                        elseif ($select_data['invoice_type'] == 'S')
                         echo 'GST Sale';
-                        elseif ($pin_data['invoice_type'] == 'M')
+                        elseif ($select_data['invoice_type'] == 'M')
                         echo 'GST Maintenance';
-                        elseif ($pin_data['invoice_type'] == 'RN')
+                        elseif ($select_data['invoice_type'] == 'RN')
                         echo 'Reimbursement Note';
                         else
                         echo 'Manual Invoice';
@@ -459,23 +453,12 @@ if($totalPages > $numberOfPages)
                 <?php
                     $i++;
                     }
-                }
-
-                if($inv_type_count==0)
-                {
-                    ?>
-                    <tr class="data" >
-                        <td  width="30px" colspan="9" class="record_not_found" align="center">Record Not Available</td>
-                    </tr>
-                    <?php
-                }
-                
             }
             else
             {
                 ?>
                 <tr class="data" >
-                    <td  width="30px" colspan="9" class="record_not_found" align="center">Record Not Found</td>
+                    <td  width="30px" colspan="9" class="record_not_found" align="center">No Record Available</td>
                 </tr>
                 <?php
             }
