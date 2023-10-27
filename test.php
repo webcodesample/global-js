@@ -20,6 +20,13 @@ $url.= $_SERVER['HTTP_HOST'];
 $url.= $_SERVER['REQUEST_URI'];      
 echo $url;
 
+$url_arr = explode("/",$url);
+
+print_r($url_arr);
+array_pop($url_arr);
+print_r($url_arr);
+echo implode("/",$url_arr);
+
 ?>
 <input type="text" name="magic_txt" id="magic_txt" value="<?= $str ?>">
 <div id="magic_str">
