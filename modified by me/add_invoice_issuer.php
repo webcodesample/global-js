@@ -45,8 +45,8 @@ if(trim($_REQUEST['action_perform']) == "edit_invoice_issuer")
      $cin_no=mysql_real_escape_string(trim($_REQUEST['cin_no']));
    
     //code by amit for logo
-    $filename=$_FILES['invoice_issuer_logo']['tmp_name'];
-    $imgData = mysql_escape_string(file_get_contents($filename));
+    //$filename=$_FILES['invoice_issuer_logo']['tmp_name'];
+    //$imgData = mysql_escape_string(file_get_contents($filename));
      
      
          $query="insert into invoice_issuer set issuer_name = '".$issuer_name."', display_name = '".$display_name."', mobile = '".$mobile."', email = '".$email."', address = '".$address."', gst_no = '".$gst_no."', cin_no = '".$cin_no."',company_name = '".$company_name."', reg_no = '".$reg_no."', vat_no = '".$vat_no."', pan_no = '".$pan_no."', create_date = '".getTime()."', logo = '".$imgData."'";

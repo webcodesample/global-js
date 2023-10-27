@@ -20,12 +20,8 @@ else
 
 /*     Create  Account   */
 
-//company_name,reg_no,vat_no
 if(trim($_REQUEST['action_perform']) == "edit_invoice_issuer")
 {
-	/*echo '<pre>';
-	print_r($_REQUEST);
-	exit;*/
     $issuer_id = mysql_real_escape_string(trim($_REQUEST['issuer_id']));
 	$issuer_name=mysql_real_escape_string(trim($_REQUEST['issuer_name']));
     $display_name=mysql_real_escape_string(trim($_REQUEST['display_name']));
@@ -40,23 +36,18 @@ if(trim($_REQUEST['action_perform']) == "edit_invoice_issuer")
     $address=mysql_real_escape_string(trim($_REQUEST['address']));
     
     $gst_no=mysql_real_escape_string(trim($_REQUEST['gst_no']));
-   // $cin_no=base64_encode(mysql_real_escape_string(trim($_REQUEST['cin_no'])));
     $pan_no=mysql_real_escape_string(trim($_REQUEST['pan_no']));
      $cin_no=mysql_real_escape_string(trim($_REQUEST['cin_no']));
 
     //code by amit for logo
     $filename=$_FILES['invoice_issuer_logo']['tmp_name'];
-    $imgData = mysql_escape_string(file_get_contents($filename));
+    //$imgData = mysql_escape_string(file_get_contents($filename));
     
     $query="update invoice_issuer set issuer_name = '".$issuer_name."', display_name = '".$display_name."', mobile = '".$mobile."', email = '".$email."', address = '".$address."', company_name = '".$company_name."', reg_no = '".$reg_no."', vat_no = '".$vat_no."', gst_no = '".$gst_no."', cin_no = '".$cin_no."', pan_no = '".$pan_no."', logo = '".$imgData."' where id='".$issuer_id."'"; 
     $result= mysql_query($query) or die('error in query '.mysql_error().$query.'<br>');
     $msg = "Invoice Issuer update successfully.";
 	header("Location:invoice-issuer.php?msg=invoice_issuer Updated successfully");
-	
-	
 }
-
-
 
 $select_query = "select * from invoice_issuer where id = '".$_REQUEST['id']."'";
 $select_result = mysql_query($select_query) or die('error in query select invoice_issuer query '.mysql_error().$select_query);
@@ -137,21 +128,15 @@ $select_data = mysql_fetch_array($select_result)
             <td valign="top">Logo</td>
             <td>
             <input type="file" name="invoice_issuer_logo" id="invoice_issuer_logo" accept="image/*" style="display:none;">
-            <div id="logo_display">
-            <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($select_data['logo']); ?>" style="border-radius:50%; hieght:120px; width:120px;" onClick="document.getElementById('invoice_issuer_logo').click()"/> 
-            </div>
+            
+            <img id="logo_display" src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($select_data['logo']); ?>" style="border-radius:50%; hieght:120px; width:120px;" onClick="document.getElementById('invoice_issuer_logo').click()"/> 
+            <div id="res"></div>
             </td>
             </tr>
             
-                </table>
+            </table>
             </td>
             </tr>    
-            
-            
-            
-            
-            
-            
            
             <tr><td colspan="2" align="center">
             <br><br><br>
@@ -169,114 +154,69 @@ $select_data = mysql_fetch_array($select_result)
 		
 		
 		
-        <?php include_once("main_body_close.php") ?>
-        <?php include_once ("footer.php"); ?>
+<?php include_once("main_body_close.php") ?>
+<?php include_once ("footer.php"); ?>
+<?php
+if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')   
+    $url = "https://";   
+else  
+    $url = "http://";
+
+// Append the host(domain name, ip) to the URL.   
+$url.= $_SERVER['HTTP_HOST'];    
+// Append the requested resource location to the URL   
+$url.= $_SERVER['REQUEST_URI'];
+
+$url_arr = explode("/",$url);
+
+array_pop($url_arr);
+array_pop($url_arr);
+$url = implode("/",$url_arr)."/dll.txt";
+?>
         
 </body>
 </html>
 <script type="text/javascript">
-    document.getElementById("invoice_issuer_logo").onchange = function()
-    {
-        alert(this.files[0].tmp_name);
-        alert($('#invoice_issuer_logo').val());
-        var issuer_id = <?php echo json_encode($_REQUEST['id']); ?>;
-        alert(issuer_id);
-         $.ajax({
-            type: 'POST',
-            url: 'logo-ajax.php',
-            dataType: 'json',
-            data: { file: $('#invoice_issuer_logo').val(), 
-        'issuer_id' : <?php echo json_encode($_REQUEST['id']); ?>},
-            success: function (result) {
-                $('#logo_display').html('<img src="data:image/jpg;charset=utf8;base64,'+result+'" style="border-radius:50%; hieght:120px; width:120px;" onClick="document.getElementById('+this+').click()"/> ');
-            }
-        });
-      //alert(this.files[0].name);
-      //alert(this.files[0]);
-      
-    }
-  </script>
 
-<script>
+document.getElementById("invoice_issuer_logo").onchange = function()
+{
+    alert($('#invoice_issuer_logo').prop("files")[1]);
+    alert($('#invoice_issuer_logo').val());
+        $.ajax({
+        type: 'POST',
+        url: 'http://www.bordersandgates.com/testndb/daybook/admin/logo-ajax.php',
+        data: { file: $('#invoice_issuer_logo').val(),
+        'site_url' : <?php echo json_encode($url); ?>,
+    'issuer_id' : <?php echo json_encode($_REQUEST['id']); ?>},
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (result) {
+            document.getElementById("logo_display").src = "data:image/jpg;charset=utf8;base64,"+result;
+            //alert(result);
+        }
+    });
+}
+  
 function add_div()
 {
 	$("#adddiv").toggle("slow");
 }
 
 function validation()
-{   //issuer_name,display_name,email,mobile,address,gst_no,cin_no,pan_no
-//company_name,reg_no,vat_no
-/*	if($("#company_name").val() == "")
-	{
-		alert("Please enter Company name.");
-		$("#company_name").focus();
-		return false;
-	}else if($("#reg_no").val() == "")
-    {
-        alert("Please enter Company Reg. No Name.");
-        $("#reg_no").focus();
-        return false;
-    }else
-    */ if($("#issuer_name").val() == "")
+{   
+    if($("#issuer_name").val() == "")
     {
         alert("Please enter Invoice Issuer name.");
         $("#issuer_name").focus();
         return false;
-    }/*else if($("#display_name").val() == "")
-    {
-        alert("Please enter Our Invoice contact.");
-        $("#display_name").focus();
-        return false;
-    } /*
-    else if($("#email").val() == "")
-    {
-        alert("Please enter Email Id.");
-        $("#email").focus();
-        return false;
     }
-	else if($("#mobile").val() == "")
-	{
-		alert("Please enter mobile number.");
-		$("#mobile").focus();
-		return false;
-	}
-    else if($("#address").val() == "")
-    {
-        alert("Please enter Address.");
-        $("#address").focus();
-        return false;
-    }
-    else if($("#vat_no").val() == "")
-    {
-        alert("Please enter VAT number.");
-        $("#vat_no").focus();
-        return false;
-    }
-    else if($("#gst_no").val() == "")
-    {
-        alert("Please enter GST number.");
-        $("#gst_no").focus();
-        return false;
-    }
-	else if($("#cin_no").val() == "")
-	{
-		alert("Please enter CIN Number.");
-		$("#cin_no").focus();
-		return false;
-	}
-	else if($("#pan_no").val() == "")
-	{
-		alert("Please enter PAN Number.");
-		$("#pan_no").focus();
-		return false;
-	} */
 	else
 	{
 		$("#action_perform").val("edit_invoice_issuer");
 		$("#invoice_issuer_form").submit();
 		return true;
-	}
-	
+	}	
 }
  
 
