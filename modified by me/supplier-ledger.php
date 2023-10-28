@@ -843,21 +843,19 @@ else
             
         </tr>   
 		
-            <tr >
-            <thead class="report-header">
+            <tr align="center">
 				<th class="data" width="30px">S.No.</th>
 				<th class="data" width="70px">Date</th>
-                <th class="data">To/From<br>Inv. No.</th>
+                <th class="data" nowrap>Invoice No.</th>
 				<th class="data">Project</th>
                 <th class="data">Subdivision</th>
 				<th class="data">Description</th>
-                <th class="data">GST Due</th>
-                <th class="data">Invoice Due</th>
+                <th class="data" nowrap>GST Due</th>
+                <th class="data" nowrap>Invoice Due</th>
 				<th class="data">Debit</th>
 				<th class="data">Credit</th>
 				<th class="data">Balance</th>
 				<th class="data noExl" id="header1">File</th>
-			</thead>	
 			</tr>
 			<?php
             $icgst=1;
@@ -897,7 +895,7 @@ else
                          {
                              //$from_date,$to_date
                              ?>
-                    <tr class="data">
+                    <tr class="data" align="center">
                         <td class="data" width="30px"><?php //echo $i; ?></td>
                         <td class="data"><b> <?php echo date("d-m-Y",$to_date); ?></b></td>
                         <td class="data"></td>
@@ -916,7 +914,7 @@ else
                          else{
                              ?>
                              
-                                            <tr class="data">
+                                            <tr class="data" align="center">
                         <td class="data" width="30px"><?php //echo $i; ?></td>
                         <td class="data"><b> <?php echo date("d-m-Y",$select_data['payment_date']); ?></b></td>
                         <td class="data"></td>
@@ -943,13 +941,13 @@ else
                     }
                      ?>
 					<tr class="data">
-						<td class="data" width="30px"><?php echo $i; ?></td>
-						<td class="data"><?php echo date("d-m-Y",$select_data['payment_date']); ?></td>
-						<td class="data"><?php echo $select_data['supplier_invoice_number']; ?></td>                    
+						<td class="data" width="30px"  align="center"><?php echo $i; ?></td>
+						<td class="data"  align="center"><?php echo date("d-m-Y",$select_data['payment_date']); ?></td>
+						<td class="data"  align="center"><?php echo $select_data['invoice_id']; ?></td>                    
 						<td class="data"><?php echo get_field_value("name","project","id",$select_data['on_project']); ?></td>
                         <td class="data"><?php echo get_field_value("name","subdivision","id",$select_data['subdivision']); ?></td>
 						<td class="data"><?php echo $select_data['description']; ?></td>
-                        <td class="data">
+                        <td class="data" align="center">
                         <?php
                         
                         if($select_data['debit'] > 0)
@@ -1032,7 +1030,7 @@ else
                     }
                             ?>   
                         </td>
-                        <td class="data">
+                        <td class="data"  align="center">
                         
                         <?php
                         /*   invoice DUE          */
@@ -1117,7 +1115,7 @@ else
                         ?>
                         
                         </td>
-						<td class="data">
+						<td class="data" align="center">
 						<?php
 							if($select_data['debit'] > 0)
 							{
@@ -1125,7 +1123,7 @@ else
 							}
                     	?>
 						</td>
-						<td class="data">
+						<td class="data" align="center">
 						<?php
 							if($select_data['credit'] > 0)
 							{
@@ -1136,7 +1134,7 @@ else
 						 <?php 
                          if($search_start=="1"){
                              ?>
-                             <td class="data" <?php if($bal_1<0 ) { ?> style="color:#FF0000;" <?php }else{?> style="color:#000000;" <?php } ?>  >
+                             <td class="data" align="center" <?php if($bal_1<0 ) { ?> style="color:#FF0000;" <?php }else{?> style="color:#000000;" <?php } ?>  >
                              <?php 
                             echo currency_symbol().number_format($bal_1,2,'.','');
                             ?>
@@ -1145,7 +1143,7 @@ else
                         }else
                         {
                             ?>
-                             <td class="data" <?php if($bal<0) { ?> style="color:#FF0000;" <?php }else{?> style="color:#000000;" <?php } ?> >
+                             <td class="data" align="center" <?php if($bal<0) { ?> style="color:#FF0000;" <?php }else{?> style="color:#000000;" <?php } ?> >
                              <?php 
                             echo currency_symbol().number_format($bal,2,'.','');  
                             ?>

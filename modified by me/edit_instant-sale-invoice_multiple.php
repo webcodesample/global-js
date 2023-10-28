@@ -445,7 +445,7 @@ if($_REQUEST['trsns_pname']=="customer-ledger-inst-sale-goods")
    //$old_pay_bank_id,$old_pay_amount,$old_pay_method,$old_pay_checkno
     $back_data="customer-ledger.php?cust_id=".$select_data['cust_id'];
     $old_trans_id = $select_data['trans_id'];
-    
+    $old_printable_invoice_number = $select_data['printable_invoice_number'];
     $old_cust_id = $select_data['cust_id'];
     $old_project_id = $select_data['on_project'];
     $old_amount = $select_data['credit'];

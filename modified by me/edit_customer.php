@@ -215,10 +215,15 @@ $select_data = mysql_fetch_array($select_result)
 			<td><input type="text" name="lname" id="lname" value="<?php echo $select_data['lname']; ?>"  tabindex="2" style="width: 250px;" ></td></tr>
 			<tr><td >E-Mail Id</td>
 			<td><input type="text" name="email" id="email" value="<?php echo $select_data['email']; ?>"  tabindex="4" style="width: 250px;" ></td></tr>
-			<tr><td >Date</td>
+
+			<tr>
+			<td >Date</td>
             <td>
-            <input type="text"  name="opening_balance_date" id="opening_balance_date"  tabindex="6" value="<?php echo date("d-m-Y",$select_data['opening_balance_date']); ?>" style="width: 250px;" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
-            &nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+            <input type="text"  name="opening_balance_date"  style="width: 250px;" id="opening_balance_date" value="<?php echo date("d-m-Y",$select_data['opening_balance_date']); ?>" onkeydown="setDateFormat(event,this.id)" tabindex="6" autocomplete="off" maxlength="10" placeholder="DD-MM-YY"/>&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
+            &nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span>
+			</td>
+			</tr>
+
             <tr><td >Same as Current</td>
 			<td><input type="checkbox" name="same_current" id="same_current" value="yes"  tabindex="8" onClick="return same_address();" <?php if($select_data['same_address'] == 'yes') { echo 'checked="checked"'; } ?>   /></td></tr>
 			
@@ -317,10 +322,6 @@ $select_data = mysql_fetch_array($select_result)
                 </td>
             </tr>
 </table></td></tr>
-            
-
-			
-			
 			
 			<tr><td colspan="2" align="center">
 			<input type="button" class="button" name="submit_button" id="submit_button" value="Submit" onClick="return validation();">
@@ -328,10 +329,6 @@ $select_data = mysql_fetch_array($select_result)
 		<input type="hidden" name="action_perform" id="action_perform" value="" >
 		
 		</form>
-		
-		
-		
-		
 	
 		<?php include_once("main_body_close.php") ?>
         <?php include_once ("footer.php"); ?>

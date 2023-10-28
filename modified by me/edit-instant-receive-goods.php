@@ -31,7 +31,15 @@ if(trim($_REQUEST['action_perform']) == "add_project")
 	$project_id = get_field_value("id","project","name",$_REQUEST['project']);
 	$amount=mysql_real_escape_string(trim($_REQUEST['amount']));
 	$amount_gst_amount=mysql_real_escape_string(trim($_REQUEST['amount_gst_amount']));
-	
+
+    //add by amit
+    $invoice_receiver_data = explode(" - ", $_REQUEST['invoice_receiver']);
+	$invoice_receiver_id = $invoice_receiver_data[1];
+
+    //added by amit
+    if($_REQUEST['supplier_invoice_number'])
+    {$supplier_invoice_number = $_REQUEST['supplier_invoice_number'];}
+
 	$description=mysql_real_escape_string(trim($_REQUEST['description']));
 	//$subdivision=mysql_real_escape_string(trim($_REQUEST['subdivision']));
     $subdivision = get_field_value("id","subdivision","name",$_REQUEST['subdivision']);
@@ -53,12 +61,12 @@ if(trim($_REQUEST['action_perform']) == "add_project")
 	$trans_id = mysql_real_escape_string(trim($_REQUEST['trans_id']));
 	
 	
-	$query="update payment_plan set  cust_id = '".$cust_id."', debit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',subdivision = '".$subdivision."',update_date = '".getTime()."' where  id = '".$id_first_cust."'";
+	$query="update payment_plan set  cust_id = '".$cust_id."', debit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',subdivision = '".$subdivision."',update_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."' where  id = '".$id_first_cust."'";
 	$result= mysql_query($query) or die('error in query '.mysql_error().$query);
 	
 	$link_id_1 = $id_first_cust;
 	
-	$query2="update payment_plan set  project_id = '".$project_id."', credit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_customer = '".$cust_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',subdivision = '".$subdivision."',update_date = '".getTime()."' where  id = '".$id_second_proj."'";
+	$query2="update payment_plan set  project_id = '".$project_id."', credit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_customer = '".$cust_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',subdivision = '".$subdivision."',update_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."' where  id = '".$id_second_proj."'";
 	$result2= mysql_query($query2) or die('error in query '.mysql_error().$query2);
 	
 	$link_id_2 = $id_second_proj;
@@ -69,12 +77,12 @@ if(trim($_REQUEST['action_perform']) == "add_project")
     if($payment_flag==1){
         if($payment_flag==1){
 
-            $query_pay ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', debit = '".$pay_amount."', description = '".$description."', on_customer = '".$cust_id."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."', payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."', trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."',create_date = '".getTime()."'";
+            $query_pay ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', debit = '".$pay_amount."', description = '".$description."', on_customer = '".$cust_id."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."', payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."', trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."',create_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."'";
             $result_pay= mysql_query($query_pay) or die('error in query '.mysql_error().$query_pay);
             
             $link_id_1_pay = mysql_insert_id();
             
-            $query2_pay="insert into payment_plan set payment_flag = '".$payment_flag."' ,trans_id = '".$trans_id."', cust_id = '".$cust_id."', credit = '".$pay_amount."', description = '".$description."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."',link_id = '".$link_id_1_pay."',trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."', create_date = '".getTime()."'";
+            $query2_pay="insert into payment_plan set payment_flag = '".$payment_flag."' ,trans_id = '".$trans_id."', cust_id = '".$cust_id."', credit = '".$pay_amount."', description = '".$description."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."',link_id = '".$link_id_1_pay."',trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."', create_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."'";
             $result2_pay= mysql_query($query2_pay) or die('error in query '.mysql_error().$query2_pay);
             
             $link_id_2_pay = mysql_insert_id();
@@ -98,12 +106,12 @@ if(trim($_REQUEST['action_perform']) == "add_project")
     $old_payment_flag=$_REQUEST['old_payment_flag'];
     if($old_payment_flag=="1"){
    
-    $query_pay ="update payment_plan set  bank_id = '".$pay_bank_id."', debit = '".$pay_amount."', description = '".$description."', on_customer = '".$cust_id."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."', payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."', update_date = '".getTime()."' where  id = '".$id_third_bankpay."'";
+    $query_pay ="update payment_plan set  bank_id = '".$pay_bank_id."', debit = '".$pay_amount."', description = '".$description."', on_customer = '".$cust_id."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."', payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."', update_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."' where  id = '".$id_third_bankpay."'";
     $result_pay= mysql_query($query_pay) or die('error in query '.mysql_error().$query_pay);
     
     $link_id_1_pay = $id_third_bankpay;
     
-    $query2_pay="update payment_plan set  cust_id = '".$cust_id."', credit = '".$pay_amount."', description = '".$description."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."', update_date = '".getTime()."' where  id = '".$id_four_cust_pay."'";
+    $query2_pay="update payment_plan set  cust_id = '".$cust_id."', credit = '".$pay_amount."', description = '".$description."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."', update_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."' where  id = '".$id_four_cust_pay."'";
     $result2_pay= mysql_query($query2_pay) or die('error in query '.mysql_error().$query2_pay);
     
     $link_id_2_pay = $id_four_cust_pay;
@@ -350,9 +358,6 @@ if($_REQUEST['trsns_pname']=="supplier-ledger-inst-make-payment")
     $select_result = mysql_query($select_query) or die('error in query select supplier query '.mysql_error().$select_query);
     $select_data = mysql_fetch_array($select_result);
      
-   //$old_trans_id,$old_cust_id,$old_project_id,$old_amount,$old_description,$old_payment_date,$old_payment_subdivision,$id_first_cust,$id_second_proj,$id_third_bankpay,$id_four_cust_pay
-   //$old_pay_bank_id,$old_pay_amount,$old_pay_method,$old_pay_checkno
-  
     $old_trans_id = $select_data['trans_id'];
     $old_cust_id = $select_data['cust_id'];
     $old_project_id = $select_data['on_project'];
@@ -368,7 +373,8 @@ if($_REQUEST['trsns_pname']=="supplier-ledger-inst-make-payment")
     $id_third_bankpay = $select_data['link2_id'];
     $id_four_cust_pay = $select_data['link3_id'];
    // $old_payment_flag =  $select_data['payment_flag'];  
-}else if($_REQUEST['trsns_pname']=="project-ledger-inst-receive-goods")
+}
+else if($_REQUEST['trsns_pname']=="project-ledger-inst-receive-goods")
 {
     
 if($_REQUEST['back']!="")
@@ -656,6 +662,26 @@ function findTotal()
              $select_cus = mysql_fetch_array($query_cus);
             ?>
             <input type="text" id="from"  name="from" value="<?php echo $select_cus['full_name'].' - '.$select_cus['cust_id']; ?>" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+
+            <tr>
+            <td >Supplier Invoice No.</td>
+            <td>
+            <input type="text" id="supplier_invoice_number"  name="supplier_invoice_number" value="<?= $select_data['supplier_invoice_number'] ?>" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span>
+            </td>
+            </tr>
+
+			<tr><td width="125px">Invoice Receiver</td>
+            <?php
+            if($select_data['invoice_issuer_id'])
+            {
+                 $sql_issuer     = "select issuer_name,display_name from `invoice_issuer` where id='".$select_data['invoice_issuer_id']."'";
+                 $query_issuer    = mysql_query($sql_issuer);
+                 $select_issuer = mysql_fetch_array($query_issuer);
+                 $invoice_receiver = $select_issuer['issuer_name']." - ".$select_data['invoice_issuer_id']." - ".$select_issuer['display_name'];
+            }
+            else{$invoice_receiver="";}
+            ?>
+            <td><input type="text" id="invoice_receiver"  name="invoice_receiver" value="<?= $invoice_receiver ?>" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
             
             <tr><td >Project</td>
              <?php $project_nm = get_field_value("name","project","id",$old_project_id);  ?>
@@ -974,6 +1000,9 @@ function checkpay_flag()
 	$(document).ready(function(){
 		$( "#from" ).autocomplete({
 			source: "supplier-ajax.php"
+		});
+        $( "#invoice_receiver" ).autocomplete({
+			source: "invoice_issuer-ajax.php"
 		});
 		$( "#project" ).autocomplete({
 			source: "project-ajax.php"

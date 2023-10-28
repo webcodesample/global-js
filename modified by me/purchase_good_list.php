@@ -18,14 +18,17 @@ else
 }
 
 
+/*blocked by amit
 if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
 { 
     $from_date = strtotime(mysql_real_escape_string(trim($_REQUEST['from_date'])));
     
     $to_date = strtotime(mysql_real_escape_string(trim($_REQUEST['to_date'])));
 
-    if($_REQUEST['cust_id']!="All"){
-        $customerdata ="and cust_id='".$_REQUEST['cust_id']."'";
+    if($_REQUEST['cust_id'])
+    {
+        $supplier_data = explode(" - ",$_REQUEST['cust_id']);
+        $customerdata ="and cust_id='".$supplier_data[1]."'";
     }else { $customerdata=""; }
     
     if($_REQUEST['project_id']!="All"){
@@ -52,19 +55,19 @@ if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
     // and payment_date >= '".$from_date."' and payment_date <= '".$to_date."' 
     
     //$query = "select *  from goods_details where  invoice_id > '0' ".$customerdata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." group by invoice_id ORDER BY invoice_id ASC ";
-     $query = "select * from payment_plan where trans_id > 0 and trans_type_name in('receive_goods','inst_receive_goods') ".$customerdata." ".$subdivisiondata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." group by trans_id ORDER BY payment_date ASC ";
+     $query = "select * from payment_plan where trans_id > 0 and trans_type_name in('receive_goods','inst_receive_goods') ".$customerdata." ".$subdivisiondata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." group by trans_id ORDER BY payment_date DESC ";
     $result = mysql_query($query) or die('error in query select invoice_issuer query '.mysql_error().$query);
     //$total_row = mysql_num_rows($result);
 }
 else
 {
    // $query = "select * from goods_details where invoice_id > '0' group by invoice_id ORDER BY invoice_id ASC ";
-    $query = "select * from payment_plan where trans_id > 0 and cust_id!='' and cust_id > 0  and trans_type_name in('receive_goods','inst_receive_goods') group by trans_id ORDER BY payment_date ASC ";
+    $query = "select * from payment_plan where trans_id > 0 and cust_id!='' and cust_id > 0  and trans_type_name in('receive_goods','inst_receive_goods') group by trans_id ORDER BY payment_date DESC ";
     //echo $select_query;
     $result = mysql_query($query) or die('error in query select  query '.mysql_error().$query);
     $total_row = mysql_num_rows($result);
     //echo $total_row;
-}
+}*/
 
 $page = $_REQUEST['page'];
 if ($page < 1) $page = 1;
@@ -80,8 +83,9 @@ if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
     
     $to_date = strtotime(mysql_real_escape_string(trim($_REQUEST['to_date'])));
 
-    if($_REQUEST['cust_id']!="All"){
-        $customerdata ="and cust_id='".$_REQUEST['cust_id']."'";
+    if($_REQUEST['cust_id']){
+        $supplier_data = explode(" - ",$_REQUEST['cust_id']);
+        $customerdata ="and cust_id='".$supplier_data[1]."'";
     }else { $customerdata=""; }
     
     if($_REQUEST['project_id']!="All"){
@@ -92,8 +96,11 @@ if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
         $invoice_iddata ="and trans_id='".$_REQUEST['invoice_id']."'";
     }else { $invoice_iddata=""; }
     
-     if($_REQUEST['subdivision']!="All"){
-        $subdivisiondata ="and subdivision='".$_REQUEST['subdivision']."'";
+     if($_REQUEST['subdivision'])
+     {
+         $subdivision = explode(" - ",$_REQUEST['subdivision']);
+         echo $subdivision[1];
+        $subdivisiondata ="and subdivision='".$subdivision[1]."'";
     }else { $subdivisiondata=""; }
     
     if($from_date!=""){
@@ -103,20 +110,20 @@ if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
     if($to_date!=""){
         $to_datedata ="and payment_date <= '".$to_date."'";
     }else { $to_datedata=""; }
+
+    print_r($_REQUEST);
     
-    // and payment_date >= '".$from_date."' and payment_date <= '".$to_date."' 
-   // $select_query  = "select *  from goods_details where  invoice_id > '0' ".$customerdata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." group by invoice_id ORDER BY invoice_id ASC ";
-   $select_query = "select * from payment_plan where trans_id > 0 and trans_type_name in('receive_goods','inst_receive_goods') ".$customerdata." ".$subdivisiondata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." group by trans_id ORDER BY payment_date ASC "; 
-    
+    echo $select_query = "select * from payment_plan where trans_id > 0 and trans_type_name in('receive_goods','inst_receive_goods') ".$customerdata." ".$subdivisiondata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." group by trans_id ORDER BY payment_date DESC "; 
     $select_result = mysql_query($select_query) or die('error in query select bank query '.mysql_error().$select_query);
     $select_total = mysql_num_rows($select_result);
+    echo $select_total;
 }
 else
 {
-    $select_query = "select * from payment_plan where trans_id > '0' and cust_id!='' and cust_id > 0 and trans_type_name in('receive_goods','inst_receive_goods') group by trans_id ORDER BY payment_date ASC LIMIT $startResults, $resultsPerPage";
-    //echo $select_query;
+    echo $select_query = "select * from payment_plan where trans_id > '0' and trans_type_name in('receive_goods','inst_receive_goods') group by trans_id ORDER BY payment_date DESC";// LIMIT $startResults, $resultsPerPage";
     $select_result = mysql_query($select_query) or die('error in query select user query '.mysql_error().$select_query);
     $select_total = mysql_num_rows($select_result);
+    echo $select_total;
 }
 
 $halfPages = floor($numberOfPages / 2);
@@ -185,6 +192,7 @@ if($totalPages > $numberOfPages)
 
 <!-------------->
 <?php include_once("main_search_open.php") ?>
+<form name="search_form" id="search_form" action="" method="post">
   <input type="hidden" name="search_check_val" id="search_check_val" value="0" >
      
 <input type="hidden" name="gst_subdivision_id" id="gst_subdivision_id" value="<?php echo $_REQUEST['gst_subdivision_id']; ?>">
@@ -209,63 +217,21 @@ if($totalPages > $numberOfPages)
                 </tr>
                 <tr>
                     
-                    <td width="80px;">Supplier List</td>
+                    <td width="80px;">Supplier</td>
                     <td width="280px;">
-                        <select name="cust_id" id="cust_id" style="width:250px; height: 25px;">
-        <option value="All">All</option>
-        <?php 
-        //$select_search1 = "select cust_id  from payment_plan where trans_type_name in('receive_goods','inst_receive_goods') and cust_id>0  group BY cust_id ";
-    $select_search1 = "select cust_id  from customer where(type = 'supplier')";
-    $search_result1 = mysql_query($select_search1) or die('error in query select gst_subdivision query '.mysql_error().$select_search1);
-    $select_total1 = mysql_num_rows($search_result1);
-        while($search_data1 = mysql_fetch_array($search_result1))
-                { 
-                    $customer_nm = get_field_value("full_name","customer","cust_id",$search_data1['cust_id']);  
-                    ?>
-                <option  value="<?php echo $search_data1['cust_id']; ?>"  <?php if($_REQUEST['cust_id']==$search_data1['cust_id']){ echo "selected='selected'"; } ?>><?php echo $customer_nm; ?></option>
-              <?php   }
-         ?>
-    </select>
+                        <input type="text" name="cust_id" id="cust_id" style="width:250px; height: 25px;">
                     </td>
                     
-                    <td width="80">Project List</td>
+                    <td width="80">Project</td>
                     <td width="280px;">
-                        <select name="project_id" id="project_id" style="width:250px; height: 25px;">
-        <option value="All">All</option>
-        <?php 
-        $select_search2 = "select on_project  from payment_plan where trans_type_name in('receive_goods','inst_receive_goods') and on_project>0 group BY on_project ";
-    $search_result2 = mysql_query($select_search2) or die('error in query select gst_subdivision query '.mysql_error().$select_search2);
-    $select_total2 = mysql_num_rows($search_result2);
-        while($search_data2 = mysql_fetch_array($search_result2))
-                {  
-                    $project1_nm = get_field_value("name","project","id",$search_data2['on_project']); 
-                    ?>
-                <option value="<?php echo $search_data2['on_project']; ?>" <?php if($_REQUEST['project_id']==$search_data2['on_project']){ echo "selected='selected'"; } ?>><?php echo $project1_nm; ?></option>
-              <?php   }
-         ?>
-    </select>
+                        <input type="text" name="project_id" id="project_id" style="width:250px; height: 25px;">
                     </td>
                 </tr>
                 
                 <tr>
-                    <td width="80px;">Subdivision List</td>
+                    <td width="80px;">Subdivision</td>
                     <td width="280px;">
-                        <select name="subdivision" id="subdivision" style="width:250px; height: 25px;">
-        <option value="All">All</option>
-        <?php 
-        $select_search1 = "select subdivision  from payment_plan where trans_type_name in('receive_goods','inst_receive_goods') and subdivision>0  group BY subdivision ";
-    $search_result1 = mysql_query($select_search1) or die('error in query select gst_subdivision query '.mysql_error().$select_search1);
-    $select_total1 = mysql_num_rows($search_result1);
-        while($search_data1 = mysql_fetch_array($search_result1))
-                { 
-                    // $project1_nm = get_field_value("name","project","id",$row_series['project_id']); 
-                    //$subdivision1_nm = get_field_value("name","subdivision","id",$row_series['subdivision']);  
-                    $customer_nm = get_field_value("name","subdivision","id",$search_data1['subdivision']);  
-                    ?>
-                <option  value="<?php echo $search_data1['subdivision']; ?>"  <?php if($_REQUEST['subdivision']==$search_data1['subdivision']){ echo "selected='selected'"; } ?>><?php echo $customer_nm; ?></option>
-              <?php   }
-         ?>
-    </select>
+                        <input type="text" name="subdivision" id="subdivision" style="width:250px; height: 25px;">
                     </td>
                     
                     <td width="80">Trans No</td>
@@ -296,7 +262,8 @@ if($totalPages > $numberOfPages)
     
                     </td>
                     <td width="80px;"></td>
-                    <td width="280px;"> <input type="button" name="search_button1" id="search_button1" value="search " onClick="return search_date();" class="button" >&nbsp;<input type="button" name="refresh" id="refresh" value="Refresh" class="button" onClick="window.location='purchase_good_list.php';"  />&nbsp;
+                    <td width="280px;">
+                    <input type="button" name="search_button1" id="search_button1" value="Search" onClick="search_date();" class="button" >&nbsp;<input type="button" name="refresh" id="refresh" value="Refresh" class="button" onClick="window.location='purchase_good_list.php';"  />&nbsp;
                     </td>
                 </tr>
                 <tr><td colspan="4">&nbsp;</td></tr>
@@ -311,7 +278,7 @@ if($totalPages > $numberOfPages)
  <!-------------->
   
   <?php include_once("main_body_open.php") ?>
-       <form name="search_form" id="search_form" action="" method="post" onSubmit="submit();" >
+       
     
         <?php if($msg != "") { ?>
     <div class="sukses">
@@ -334,8 +301,8 @@ if($totalPages > $numberOfPages)
                 <input type="hidden" name="action_perform" id="action_perform" value="" >
         <input type="hidden" name="del_id" id="del_id" value="" >
         <input type="hidden" name="count" id="count" value="<?php echo $i; ?>"  />    
-        </form>     
-        <div id="ledger_data">
+        </form>  
+        <div id="ledger_data" style="height: 400px; width:98%; padding-right: 10px; overflow-x: scroll; overflow-y: scroll;">
         <table class="data" id="my_table" border="1" cellpadding="1" cellspacing="0" style="border: 1px solid #111111;">
         <tr style="display:none ;">
             <td colspan="12" align="center">Purchase Goods List :</td>
@@ -343,21 +310,21 @@ if($totalPages > $numberOfPages)
     <tr style="display:none ;">
             <td colspan="12" align="center"> Generated Date & Time : <?php echo getTime(); ?></td>
     </tr>
-            <tr >
-            <thead class="report-header">
-                <th class="data" width="30px">S.No.</th>
-                <th class="data noExl">Trans. Id</th>
-                <th class="data">Supplier Name</th>
-                <th class="data" style="display:none;">Supplier GST No.</th>
-                <th class="data">Project Name</th>
-                <th class="data">Subdivision Name</th>
-                <th style="display:none;" class="data">Description</th>
-                <th style="display:none;" class="data">Sub total</th>
-                <th style="display:none;" class="data">Gst(%)</th>
-                <th style="" class="data">Gst Amount</th>
-                <th class="data" width="50px" >Grand Total</th>
-                <th class="data" width="75px" >Date</th>
-                </thead>
+            <tr align="center">
+                <th class="data" width="30px" nowrap>S.No.</th>
+                <th class="data" width="75px" nowrap>Date</th>
+                <th class="data" nowrap>Transaction Id</th>
+                <th class="data" nowrap>Invoice Id</th>
+                <th class="data" nowrap>Supplier Name</th>
+                <th class="data" nowrap>Supplier GSTIN</th>
+                <th class="data" nowrap>Invoice Receiver</th>
+                <th class="data" nowrap>Receiver GSTIN</th>
+                <th class="data" nowrap>Project Name</th>
+                <th class="data" nowrap>Subdivision Name</th>
+                <th class="data" nowrap>Sub Total</th>
+                <th class="data" nowrap>GST (%)</th>
+                <th class="data" nowrap>GST Amount</th>
+                <th class="data" width="50px" nowrap>Grand Total</th>
             </tr>
             <?php
             if($select_total > 0)
@@ -367,46 +334,76 @@ if($totalPages > $numberOfPages)
                 {
                     $ii=$i+$startResults;    
                      ?>
-                    <tr class="data">
-                        <td class="data" width="30px" align="center"><?php echo $ii; ?></td>
-                        <td class="data noExl" id="hid1[]"><?php echo $select_data['trans_id']; ?></td>
-                        <td class="data"><?php //echo $select_data['cust_id'];
+                    <tr class="data" align="center">
+                        <td class="data" width="30px" nowrap><?php echo $ii; ?></td>
+                        <td class="data " align="center" nowrap><?php echo date("d-m-Y",$select_data['payment_date']); ?></td>
+                        <td class="data" id="hid1[]" nowrap><?php echo $select_data['trans_id']; ?></td>
+                        <td class="data" id="hid1[]" nowrap>
+                        <?php
+                            if($select_data['invoice_id'])
+                            echo $select_data['invoice_id'];
+                        ?>
+                        </td>
+                        <td class="data" nowrap>
+                        <?php //echo $select_data['cust_id'];
                         $customer_nm = get_field_value("full_name","customer","cust_id",$select_data['cust_id']); 
                         echo $customer_nm;
-                         ?></td>
-                         <td class="data" style="display:none;"><?php //echo $select_data['cust_id'];
+                         ?>
+                         </td>
+                         <td class="data" nowrap><?php //echo $select_data['cust_id'];
                         $gst_nm = get_field_value("supply_gst_no","customer","cust_id",$select_data['cust_id']); 
                         echo $gst_nm;
                          ?></td>
-                        <td class="data"><?php 
-                        
+
+                        <td class="data" nowrap>
+                        <?php
+                            echo get_field_value("issuer_name","invoice_issuer","id",$select_data['invoice_issuer_id']);
+                        ?>
+                        </td>
+
+                        <td class="data" nowrap>
+                        <?php
+                            echo get_field_value("gst_no","invoice_issuer","id",$select_data['invoice_issuer_id']);
+                        ?>
+                        </td>
+
+                        <td class="data" nowrap><?php 
                         $project_name = get_field_value("name","project","id",$select_data['on_project']); 
                          echo $project_name;
                          ?></td>
                         
-                        <td class="data">
+                        <td class="data" nowrap>
                         <?php 
                         $subdivision_name = get_field_value("name","subdivision","id",$select_data['subdivision']); 
                          echo $subdivision_name;
                          ?>
                         </td>
-                        <td style="display:none;" class="data"><?php echo $select_data['description']; ?></td>
-                        <td style="display:none;" class="data"><?php 
-                        $subtot= $select_data['debit']-$select_data['gst_amount'];
-                        echo number_format((float)$subtot, 2,'.','');
-                        ?></td>
-                        <td style="display:none;" class="data"><?php
-                        $subtot = $select_data['debit']-$select_data['gst_amount'];
-                        $gstper = ($select_data['gst_amount']/$subtot)*100;
-                        echo $gstper; ?></td>
-                        <td style="" align="center" class="data"><?php 
-                        // echo floatval(number_format((float)$select_data['gst_amount'], 2,'.',''));
+                        
+                        <td class="data" nowrap>
+                        <?php 
+                            $subtot= $select_data['debit']-$select_data['gst_amount'];
+                            echo number_format((float)$subtot, 2,'.','');
+                        ?>
+                        </td>
+                        <td class="data" nowrap>
+                        <?php
+                        if($select_data['gst_amount']>1)
+                        {
+                            $subtot = $select_data['debit']-$select_data['gst_amount'];
+                            $gstper = ($select_data['gst_amount']/$subtot)*100;
+                            echo ceil($gstper).'%';
+                        }
+                        ?>
+                        </td>
+                        <td style="" align="center" class="data" nowrap>
+                        <?php 
+                        if($select_data['gst_amount']>1)
+                        {
                          echo number_format((float)$select_data['gst_amount'], 2,'.','');
-                        //echo $select_data['gst_amount']; ?></td>
-                        <td class="data" align="center"><?php echo number_format(floatval($select_data['debit']),2,'.',''); ?></td>
-                        <td class="data " align="center"><?php echo date("d-m-Y",$select_data['payment_date']); ?></td>
-                        
-                        
+                        }
+                        ?>
+                        </td>
+                        <td class="data" align="justify" nowrap><span style="color:red;">&#8377;&nbsp; <?php echo number_format(floatval($select_data['debit']),2,'.',''); ?></span></td>
                     </tr>
                 <?php
                     $i++;
@@ -417,7 +414,7 @@ if($totalPages > $numberOfPages)
             {
                 ?>
                 <tr class="data" >
-                    <td  width="30px" colspan="7" class="record_not_found" >Record Not Found</td>
+                    <td align="center" colspan="14" class="record_not_found" >Sorry! No Record Available</td>
                 </tr>
                 <?php
             }
@@ -425,9 +422,9 @@ if($totalPages > $numberOfPages)
             
         </table>
         </div>
-        <div class="pagination" >
+        <!--<div class="pagination" >-->
         
-        <?php
+        <?php/*
             
                         if($page > 1)
                         {
@@ -459,18 +456,11 @@ if($totalPages > $numberOfPages)
                             $page = $page-1;
                         }
                         
-                     ?>
+                     */?>
        
-        </div>
+        <!--</div>-->
     </div>
     
-    <div id="ledger_data" style="display:none;" >
-        <?php 
-       //$attach_file_id ='1012';
-       
-       // include_once("invoice-print.php");
-         ?>
-        <br>
         </div>
 <div class="clear"></div>
 <?php
@@ -479,19 +469,12 @@ include_once("footer.php");
 </div>
 </body>
 </html>
+<script src="js/jquery-ui.js"></script>
+
 <script>
 
 $(document).ready(function(){
     $("#export_to_excel").click(function(){
-        //document.getElementById("hid1").style.visibility = "hidden"; 
-       //  document.getElementById("hid1[]").style.display = "none";   
-        
-
-//newWin.document.write(getHeader());
-          //  $('#my_table td').find('td:eq(2)').hide(); 
-         //$('table td').find('td:eq(4)').hide(); 
-         //$("#thead").hide(); 
-         //$("td:hidden,th:hidden","#my_table").remove();
         $("#my_table").table2excel({        
         
             exclude: ".noExl",
@@ -504,65 +487,49 @@ $(document).ready(function(){
             
                    
         });  
-        // $("#thead").show();
-      //  $("td:eq(2),th:eq(2)","#my_table").show(); 
-       //  document.getElementById("hid1").style.display = "block";
     });
-   
-   //$("td:eq(2),th:eq(2)","#my_table").show();   
-   // $('table td').find('td:eq(4)').show(); 
-   
+
+    $("#cust_id").autocomplete({
+			source: "supplier-ajax.php"
+		});
+    $("#subdivision").autocomplete({
+			source: "subdivision_search_ajax.php"
+		});
+    $("#project_id").autocomplete({
+			source: "project-ajax.php"
+		});
+
 });
 function show_records(getno)
 {
-    //alert(getno);
     document.getElementById("page").value=getno;
     document.search_form.submit(); 
 }
 
 function search_date()
 {
-    //document.getElementById("search_action").value="withoutdate";
-    
         $("#search_action").val("enddate");
-        $("#search_form").submit();
-    
+        $("#search_form").submit();    
 }
 
 function print_data()
 {
 
-     var print_header1 = $("#print_header").val();           
-   var divToPrint1 = document.getElementById("ledger_data");
+var print_header1 = $("#print_header").val();           
+var divToPrint1 = document.getElementById("ledger_data");
 var divToPrint = divToPrint1;
 divToPrint.border = 3;
 divToPrint.cellSpacing = 0;
 divToPrint.cellPadding = 2;
 divToPrint.style.borderCollapse = 'collapse';
 newWin = window.open();
-//newWin.document.write(getHeader());
-//newWin.document.write("<h3 align='center'>Master Designation List </h3>");
 newWin.document.write("<h3 align='center'>"+print_header1+" </h3>");
-//$('tr').children().eq(3).hide();
 
-// $("#header1").hide();
-// $("#header2").hide();
-//$('table tr').find('td:eq(5)').hide();
-//$('table tr').find('td:eq(6)').hide();
 newWin.document.write(divToPrint.outerHTML);
 newWin.print();
-//$('tr').children().eq(7).show();
 
-//$('table tr').find('td:eq(5)').show();
-//$('table tr').find('td:eq(6)').show();
-//$("#header1").show();
-//$("#header2").show();
 newWin.close();
    
-   /* printMe=window.open();
-    printMe.document.write(document.getElementById("").innerHTML);
-    printMe.print();
-    printMe.close();*/
 }
 
 

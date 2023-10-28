@@ -176,7 +176,7 @@ if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
 }
 else
 {
-    $select_query = "select * from goods_details where invoice_id > '0' group by invoice_id ORDER BY invoice_id DESC LIMIT $startResults, $resultsPerPage";
+    $select_query = "select * from goods_details where invoice_id > '0' group by invoice_id ORDER BY invoice_id DESC";// LIMIT $startResults, $resultsPerPage";
     $select_result = mysql_query($select_query) or die('error in query select user query '.mysql_error().$select_query);
     $select_total = mysql_num_rows($select_result);
 }
@@ -348,7 +348,7 @@ if($totalPages > $numberOfPages)
         </div>
         
                 
-        <div id="ledger_data">
+        <div id="ledger_data" style="height: 400px; width:98%; overflow-y: scroll;">
         <?php if($msg != "") { ?>
     <div class="sukses">
         <?php echo $msg; ?>
@@ -458,7 +458,7 @@ if($totalPages > $numberOfPages)
             {
                 ?>
                 <tr class="data" >
-                    <td  width="30px" colspan="9" class="record_not_found" align="center">No Record Available</td>
+                    <td width="30px" colspan="9" class="record_not_found" align="center">No Record Available</td>
                 </tr>
                 <?php
             }

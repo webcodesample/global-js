@@ -29,11 +29,16 @@ if(trim($_REQUEST['action_perform']) == "add_project")
 	$from_arr = explode("- ",$_REQUEST['from']);
 	$cust_id = $from_arr[1];
 	$project_id = get_field_value("id","project","name",$_REQUEST['project']);
+    //added by amit
     if($_REQUEST['supplier_invoice_number'])
     {$supplier_invoice_number = $_REQUEST['supplier_invoice_number'];}
     $amount=mysql_real_escape_string(trim($_REQUEST['amount']));
     $amount_gst_amount=mysql_real_escape_string(trim($_REQUEST['amount_gst_amount']));
     $sub_amount = $_REQUEST['amount_sub'];
+
+    //add by amit
+    $invoice_receiver_data = explode(" - ", $_REQUEST['invoice_receiver']);
+	$invoice_receiver_id = $invoice_receiver_data[1];
 
 	$description=mysql_real_escape_string(trim($_REQUEST['description']));
 	//$subdivision=mysql_real_escape_string(trim($_REQUEST['subdivision']));
@@ -56,12 +61,12 @@ if(trim($_REQUEST['action_perform']) == "add_project")
 	$trans_id = mysql_real_escape_string(trim($_REQUEST['trans_id']));
 	   //amount_sub,amount_gstper,amount_gst_amount, amount_grand, amount
 	
-	$query="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."', debit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',subdivision = '".$subdivision."',trans_type = '".$trans_type."', trans_type_name = '".$trans_type_name."', create_date = '".getTime()."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."', invoice_pay_amount = '".$sub_amount."'";
+	$query="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."', debit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',subdivision = '".$subdivision."',trans_type = '".$trans_type."', trans_type_name = '".$trans_type_name."', create_date = '".getTime()."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."', invoice_pay_amount = '".$sub_amount."', invoice_issuer_id = '".$invoice_receiver_id."'";
 	$result= mysql_query($query) or die('error in query '.mysql_error().$query);
 	
 	$link_id_1 = mysql_insert_id();
 	
-	$query2="insert into payment_plan set trans_id = '".$trans_id."', project_id = '".$project_id."', credit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_customer = '".$cust_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',link_id = '".$link_id_1."',subdivision = '".$subdivision."',trans_type = '".$trans_type."', trans_type_name = '".$trans_type_name."', create_date = '".getTime()."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."', invoice_pay_amount = '".$sub_amount."'";
+	$query2="insert into payment_plan set trans_id = '".$trans_id."', project_id = '".$project_id."', credit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_customer = '".$cust_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',link_id = '".$link_id_1."',subdivision = '".$subdivision."',trans_type = '".$trans_type."', trans_type_name = '".$trans_type_name."', create_date = '".getTime()."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."', invoice_pay_amount = '".$sub_amount."', invoice_issuer_id = '".$invoice_receiver_id."'";
 	$result2= mysql_query($query2) or die('error in query '.mysql_error().$query2);
 	
 	$link_id_2 = mysql_insert_id();
@@ -78,12 +83,12 @@ if(trim($_REQUEST['action_perform']) == "add_project")
     $trans_id = mysql_real_escape_string(trim($_REQUEST['trans_id']));
     if($payment_flag==1)
     {
-    $query_pay ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', debit = '".$pay_amount."', description = '".$description."', on_customer = '".$cust_id."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."', payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."', trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."',create_date = '".getTime()."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."'";
+    $query_pay ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', debit = '".$pay_amount."', description = '".$description."', on_customer = '".$cust_id."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."', payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."', trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."',create_date = '".getTime()."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."', invoice_issuer_id = '".$invoice_receiver_id."'";
     $result_pay= mysql_query($query_pay) or die('error in query '.mysql_error().$query_pay);
     
     $link_id_1_pay = mysql_insert_id();
     
-    $query2_pay="insert into payment_plan set trans_id = '".$trans_id."',payment_flag = '".$payment_flag."', cust_id = '".$cust_id."', credit = '".$pay_amount."', description = '".$description."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."',link_id = '".$link_id_1_pay."',trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."', create_date = '".getTime()."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."'";
+    $query2_pay="insert into payment_plan set trans_id = '".$trans_id."',payment_flag = '".$payment_flag."', cust_id = '".$cust_id."', credit = '".$pay_amount."', description = '".$description."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."',link_id = '".$link_id_1_pay."',trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."', create_date = '".getTime()."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."', invoice_issuer_id = '".$invoice_receiver_id."'";
     $result2_pay= mysql_query($query2_pay) or die('error in query '.mysql_error().$query2_pay);
     
     $link_id_2_pay = mysql_insert_id();
@@ -427,8 +432,19 @@ function findTotal()
             <tr><td colspan="2"> <h4 class="u-text-2 u-text-palette-1-base1 " style="padding:0px; margin:0px;">Instant Receive Goods</h4></td></tr>
             <tr><td width="125px">Transaction ID</td>
             <td style="color:#FF0000; font-weight:bold;"><input type="hidden" id="trans_id"  name="trans_id" value="<?php echo $trans_id; ?>"/>&nbsp;<?php echo $trans_id; ?></td></tr>
+            
+            <tr>
+            <td >Supplier Invoice No.</td>
+            <td>
+            <input type="text" id="supplier_invoice_number"  name="supplier_invoice_number" value="" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span>
+            </td>
+            </tr>
+            
             <tr><td width="125px">Supplier Name</td>
             <td><input type="text" id="from"  name="from" value="" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+
+			<tr><td width="125px">Invoice Receiver</td>
+            <td><input type="text" id="invoice_receiver"  name="invoice_receiver" value="" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
             
             <tr><td >Project</td>
             <td><input type="text" id="project"  name="project" value="" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
@@ -441,13 +457,6 @@ function findTotal()
             
             </td></tr>
 
-            <tr>
-            <td >Supplier Invoice Number</td>
-            <td>
-            <input type="text" id="supplier_invoice_number"  name="supplier_invoice_number" value="" style="width:250px;"/>
-            </td>
-            </tr>
-            
             <tr><td align="left" valign="top" >
             Sub Total</td>
             <td><input type="text"  name="amount_sub" id="amount_sub" value=""  />&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
@@ -457,8 +466,6 @@ function findTotal()
             
             <tr><td align="left" valign="top" >GST Amount</td>
             <td><input type="text"  name="amount_gst_amount" id="amount_gst_amount" value="" />&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
-             <!-- //amount_sub,amount_gstper,amount_gst_amount, amount_grand, amount -->
-
             
             <tr><td align="left" valign="top" >Grand Total</td>
             <td><input type="hidden"  name="amount_grand" id="amount_grand" value="" />
@@ -477,15 +484,6 @@ function findTotal()
             <td><input type="text" id="attach_file_name"  name="attach_file_name" value="" autocomplete="off"/></td></tr>
             
             <tr><td valign="top" colspan="2" >
-          <!--  <div id="drag_div" style="border:1px solid #CCCCCC; width:100%; background-color:#FFFFFF; border-radius:10px; ">
-                    
-                    
-                    <div style="height:20px; width:100%; background-color:#F9F9F9; border-top-left-radius:10px; border-top-right-radius:10px; color:#FF0000; text-align:left; float:right; " >&nbsp;&nbsp;&nbsp;&nbsp;<strong>Drag Files To Upload</strong>
-                            </div>
-                            <div id="dropbox" >
-            <span class="message" >Drop Files here to upload.</span>
-        </div>
-                        </div>-->
             </td></tr>
             
             
@@ -704,6 +702,9 @@ function validation()
 	$(document).ready(function(){
 		$( "#from" ).autocomplete({
 			source: "supplier-ajax.php"
+		});
+        $( "#invoice_receiver" ).autocomplete({
+			source: "invoice_issuer-ajax.php"
 		});
 		$( "#project" ).autocomplete({
 			source: "project-ajax.php"

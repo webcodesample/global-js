@@ -41,7 +41,7 @@ if(trim($_REQUEST['action_perform']) == "edit_invoice_issuer")
 
     //code by amit for logo
     $filename=$_FILES['invoice_issuer_logo']['tmp_name'];
-    //$imgData = mysql_escape_string(file_get_contents($filename));
+    $imgData = mysql_escape_string(file_get_contents($filename));
     
     $query="update invoice_issuer set issuer_name = '".$issuer_name."', display_name = '".$display_name."', mobile = '".$mobile."', email = '".$email."', address = '".$address."', company_name = '".$company_name."', reg_no = '".$reg_no."', vat_no = '".$vat_no."', gst_no = '".$gst_no."', cin_no = '".$cin_no."', pan_no = '".$pan_no."', logo = '".$imgData."' where id='".$issuer_id."'"; 
     $result= mysql_query($query) or die('error in query '.mysql_error().$query.'<br>');
@@ -127,9 +127,8 @@ $select_data = mysql_fetch_array($select_result)
             <tr>
             <td valign="top">Logo</td>
             <td>
-            <input type="file" name="invoice_issuer_logo" id="invoice_issuer_logo" accept="image/*" style="display:none;">
-            
-            <img id="logo_display" src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($select_data['logo']); ?>" style="border-radius:50%; hieght:120px; width:120px;" onClick="document.getElementById('invoice_issuer_logo').click()"/> 
+            <img id="logo_display" src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($select_data['logo']); ?>" style="border-radius:50%; hieght:120px; width:120px;" onClick="document.getElementById('invoice_issuer_logo').click();"/> 
+            <br><input type="file" name="invoice_issuer_logo" id="invoice_issuer_logo" accept="image/*" style="display:none;">
             <div id="res"></div>
             </td>
             </tr>
@@ -177,8 +176,7 @@ $url = implode("/",$url_arr)."/dll.txt";
 </body>
 </html>
 <script type="text/javascript">
-
-document.getElementById("invoice_issuer_logo").onchange = function()
+/*document.getElementById("invoice_issuer_logo").onchange = function()
 {
     alert($('#invoice_issuer_logo').prop("files")[1]);
     alert($('#invoice_issuer_logo').val());
@@ -196,7 +194,7 @@ document.getElementById("invoice_issuer_logo").onchange = function()
             //alert(result);
         }
     });
-}
+}*/
   
 function add_div()
 {
