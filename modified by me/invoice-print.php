@@ -47,7 +47,8 @@ include_once("../connection.php");
                   <table width="100%">
                   <tr>
                   <td>
-                  <img src="data:image/jpg;charset=utf8;base64,<?php //echo base64_encode($select_issuer['logo']); ?>" style="border-radius:50%; hieght:80px; width:80px;"/> 
+                  <!--<img src="data:image/jpg;charset=utf8;base64,<?php //echo base64_encode($select_issuer['logo']); ?>" style="border-radius:50%; hieght:80px; width:80px;"/> -->
+                  <img src="images/default-logo.png" style="border-radius:50%; hieght:80px; width:80px;"/>
                   </td>
                   <td valign="middle"><font face="arial" size="4 " color=""><b><?php echo $select_issuer['company_name']; ?> </b></font><br>
                     <font face="arial" size="2 " color=""><b><?php echo $select_issuer['address']; ?></b></font>

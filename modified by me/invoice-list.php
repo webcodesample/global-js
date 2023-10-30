@@ -63,9 +63,77 @@ if($_REQUEST['action_perform'] == "delete_user")
     $msg = "user Deleted Successfully.";
     
 }
-/*blocked by amit
+
 if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
 { 
+    $from_date = strtotime(mysql_real_escape_string(trim($_REQUEST['from_date'])));
+    
+    $to_date = strtotime(mysql_real_escape_string(trim($_REQUEST['to_date'])));
+
+    if($_REQUEST['cust_id'])
+    {
+        //modify by amit
+        $customer_info = explode(" - ",$_REQUEST['cust_id']);
+        $customerdata ="and cust_id='".$customer_info[1]."'";
+    }
+    else { $customerdata=""; }
+    
+    if($_REQUEST['project_id']!="All"){
+        $projectdata ="and project_id='".$_REQUEST['project_id']."'";
+    }else { $projectdata=""; }
+
+    if($_REQUEST['invoice_type']!="All")
+    {//code by amit
+        $invoice_type ="and invoice_type='".$_REQUEST['invoice_type']."'";
+    }else { $invoice_type=""; }
+    
+    if($_REQUEST['invoice_id']){
+        $invoice_iddata ="and invoice_id='".$_REQUEST['invoice_id']."'";
+    }
+    elseif($_REQUEST['printable_invoice_number'])
+    {
+        //code by amit
+        $print_inv_data = explode(" - ",$_REQUEST['printable_invoice_number']);
+        $invoice_iddata ="and invoice_id='".$print_inv_data[1]."'";
+    }else { $invoice_iddata=""; }
+    
+    if($from_date!=""){
+        $from_datedata ="and payment_date >= '".$from_date."'";
+    }else { $from_datedata=""; }
+    
+    if($to_date!=""){
+        $to_datedata ="and payment_date <= '".$to_date."'";
+    }else { $to_datedata=""; }
+  
+    // and payment_date >= '".$from_date."' and payment_date <= '".$to_date."' 
+    
+    $query = "select *  from goods_details where  invoice_id > '0' ".$customerdata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." ".$invoice_type." group by invoice_id ORDER BY invoice_id ASC ";
+    
+    $result = mysql_query($query) or die('error in query select invoice_issuer query '.mysql_error().$query);
+    $total_row = mysql_num_rows($result);
+}
+else
+{
+    $query = "select * from goods_details where invoice_id > '0' group by invoice_id ORDER BY invoice_id ASC ";
+    $result = mysql_query($query) or die('error in query select invoice_issuer query '.mysql_error().$query);
+    $total_row = mysql_num_rows($result);
+    //echo $total_row;
+}
+
+$page = $_REQUEST['page'];
+if ($page < 1) $page = 1;
+$numberOfPages = numberofpages();
+if($_REQUEST['rpp'])
+{$resultsPerPage = $_REQUEST['rpp'];}
+else
+{$resultsPerPage = 20;}
+
+$startResults = ($page - 1) * $resultsPerPage;
+$totalPages = ceil($total_row / $resultsPerPage);
+
+
+if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
+{
     $from_date = strtotime(mysql_real_escape_string(trim($_REQUEST['from_date'])));
     
     $to_date = strtotime(mysql_real_escape_string(trim($_REQUEST['to_date'])));
@@ -106,77 +174,14 @@ if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
   
     // and payment_date >= '".$from_date."' and payment_date <= '".$to_date."' 
     
-    $query = "select *  from goods_details where  invoice_id > '0' ".$customerdata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." ".$invoice_type." group by invoice_id ORDER BY invoice_id ASC ";
-    
-    $result = mysql_query($query) or die('error in query select invoice_issuer query '.mysql_error().$query);
-    //$total_row = mysql_num_rows($result);
-}
-else
-{
-    $query = "select * from goods_details where invoice_id > '0' group by invoice_id ORDER BY invoice_id ASC ";
-    $result = mysql_query($query) or die('error in query select invoice_issuer query '.mysql_error().$query);
-    $total_row = mysql_num_rows($result);
-    //echo $total_row;
-}*/
-
-$page = $_REQUEST['page'];
-if ($page < 1) $page = 1;
-$numberOfPages = numberofpages();
-$resultsPerPage = resultperpage();
-$startResults = ($page - 1) * $resultsPerPage;
-$totalPages = ceil($total_row / $resultsPerPage);
-
-
-if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
-{
-    $from_date = strtotime(mysql_real_escape_string(trim($_REQUEST['from_date'])));
-    
-    $to_date = strtotime(mysql_real_escape_string(trim($_REQUEST['to_date'])));
-
-    if($_REQUEST['cust_id'])
-    {
-        //modify by amit
-        $customer_info = explode(" - ",$_REQUEST['cust_id']);
-        $customerdata ="and cust_id='".$customer_info[1]."'";
-    }
-    else { $customerdata=""; }
-    
-    if($_REQUEST['project_id']!="All"){
-        $projectdata ="and project_id='".$_REQUEST['project_id']."'";
-    }else { $projectdata=""; }
-
-        if($_REQUEST['invoice_type']!="All"){//code by amit
-        $invoice_type ="and invoice_type='".$_REQUEST['invoice_type']."'";
-    }else { $invoice_type=""; }
-    
-    if($_REQUEST['invoice_id']){
-        $invoice_iddata ="and invoice_id='".$_REQUEST['invoice_id']."'";
-    }
-    elseif($_REQUEST['printable_invoice_number'])
-    {
-        //code by amit
-        $print_inv_data = explode(" - ",$_REQUEST['printable_invoice_number']);
-        $invoice_iddata ="and invoice_id='".$print_inv_data[1]."'";
-    }else { $invoice_iddata=""; }
-    
-    if($from_date!=""){
-        $from_datedata ="and payment_date >= '".$from_date."'";
-    }else { $from_datedata=""; }
-    
-    if($to_date!=""){
-        $to_datedata ="and payment_date <= '".$to_date."'";
-    }else { $to_datedata=""; }
-  
-    // and payment_date >= '".$from_date."' and payment_date <= '".$to_date."' 
-    
-    $select_query = "select *  from goods_details where  invoice_id > '0' ".$customerdata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." ".$invoice_type." group by invoice_id ORDER BY invoice_id DESC ";
+    $select_query = "select *  from goods_details where  invoice_id > '0' ".$customerdata." ".$projectdata."".$invoice_iddata." ".$from_datedata." ".$to_datedata." ".$invoice_type." group by invoice_id ORDER BY invoice_id DESC LIMIT ". $startResults.",". $resultsPerPage;
     
     $select_result = mysql_query($select_query) or die('error in query select bank query '.mysql_error().$select_query);
     $select_total = mysql_num_rows($select_result);
 }
 else
 {
-    $select_query = "select * from goods_details where invoice_id > '0' group by invoice_id ORDER BY invoice_id DESC";// LIMIT $startResults, $resultsPerPage";
+    $select_query = "select * from goods_details where invoice_id > '0' group by invoice_id ORDER BY invoice_id DESC LIMIT ". $startResults.",". $resultsPerPage;
     $select_result = mysql_query($select_query) or die('error in query select user query '.mysql_error().$select_query);
     $select_total = mysql_num_rows($select_result);
 }
@@ -234,9 +239,31 @@ if($totalPages > $numberOfPages)
     <tr>
         <td style="align:top;" align="left">
         <h4 class="u-text-2 u-text-palette-1-base " style="padding:0px; margin:0px;">
-        Sale Invoice List</h4>
+        Sale Invoice List</h4>&nbsp;
   </td>
         <td width="" style="float:right;">
+        <b>Rows Per Page</b>
+        <?php
+        //code by amit
+        if($_REQUEST['rpp']==10)
+            $sel_10 = 'selected';
+        elseif($_REQUEST['rpp']==50)
+            $sel_50 = 'selected';
+        elseif($_REQUEST['rpp']==30)
+            $sel_30 = 'selected';
+        elseif($_REQUEST['rpp']==40)
+            $sel_40 = 'selected';
+        else
+            $sel_20 = "selected";
+        ?>
+    <select name="rpp_select" id="rpp_select" onchange="document.getElementById('rpp').value=this.value; document.getElementById('search_form').submit();">
+       <option value="10" <?= $sel_10; ?>>10</option>
+       <option value="20" <?= $sel_20; ?>>20</option>
+       <option value="30" <?= $sel_30; ?>>30</option>
+       <option value="40">40</option>
+       <option value="50">50</option>
+    </select>
+    &nbsp;
             <input type="button" name="print_button" id="print_button" value="" class="button_print" onClick="return print_data();"  />
     <script src="dist/jquery.table2excel.min.js"></script>
     <input type="button" id="export_to_excel" value="" class="button_export" >  
@@ -327,7 +354,8 @@ if($totalPages > $numberOfPages)
             
             
                         <input type="hidden" name="search_action" id="search_action" value=""  />
-            <input type="hidden" name="page" id="page" value=""  />
+            <input type="hidden" name="page" id="page" value="">
+            <input type="hidden" name="rpp" id="rpp" value="<?= $_REQUEST['rpp'] ?>">
 
             </form>    
            <form name="user_form" id="user_form" action="" method="post" >
@@ -348,7 +376,7 @@ if($totalPages > $numberOfPages)
         </div>
         
                 
-        <div id="ledger_data" style="height: 400px; width:98%; overflow-y: scroll;">
+        <div id="ledger_data">
         <?php if($msg != "") { ?>
     <div class="sukses">
         <?php echo $msg; ?>
@@ -375,9 +403,8 @@ if($totalPages > $numberOfPages)
                 <th class="data" align="center">Invoice No.</th>
                 <th class="data" align="center">Invoice Type</th>
                 <th class="data" align="center">Customer Name</th>
-                <th class="data" align="center">Issuer Name</th>
+                <th class="data" align="center">Inv From</th>
                 <th class="data" align="center">Date </th>
-                <th class="data noExl" width="50px" id="header2" align="center">&nbsp;</th>
                 <th class="data noExl" width="75px" id="header1" align="center">Action</th>
                 </thead>
             </tr>
@@ -390,10 +417,10 @@ if($totalPages > $numberOfPages)
                     $ii=$i+$startResults;
 
                      ?>
-                    <tr class="data" align="center">
+                    <tr class="data">
                         <td class="data" width="30px"><?php echo $ii; ?></td>
                         <td class="data"><?php echo $select_data['invoice_id']; ?></td>
-                        <td class="data" align="center">
+                        <td class="data">
                         <?php 
                         //code by amit
                         $pin_query = "Select printable_invoice_number,invoice_type from payment_plan where invoice_id='".$select_data['invoice_id']."'";
@@ -408,7 +435,7 @@ if($totalPages > $numberOfPages)
                         ?>
                         </td>
 
-                        <td class="data" align="center">
+                        <td class="data">
                         <?php 
                         //code by amit
                         if($select_data['invoice_type'] == 'R')
@@ -434,20 +461,19 @@ if($totalPages > $numberOfPages)
                         //echo  $payment_customer;
                         $invoice_issuer_id = get_field_value("invoice_issuer_id","payment_plan","id",$payment_customer); 
                          //echo $invoice_issuer_id;
-                         $display_name = get_field_value("display_name","invoice_issuer","id",$invoice_issuer_id); 
+                         $display_name = get_field_value("issuer_name","invoice_issuer","id",$invoice_issuer_id); 
                          echo $display_name;
                          ?></td>
                         
                         
                         <td class="data" align="center"><?php echo date("d-m-Y",$select_data['payment_date']); ?></td>
-                        <td class="data noExl"><center><?php if($select_data['trans_type_name']=="instmulti_sale_goods")
+                        <td class="data noExl">
+                        <center><?php if($select_data['trans_type_name']=="instmulti_sale_goods")
                         {  ?>
-                        <a href="edit_instant-sale-invoice_multiple.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['link2_id']; ?>&trsns_pname=<?php echo "invoice-list-inst-sale-goods"; ?>"><img src="mos-css/img/edit.png" title="Edit"></a>
-                 <?php  } ?>&nbsp;</center></td>
-                        <td class="data noExl" width="75px">
-                        <center> 
+                        <a href="edit_instant-sale-invoice_multiple.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['link2_id']; ?>&trsns_pname=<?php echo "invoice-list-inst-sale-goods"; ?>"><img src="mos-css/img/edit.png" style="height:15px; width:15px;" title="Edit"></a>
+                 <?php  } ?>&nbsp;
                         
-                        <a href="invoice-print.php?invoice_id=<?php echo $select_data['invoice_id']; ?>"><input type="button" name="print_button" id="print_button" value="Print" class="button"   /></a></center>
+                        <a href="invoice-print.php?invoice_id=<?php echo $select_data['invoice_id']; ?>"><img src="images/print_icon.png" style="height:15px; width:15px;" title="Print"></a></center>
                         </td>
                     </tr>
                 <?php
@@ -501,7 +527,6 @@ if($totalPages > $numberOfPages)
                         }
                         
                      ?>
-       
         </div>
     
     <div id="ledger_data" style="display:none;" >

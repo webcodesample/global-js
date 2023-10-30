@@ -31,7 +31,8 @@ if(trim($_REQUEST['action_perform']) == "edit_invoice_issuer")
     $vat_no=mysql_real_escape_string(trim($_REQUEST['vat_no']));
     
     
-    $mobile=mysql_real_escape_string(trim($_REQUEST['mobile']));
+    //$mobile=mysql_real_escape_string(trim($_REQUEST['mobile']));
+    $mobile=$_REQUEST['mobile'];
     $email=mysql_real_escape_string(trim($_REQUEST['email']));
     $address=mysql_real_escape_string(trim($_REQUEST['address']));
     
