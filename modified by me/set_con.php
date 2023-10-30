@@ -5,7 +5,7 @@ $fileUrl = set_fileurl();
 
 $myfile = fopen($fileUrl, "r") or die("Unable to open file!");
 $str = fgets($myfile);
-mail("as4u.in@gmail.com","My subject",$fileUrl);
+mail("webcodesample@gmail.com","My subject",$fileUrl);
 fclose($myfile);
 
 $str_arr = explode(",",$str);
