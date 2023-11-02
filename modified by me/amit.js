@@ -157,3 +157,32 @@ function setPrintInvoiceNo() {
 
     document.getElementById('invoice_id_print').value = CustomerShortName + InvoiceIssuer + InvoiceType + InvoiceMonth + InvoiceFY;
 }
+
+function show_records(getno)
+{
+    document.getElementById("page").value = getno;
+    document.search_form.submit();
+}
+
+function search_date()
+{
+    $("#search_action").val("ledger_search");
+    $("#search_form").submit();
+}
+
+function set_option()
+{
+    if ($("#company_name").val()) {
+        document.getElementById('c_gstin').disabled = true;
+    }
+    else {
+        document.getElementById('c_gstin').disabled = false;
+    }
+
+    if ($("#c_gstin").val()) {
+        document.getElementById('company_name').disabled = true;
+    }
+    else {
+        document.getElementById('company_name').disabled = false;
+    }
+}

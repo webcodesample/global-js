@@ -524,7 +524,7 @@ function findTotal()
         
             <td><input type="text"  name="pay_payment_date" id="pay_payment_date" value="<?php echo $_REQUEST['payment_date']; ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('pay_payment_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
             
-            <tr><td >Payment Mothod</td>
+            <tr><td >Payment Method</td>
             <td><br>
             <input type="radio" id="pay_method" name="pay_method"  onchange=" return checkno_create();" value="check">
             <label for="male">Cheque</label>&nbsp;&nbsp;

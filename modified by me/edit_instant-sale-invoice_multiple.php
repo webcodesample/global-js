@@ -1112,6 +1112,7 @@ var desc_total="";
 			<td style="font-weight:bold;">
             <?php
              $pin_parts = explode("/",$select_data['printable_invoice_number']);
+             //print_r($pin_parts);
              if($select_data['invoice_type']=='M')
              {$pinv_month = $pin_parts[3]; $pinv_year = $pin_parts[4];}
              else

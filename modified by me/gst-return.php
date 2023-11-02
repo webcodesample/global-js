@@ -17,7 +17,9 @@ else
     $error_msg = "";
 }
 
-if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
+echo $cutoff_date = strtotime("1 september 2023");
+
+if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "ledger_search")
 {
     $from_date = strtotime(mysql_real_escape_string(trim($_REQUEST['from_date'])));
     
@@ -27,27 +29,27 @@ if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
     {
         $invoice_rcvr = explode(" - ",$_REQUEST['company_name']);
         $querypart_rcvr = "and invoice_issuer_id='".$invoice_rcvr[1]."'";
-        $company_name = $invoice_rcvr[0];
-        $company_gstin = $invoice_rcvr[2];
     }
     elseif($_REQUEST['c_gstin'])
     {
         $invoice_rcvr = explode(" - ",$_REQUEST['c_gstin']);
         $querypart_rcvr = "and invoice_issuer_id='".$invoice_rcvr[1]."'";
-        $company_name = $invoice_rcvr[0];
-        $company_gstin = $invoice_rcvr[2];
     }
     else{$querypart_rcvr = "";}
 
-    if($from_date!=""){
+    
+    if($from_date!="")
+    {
         $from_datedata ="and payment_date >= '".$from_date."'";
         $from_dt = "From : ".$_REQUEST['from_date'];
-    }else { $from_datedata=""; }
+    }else { $from_datedata ="and payment_date >= '".$cutoff_date."'";}
     
     if($to_date!=""){
         $to_datedata ="and payment_date <= '".$to_date."'";
         $to_dt = " To : ".$_REQUEST['to_date'];
     }else { $to_datedata=""; }
+
+    
 
     //purchase return queries
     $select_query = "select * from payment_plan where trans_id > 0 and trans_type_name in('receive_goods','inst_receive_goods') ".$querypart_rcvr."".$from_datedata." ".$to_datedata." group by trans_id ORDER BY payment_date ASC";
@@ -69,24 +71,21 @@ if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
 }
 else
 {
-    echo $start_date = strtotime("1 september 2023");
-
-
     //purchase queries
-    $select_query = "select * from payment_plan where trans_id > '0' and payment_date >= '".$start_date."' and trans_type_name in('receive_goods','inst_receive_goods') group by trans_id ORDER BY payment_date ASC";
+    $select_query = "select * from payment_plan where trans_id > '0' and payment_date >= '".$cutoff_date."' and trans_type_name in('receive_goods','inst_receive_goods') group by trans_id ORDER BY payment_date ASC";
     $select_result = mysql_query($select_query) or die('error in query select user query '.mysql_error().$select_query);
     $select_total = mysql_num_rows($select_result);
 
-    $paid_amout_query = "SELECT SUM(invoice_pay_amount) AS amount_paid, SUM(gst_amount) AS gst_paid FROM payment_plan where trans_id > '0' and trans_type_name in('receive_goods','inst_receive_goods') and payment_date >= '".$start_date."'";
+    $paid_amout_query = "SELECT SUM(invoice_pay_amount) AS amount_paid, SUM(gst_amount) AS gst_paid FROM payment_plan where trans_id > '0' and trans_type_name in('receive_goods','inst_receive_goods') and payment_date >= '".$cutoff_date."'";
     $paid_amout_result = mysql_query($paid_amout_query) or die('error in query select user query '.mysql_error().$paid_amout_query);
     $paid_amount = mysql_fetch_array($paid_amout_result);
     
     //sales return queries
-    $sales_query = "select * from payment_plan where trans_id > 0 and payment_date >= '".$start_date."' and trans_type_name='instmulti_sale_goods' group by trans_id ORDER BY payment_date ASC";
+    $sales_query = "select * from payment_plan where trans_id > 0 and payment_date >= '".$cutoff_date."' and trans_type_name='instmulti_sale_goods' group by trans_id ORDER BY payment_date ASC";
     $sales_result = mysql_query($sales_query) or die('error in query select bank query '.mysql_error().$sales_query);
     $sales_total_row = mysql_num_rows($sales_result);
 
-    $rcvd_amout_query = "SELECT SUM(invoice_pay_amount) AS amount_paid, SUM(gst_amount) AS gst_paid FROM payment_plan where trans_id > '0' and trans_type_name='instmulti_sale_goods' and payment_date >= '".$start_date."'";
+    $rcvd_amout_query = "SELECT SUM(invoice_pay_amount) AS amount_paid, SUM(gst_amount) AS gst_paid FROM payment_plan where trans_id > '0' and trans_type_name='instmulti_sale_goods' and payment_date >= '".$cutoff_date."'";
     $rcvd_amout_result = mysql_query($rcvd_amout_query) or die('error in query select user query '.mysql_error().$rcvd_amout_query);
     $rcvd_amount = mysql_fetch_array($rcvd_amout_result);
 }
@@ -108,7 +107,7 @@ else
 }
 </STYLE>
 
-<body  data-home-page-title="" class="u-body u-xl-mode" data-lang="en">
+<body  data-home-page-title="" class="u-body u-xl-mode" data-lang="en" onload="set_option()">
   <?php include_once ("top_header2.php"); ?> 
   <?php include_once ("top_menu.php"); ?>
   <?php include_once("main_heading_open.php") ?>
@@ -209,6 +208,9 @@ else
         <?php
         if($_REQUEST['search_action'])
         {
+            $company_name = get_field_value("company_name","invoice_issuer","id",$invoice_rcvr[1]);
+            $company_gstin = $invoice_rcvr[2];
+
             if($_REQUEST['company_name']!=='' || $_REQUEST['c_gstin']!=='')
                 echo "GST Return for ".$company_name." ( GSTIN : ".$company_gstin." )<br>";
             if($_REQUEST['to_date']!=='' || $_REQUEST['from_date']!=='')
@@ -216,7 +218,7 @@ else
         }
         else 
         {
-	    echo "GST Return : Common";
+	    echo "GST Return : All";
         }
         ?>
         </div>
@@ -269,13 +271,13 @@ else
                         echo $gst_nm;
                          ?></td>
 
-                        <td class="data" nowrap>
+                        <td class="data" nowrap>&#8377;&nbsp;
                         <?php 
                             $subtot= $select_data['debit']-$select_data['gst_amount'];
                             echo number_format((float)$subtot, 2,'.','');
                         ?>
                         </td>
-                        <td style="" class="data" nowrap>
+                        <td style="" class="data" nowrap>&#8377;&nbsp;
                         <?php 
                         if($select_data['gst_amount']>1)
                         {
@@ -317,18 +319,15 @@ else
         <td class="data" colspan="5" align="right" style="color:#800000;">
         Total Paid
         </td>
-        <td class="data" style="color:#800000;">
+        <td class="data" style="color:#800000;">&#8377;&nbsp;
         <?php echo number_format(floatval($paid_amount['amount_paid']/2),2,'.',''); ?>
         </td>
-        <td class="data" style="color:#800000;">
+        <td class="data" style="color:#800000;">&#8377;&nbsp;
         <?php echo number_format(floatval($paid_amount['gst_paid']/2),2,'.',''); ?>
         </td>
         <td colspan="2" class="data"></td>
         </tr>
-
-        </table>
-
-        <table class="data" id="my_table" border="1" cellpadding="1" cellspacing="0" style="border: 1px solid #111111;">
+        <tr class="data"><td colspan="9" class="data">&nbsp;</td></tr>
         <tr class="data">
             <td class="data" colspan="9" nowrap>
             <b>GST Sale Return: Generated On :
@@ -363,28 +362,30 @@ else
     
                         <td class="data" nowrap>
                         <?php
-                            if($sales_data['invoice_id'])
+                            if($sales_data['printable_invoice_number'])
+                            echo $sales_data['printable_invoice_number'];
+                            else
                             echo $sales_data['invoice_id'];
                         ?>
                         </td>
                         <td class="data" nowrap>
-                        <?php //echo $sales_data['cust_id'];
+                        <?php 
                         $customer_nm = get_field_value("full_name","customer","cust_id",$sales_data['cust_id']); 
                         echo $customer_nm;
                          ?>
                          </td>
-                         <td class="data" nowrap><?php //echo $sales_data['cust_id'];
-                        $gst_nm = get_field_value("supply_gst_no","customer","cust_id",$sales_data['cust_id']); 
+                         <td class="data" nowrap><?php 
+                        $gst_nm = get_field_value("client_gst","customer","cust_id",$sales_data['cust_id']); 
                         echo $gst_nm;
                          ?></td>
 
-                        <td class="data" nowrap>
+                        <td class="data" nowrap>&#8377;&nbsp;
                         <?php 
                             $subtot= $sales_data['credit']-$sales_data['gst_amount'];
                             echo number_format((float)$subtot, 2,'.','');
                         ?>
                         </td>
-                        <td style="" class="data" nowrap>
+                        <td style="" class="data" nowrap>&#8377;&nbsp;
                         <?php 
                         if($sales_data['gst_amount']>1)
                         {
@@ -425,25 +426,25 @@ else
         <td class="data" colspan="5" align="right" style="color:#800000;">
         Total Received
         </td>
-        <td class="data" style="color:#800000;">
+        <td class="data" style="color:#800000;">&#8377;&nbsp;
         <?php echo number_format(floatval($rcvd_amount['amount_paid']/2),2,'.',''); ?>
         </td>
-        <td class="data" style="color:#800000;">
+        <td class="data" style="color:#800000;">&#8377;&nbsp;
         <?php echo number_format(floatval($rcvd_amount['gst_paid']/2),2,'.',''); ?>
         </td>
         <td colspan="2" class="data"></td>
         </tr>
 
         </table>
-
-        <div style="width:100%; font-weight:bold; color:#800000; font-size:13px; text-align:center;">
+        
         <?php
             if($rcvd_amount['gst_paid']>$paid_amount['gst_paid'])
-            echo "Payable GST Amount is : Rs. ".number_format(floatval(($rcvd_amount['gst_paid']-$paid_amount['gst_paid'])/2),2,'.','')."/- Only";
+            echo "<div style='width:100%; font-weight:bold; color:red; font-size:13px; text-align:center;'>Payable GST Amount : &#8377;&nbsp; ".number_format(floatval(($rcvd_amount['gst_paid']-$paid_amount['gst_paid'])/2),2,'.','')."/- Only</div>";
+            elseif($rcvd_amount['gst_paid']<$paid_amount['gst_paid'])
+            echo "<div style='width:100%; font-weight:bold; color:green; font-size:13px; text-align:center;'>Refundable GST Amount : &#8377;&nbsp; ".number_format(floatval(($paid_amount['gst_paid']-$rcvd_amount['gst_paid'])/2),2,'.','')."/- Only</div>";
             else
-            echo "Refundable GST Amount is : Rs. ".number_format(floatval(($paid_amount['gst_paid']-$rcvd_amount['gst_paid'])/2),2,'.','')."/- Only";
+            echo "<div style='width:100%; font-weight:bold; color:green; font-size:13px; text-align:center;'>***No GST Due & No GST Refund***</div>";
         ?>
-        </div>
 
         </div>
         
@@ -455,6 +456,7 @@ include_once("footer.php");
 </body>
 </html>
 <script src="js/jquery-ui.js"></script>
+<script src="amit.js"></script>
 
 <script>
 
@@ -464,13 +466,11 @@ $(document).ready(function(){
         
             exclude: ".noExl",
             name: "Developer data",
-            filename: "Purchase_Goods_List",
+            filename: "GSTReturn",
             fileext: ".xls",        
             exclude_img: true,
             exclude_links: true,
-            exclude_inputs: true ,    
-            
-                   
+            exclude_inputs: true ,
         });  
     });
 
@@ -481,42 +481,9 @@ $(document).ready(function(){
 			source: "company-ajax.php"
 		});
 });
-function show_records(getno)
-{
-    document.getElementById("page").value=getno;
-    document.search_form.submit(); 
-}
-
-function search_date()
-{
-        $("#search_action").val("enddate");
-        $("#search_form").submit();    
-}
-
-function set_option()
-{
-    if($("#company_name").val())
-    {
-        document.getElementById('c_gstin').disabled = true;
-    }
-    else 
-    {
-	    document.getElementById('c_gstin').disabled = false;
-    }
-
-    if($("#c_gstin").val())
-    {
-        document.getElementById('company_name').disabled = true;
-    }
-    else 
-    {
-	    document.getElementById('company_name').disabled = false;
-    }
-}
 
 function print_data()
 {
-
 var print_header1 = $("#print_header").val();           
 var divToPrint1 = document.getElementById("ledger_data");
 var divToPrint = divToPrint1;
