@@ -466,7 +466,7 @@ if($totalPages > $numberOfPages)
                         <?php
                         if($select_data['trans_type_name']=="receive_goods" || $select_data['trans_type_name']=="inst_receive_goods")
                         {  ?>
-                        <a href="edit-instant-receive-goods.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['link2_id']+1; ?>&trsns_pname=<?php echo "supplier-ledger-inst-make-payment"; ?>"><img src="mos-css/img/edit.png" style="height:15px; width:15px;" title="Edit"></a>
+                        <a href="edit-instant-receive-goods.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['link_id']-1; ?>&trsns_pname=<?php echo "supplier-ledger-inst-receive-goods"; ?>"><img src="mos-css/img/edit.png" style="height:15px; width:15px;" title="Edit"></a>
                         <?php  } ?>
                         </td>
 
