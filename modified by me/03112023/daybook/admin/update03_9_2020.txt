@@ -1,0 +1,7 @@
+
+
+
+ALTER TABLE `payment_plan` ADD `loan_id` INT( 50 ) NOT NULL AFTER `invoice_id` ;
+ALTER TABLE `payment_plan` ADD `on_loan` INT( 50 ) NOT NULL AFTER `on_bank` ;
+ALTER TABLE `payment_plan` ADD `advance_loan_no` INT( 50 ) NOT NULL AFTER `trans_id` ;
+ALTER TABLE `payment_plan` ADD `interest_per` DECIMAL( 15, 2 ) NOT NULL AFTER `payment_checkno` ;

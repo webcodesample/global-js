@@ -1,0 +1,4 @@
+
+
+ALTER TABLE `goods_details` CHANGE `unit_price` `unit_price` DECIMAL( 15, 2 ) NOT NULL ;
+ALTER TABLE `goods_details` CHANGE `sub_total` `sub_total` DECIMAL( 15, 2 ) NOT NULL ;

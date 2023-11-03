@@ -1,0 +1,3 @@
+
+
+ALTER TABLE `bank` ADD `exact_bank_name` VARCHAR( 255 ) NOT NULL AFTER `bank_name` ;

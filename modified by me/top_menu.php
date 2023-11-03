@@ -90,7 +90,7 @@
                      <li><a href="invoice-report.php">Sales Reports</a></li>
                       <li><a href="purchase-report-new.php">Purchase Reports</a></li>
                       <li><a href="gst-report.php">GST Reports</a></li>
-                      <li><a href="gst-return.php">GST Return</a></li>
+                      <!--<li><a href="gst-return.php">GST Return</a></li>-->
                   </ul>
               </li>
               
@@ -188,7 +188,7 @@
                      <li><a href="invoice-report.php">Sales Reports</a></li>
                       <li><a href="purchase-report-new.php">Purchase Reports</a></li>
                       <li><a href="gst-report.php">GST Reports</a></li>
-                      <li><a href="gst-return.php">GST Return</a></li>
+                      <!--<li><a href="gst-return.php">GST Return</a></li>-->
                   </ul>
               </li>
               

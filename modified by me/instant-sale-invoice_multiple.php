@@ -18,10 +18,9 @@ else
 }
 $flag = 0;
 
+print_r($_REQUEST);
 /*     Create  Account   */
 
-  //no_check_1,snum_1,invoice_id_new,date_new_id  
-  //invoice_id_new_old,date_new_id_old
   $date_new_id_1=$_REQUEST['date_new_id'];  
 if(trim($_REQUEST['action_perform']) == "add_project")
 {
@@ -78,31 +77,31 @@ $wi = 0;
     
     /* goods detail start*/
         
-       $desc_t=$_REQUEST['desc_t'];
-       $qty_t=$_REQUEST['qty_t'];
-       $unit_price_1=$_REQUEST['unit_price_1'];
-       $sub_total=$_REQUEST['sub_total'];
-       $gst=$_REQUEST['gst'];
-       $tds=$_REQUEST['tds'];
-       $gst_amount=$_REQUEST['gst_amount'];
-       $total=$_REQUEST['total'];
-       //totall value fields
-       $qty_tot=$_REQUEST['qty_tot'];
-       $unit_price_tot=$_REQUEST['unit_price_tot'];
-       $sub_total_tot=$_REQUEST['sub_total_tot'];
-       $total_tot=$_REQUEST['total_tot'];
+    $desc_t=$_REQUEST['desc_t'];
+    $qty_t=$_REQUEST['qty_t'];
+    $unit_price_1=$_REQUEST['unit_price_1'];
+    $sub_total=$_REQUEST['sub_total'];
+    $gst=$_REQUEST['gst'];
+    $tds=$_REQUEST['tds'];
+    $gst_amount=$_REQUEST['gst_amount'];
+    $total=$_REQUEST['total'];
+    //totall value fields
+    $qty_tot=$_REQUEST['qty_tot'];
+    $unit_price_tot=$_REQUEST['unit_price_tot'];
+    $sub_total_tot=$_REQUEST['sub_total_tot'];
+    $total_tot=$_REQUEST['total_tot'];
        
-       $project_array =$_REQUEST['project'];
-       $subdivision_array =$_REQUEST['subdivision'];
-       $gst_subdivision_n = get_field_value("id","gst_subdivision","name",$_REQUEST['gst_subdivision_1']);
-       $tds_subdivision_n = get_field_value("id","tds_subdivision","name",$_REQUEST['tds_subdivision_1']);
-      // $gst_subdivision_n =$_REQUEST['gst_subdivision_1'];
-       //$tds_subdivision_n=$_REQUEST['tds_subdivision_1'];
-       $hsn_code=$_REQUEST['hsn_code'];
-       $gst_amount_tot=$_REQUEST['gst_amount_tot'];
-       $tds_amount_tot=$_REQUEST['tds_amount_tot'];
-       $invoice_pay_amount=$_REQUEST['pay_amount_final'];
-       $invoice_id_print = $_REQUEST['invoice_id_print'];
+    $project_array =$_REQUEST['project'];
+    $subdivision_array =$_REQUEST['subdivision'];
+    $gst_subdivision_n = get_field_value("id","gst_subdivision","name",$_REQUEST['gst_subdivision_1']);
+    $tds_subdivision_n = get_field_value("id","tds_subdivision","name",$_REQUEST['tds_subdivision_1']);
+    // $gst_subdivision_n =$_REQUEST['gst_subdivision_1'];
+    //$tds_subdivision_n=$_REQUEST['tds_subdivision_1'];
+    $hsn_code=$_REQUEST['hsn_code'];
+    $gst_amount_tot=$_REQUEST['gst_amount_tot'];
+    $tds_amount_tot=$_REQUEST['tds_amount_tot'];
+    $invoice_pay_amount=$_REQUEST['pay_amount_final'];
+    $invoice_id_print = $_REQUEST['invoice_id_print'];
        
     /* goods detail end  */
 
@@ -129,7 +128,7 @@ $wi = 0;
    //gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',
     if($in==0){
     if($payment_flag==1){
-    $query_pay ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', credit = '".$pay_amount."',  description = '(Invoice Amount Received ): ".$description."', on_customer = '".$cust_id."', invoice_id = '".$invoice_idnew."',payment_flag = '".$payment_flag."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_issuer_id = '".$invoice_issuer_id."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."', trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."',create_date = '".getTime()."',printable_invoice_number ='".$invoice_id_print."',invoice_type = '".$_REQUEST['invoice_type']."'";
+    $query_pay ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', credit = '".$pay_amount."',  description = '(Invoice Amount Received ): ".$description."', on_customer = '".$cust_id."', on_project = '".$invoice_idnew."',payment_flag = '".$payment_flag."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."',subdivision = '".$subdivision."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',invoice_issuer_id = '".$invoice_issuer_id."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."', trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."',create_date = '".getTime()."',printable_invoice_number ='".$invoice_id_print."',invoice_type = '".$_REQUEST['invoice_type']."'";
     $result_pay= mysql_query($query_pay) or die('error in query '.mysql_error().$query_pay);
     
    

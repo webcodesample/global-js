@@ -177,7 +177,7 @@ if(trim($_REQUEST['action_perform']) == "add_project")
     for($i = 0; $i < count($desc_t); $i++) {
         //$old_id_check1,$old_id_check2,$old_new_check
        // desc_total =desc_total+"("+i+")"+$("#desc_t"+i+"").val()+",";
-        $project_id = get_field_value("id","project","name",$project_array[$i]);
+    $project_id = get_field_value("id","project","name",$project_array[$i]);
        
     $subdivision = get_field_value("id","subdivision","name",$subdivision_array[$i]);
     $gst_subdivision = get_field_value("id","gst_subdivision","name",$get_subdivision_array[$i]);
@@ -1111,24 +1111,25 @@ var desc_total="";
             <td width="125px">Invoice Month</td>
 			<td style="font-weight:bold;">
             <?php
-             $pin_parts = explode("/",$select_data['printable_invoice_number']);
-             //print_r($pin_parts);
-             if($select_data['invoice_type']=='M')
-             {$pinv_month = $pin_parts[3]; $pinv_year = $pin_parts[4];}
-             else
-             {$pinv_month = $pin_parts[2]; $pinv_year = $pin_parts[3];}
+             $pin_parts = explode("/",$old_printable_invoice_number);
+             print_r($pin_parts);
+             if($select_data['invoice_type']=='R' || $select_data['invoice_type']=='RN')
+             {echo $pinv_month = $pin_parts[2]; echo $pinv_year = $pin_parts[3];}
+             else if($select_data['invoice_type']=='M')
+             {echo $pinv_month = $pin_parts[3]; echo $pinv_year = $pin_parts[4];}
+             else{echo $pinv_year = $pin_parts[3];}
             ?>
             <Select id="invoice_month" name="invoice_month" onChange="setPrintInvoiceNo()">
             <option value="">Select Month</option>            
-            <option value="/01"  <?php if($pinv_month==01) echo 'selected';?>>April</option>
-            <option value="/02"  <?php if($pinv_month==02) echo 'selected';?>>May</option>
-            <option value="/03"  <?php if($pinv_month==03) echo 'selected';?>>June</option>
-            <option value="/04"  <?php if($pinv_month==04) echo 'selected';?>>July</option>
-            <option value="/05"  <?php if($pinv_month==05) echo 'selected';?>>August</option>
-            <option value="/06"  <?php if($pinv_month==06) echo 'selected';?>>September</option>
-            <option value="/07"  <?php if($pinv_month==07) echo 'selected';?>>October</option>
-            <option value="/08"  <?php if($pinv_month==08) echo 'selected';?>>November</option>
-            <option value="/09"  <?php if($pinv_month==09) echo 'selected';?>>December</option>
+            <option value="/01"  <?php if($pinv_month==1) echo 'selected';?>>April</option>
+            <option value="/02"  <?php if($pinv_month==2) echo 'selected';?>>May</option>
+            <option value="/03"  <?php if($pinv_month==3) echo 'selected';?>>June</option>
+            <option value="/04"  <?php if($pinv_month==4) echo 'selected';?>>July</option>
+            <option value="/05"  <?php if($pinv_month==5) echo 'selected';?>>August</option>
+            <option value="/06"  <?php if($pinv_month==6) echo 'selected';?>>September</option>
+            <option value="/07"  <?php if($pinv_month==7) echo 'selected';?>>October</option>
+            <option value="/08"  <?php if($pinv_month==8) echo 'selected';?>>November</option>
+            <option value="/09"  <?php if($pinv_month==9) echo 'selected';?>>December</option>
             <option value="/10"  <?php if($pinv_month==10) echo 'selected';?>>January</option>
             <option value="/11"  <?php if($pinv_month==11) echo 'selected';?>>February</option>
             <option value="/12"  <?php if($pinv_month==12) echo 'selected';?>>March</option>
