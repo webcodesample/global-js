@@ -130,6 +130,9 @@ function setPrintInvoiceNo() {
     if (document.getElementById('invoice_type').value == "M") {
         InvoiceType = "/M";
     }
+    else if (document.getElementById('invoice_type').value == "RN") {
+        InvoiceType = "/R";
+    }
 
     if (document.getElementById('invoice_type').value == "S") {
         InvoiceMonth = "/" + document.getElementById('invoice_idnew').value;
@@ -143,7 +146,7 @@ function setPrintInvoiceNo() {
     }
 
     if (document.getElementById('invoice_issuer').value) {
-        if (document.getElementById('invoice_type').value == "M" || document.getElementById('invoice_type').value == "S")
+        if (document.getElementById('invoice_type').value == "M" || document.getElementById('invoice_type').value == "S" || document.getElementById('invoice_type').value == "RN")
             InvoiceIssuer = "/" + document.getElementById('invoice_issuer').value.substring(0, 2);
         else
             InvoiceIssuer = "/" + document.getElementById('invoice_issuer').value.substring(0, 3);
