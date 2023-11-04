@@ -312,11 +312,12 @@ if($totalPages > $numberOfPages)
                     
                 </tr>
             </table>
+            
+            
+                        <input type="hidden" name="search_action" id="search_action" value="<?= $_REQUEST['search_action'] ?>"  />
+                        <input type="hidden" name="page" id="page" value=""/>
+                        <input type="hidden" name="rpp" id="rpp" value="<?= $_REQUEST['rpp']?>"/>
             </form>    
-
-        <input type="hidden" name="search_action" id="search_action" value=""  />
-        <input type="hidden" name="page" id="page" value=""/>
-
   
   <?php include_once("main_search_close.php") ?>
  <!-------------->

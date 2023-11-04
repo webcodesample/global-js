@@ -43,8 +43,8 @@ if(trim($_REQUEST['action_perform']) == "edit_invoice_issuer")
     //code by amit for logo
     $filename=$_FILES['invoice_issuer_logo']['tmp_name'];
     $imgData = mysql_escape_string(file_get_contents($filename));
-    //update invoice_issuer set issuer_name = '".$issuer_name."', display_name = '".$display_name."', mobile = '".$mobile."', email = '".$email."', address = '".$address."', company_name = '".$company_name."', reg_no = '".$reg_no."', vat_no = '".$vat_no."', gst_no = '".$gst_no."', cin_no = '".$cin_no."', pan_no = '".$pan_no."', logo = '".$imgData."' where id='".$issuer_id."'";
-    $query="update invoice_issuer set issuer_name = '".$issuer_name."', display_name = '".$display_name."', mobile = '".$mobile."', email = '".$email."', address = '".$address."', company_name = '".$company_name."', reg_no = '".$reg_no."', vat_no = '".$vat_no."', gst_no = '".$gst_no."', cin_no = '".$cin_no."', pan_no = '".$pan_no."' where id='".$issuer_id."'"; 
+    
+    $query="update invoice_issuer set issuer_name = '".$issuer_name."', display_name = '".$display_name."', mobile = '".$mobile."', email = '".$email."', address = '".$address."', company_name = '".$company_name."', reg_no = '".$reg_no."', vat_no = '".$vat_no."', gst_no = '".$gst_no."', cin_no = '".$cin_no."', pan_no = '".$pan_no."', logo = '".$imgData."' where id='".$issuer_id."'"; 
     $result= mysql_query($query) or die('error in query '.mysql_error().$query.'<br>');
     $msg = "Invoice Issuer update successfully.";
 	header("Location:invoice-issuer.php?msg=invoice_issuer Updated successfully");
@@ -126,12 +126,12 @@ $select_data = mysql_fetch_array($select_result)
             <td><textarea name="address" id="address" style="width:250px; height:100px;"><?php echo $select_data['address']; ?></textarea>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td>
             </tr>
             <tr>
-            <td valign="top">Logo</td>
+            <!--<td valign="top">Logo</td>
             <td>
             <img id="logo_display" src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($select_data['logo']); ?>" style="border-radius:50%; hieght:120px; width:120px;" onClick="document.getElementById('invoice_issuer_logo').click();"/> 
             <br><input type="file" name="invoice_issuer_logo" id="invoice_issuer_logo" accept="image/*" style="display:none;">
             <div id="res"></div>
-            </td>
+            </td>-->
             </tr>
             
             </table>

@@ -243,6 +243,19 @@ if($totalPages > $numberOfPages)
   </td>
         <td width="" style="float:right;">
         <b>Rows Per Page</b>
+        <?php
+        //code by amit
+        if($_REQUEST['rpp']==10)
+            $sel_10 = 'selected';
+        elseif($_REQUEST['rpp']==50)
+            $sel_50 = 'selected';
+        elseif($_REQUEST['rpp']==30)
+            $sel_30 = 'selected';
+        elseif($_REQUEST['rpp']==40)
+            $sel_40 = 'selected';
+        else
+            $sel_20 = "selected";
+        ?>
     <select name="rpp_select" id="rpp_select" onchange="document.getElementById('rpp').value=this.value; document.getElementById('search_form').submit();">
        <option value="10" <?= $sel_10; ?>>10</option>
        <option value="20" <?= $sel_20; ?>>20</option>
@@ -339,15 +352,17 @@ if($totalPages > $numberOfPages)
                 <tr><td colspan="4">&nbsp;</td></tr>
             </table>
             
-            </form>
+            
+                        <input type="hidden" name="search_action" id="search_action" value=""  />
+            <input type="hidden" name="page" id="page" value="">
+            <input type="hidden" name="rpp" id="rpp" value="<?= $_REQUEST['rpp'] ?>">
+
+            </form>    
            <form name="user_form" id="user_form" action="" method="post" >
                 <input type="hidden" name="action_perform" id="action_perform" value="" >
         <input type="hidden" name="del_id" id="del_id" value="" >
         <input type="hidden" name="count" id="count" value="<?php echo $i; ?>"  />    
         </form>
-        <input type="hidden" name="search_action" id="search_action" value=""  />
-        <input type="hidden" name="page" id="page" value="">
-
   <?php include_once("main_search_close.php") ?>
  <!-------------->
   

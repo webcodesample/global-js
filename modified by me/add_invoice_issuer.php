@@ -49,7 +49,7 @@ if(trim($_REQUEST['action_perform']) == "edit_invoice_issuer")
     //$imgData = mysql_escape_string(file_get_contents($filename));
      
      
-         $query="insert into invoice_issuer set issuer_name = '".$issuer_name."', display_name = '".$display_name."', mobile = '".$mobile."', email = '".$email."', address = '".$address."', gst_no = '".$gst_no."', cin_no = '".$cin_no."',company_name = '".$company_name."', reg_no = '".$reg_no."', vat_no = '".$vat_no."', pan_no = '".$pan_no."', create_date = '".getTime()."', logo = '".$imgData."'";
+         $query="insert into invoice_issuer set issuer_name = '".$issuer_name."', display_name = '".$display_name."', mobile = '".$mobile."', email = '".$email."', address = '".$address."', gst_no = '".$gst_no."', cin_no = '".$cin_no."',company_name = '".$company_name."', reg_no = '".$reg_no."', vat_no = '".$vat_no."', pan_no = '".$pan_no."', create_date = '".getTime()."'";//, logo = '".$imgData."'";
          $result= mysql_query($query) or die('error in query '.mysql_error().$query);
          $msg = "Invoice Issuer added successfully.";
  
@@ -129,7 +129,6 @@ if(trim($_REQUEST['action_perform']) == "edit_invoice_issuer")
             <td><input type="text" id="mobile"  name="mobile" value=""/></td></tr>
             <tr><td valign="top">Address</td>
             <td><textarea name="address" id="address" style="width:250px; height:100px;"><?php //echo $select_data['address']; ?></textarea>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
-
             <td valign="top">Logo</td>
             <td><input type="file" name="invoice_issuer_logo" id="invoice_issuer_logo" accept="image/*"><br>
             </td>
