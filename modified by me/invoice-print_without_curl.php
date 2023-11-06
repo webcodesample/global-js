@@ -56,9 +56,12 @@ include_once("set_con.php");
                   </tr>
                   </table>  
                 </td>
-                <td align="center" nowrap>
+                <td align="center">
                     <?php //CODE BY AMIT
-                    display($select_pay_plan['invoice_type']);
+                    if($select_pay_plan['invoice_type'] == 'RN')
+                    {echo 'Reimbursment Note - ';}
+                    else
+                    {echo 'Invoice No. - ';} 
                      
                     if($select_pay_plan['printable_invoice_number'])
                     {echo $select_pay_plan['printable_invoice_number'];}
@@ -154,9 +157,9 @@ include_once("set_con.php");
             <table style="width: 690px; font-size: 15; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px; "  border="0">
                     <tr valign="top"><td style=" border-bottom:1px dashed #DB8482;border-right :1px dashed #111111; padding: 0px 0 0px 0;" align="center" width="40px" height="30" valign="middle"><b>Qty</b></td>
                         <td height="30" align="center" style=" border-bottom:1px dashed #DB8482;border-right :1px dashed #DB8482; padding: 0px 0 0px 0;" valign="middle"><b>Description</b></td><td height="30" align="center" style=" border-bottom:1px dashed #DB8482;border-right :1px dashed #DB8482; padding: 0px 0 0px 0;" width="80px" valign="middle"><b>HSN Code</b></td>
-                        <td height="30" align="center" style=" border-bottom:1px dashed #DB8482;border-right :1px dashed #DB8482; padding: 0px 0 0px 0;" width="120px" valign="middle"><b>Unit Price</b></td>
-                         <td height="30" align="center" style=" border-bottom:1px dashed #DB8482;border-right :1px dashed #DB8482; padding: 0px 0 0px 0;" width="10px" valign="middle" nowrap><b>GST&nbsp;%</b></td>
-                        <td align="center" style=" border-bottom:1px dashed #DB8482; padding: 0px 0 0px 0;" width="130px;" valign="middle"><b>Sub Total</b></td>
+                        <td height="30" align="center" style=" border-bottom:1px dashed #DB8482;border-right :1px dashed #DB8482; padding: 0px 0 0px 0;" width="120px"><b>Unit Price</b></td>
+                         <td height="30" align="center" style=" border-bottom:1px dashed #DB8482;border-right :1px dashed #DB8482; padding: 0px 0 0px 0;" width="10px"><b>GST<br>%</b></td>
+                        <td align="center" style=" border-bottom:1px dashed #DB8482; padding: 0px 0 0px 0;" width="130px;" valign="middle"><b>Total</b></td>
                     </tr>   
                    <tr valign="top"><td height="15px;" style=" border-right :1px dashed #DB8482; " align="center"  >&nbsp;</td>
                         <td align="left" style=" border-right :1px dashed #DB8482; padding: 0px 0 0px 5px; color: ;"></td>
@@ -234,9 +237,7 @@ include_once("set_con.php");
            <?php  }
              ?>
            <br><br>
-           <span style="color:#800000; font-weight:bold;">
-           AMOUNT IN WORDS :(<?php echo ntw($tot1_grand_total); ?>)
-           </span>
+           AMOUNT IN WORDS :(Rupees <?php echo numberTowords("$tot1_grand_total")." Only"; ?>) 
             </div>
             
             
@@ -244,7 +245,7 @@ include_once("set_con.php");
             <td width="" valign="top">
             <table width="100%" border="0">
                 <tr>
-                    <td style=" border-right :1px dashed #DB8482; " align="left" width="83px"  >Total</td>
+                    <td style=" border-right :1px dashed #DB8482; " align="left" width="83px"  >Sub Total </td>
                     <td style=" border-right :1px dashed #DB8482;border-bottom :1px dashed #DB8482; " align="right" width="130px"  ><?php //echo $tot1_sub_total;
                     echo currency_symbol().number_format($tot1_sub_total,2);  ?>&nbsp;</td>
                 </tr>
@@ -263,9 +264,9 @@ include_once("set_con.php");
                 </tr>
                 
                 <tr>
-                    <td style=" border-right :1px dashed #DB8482; color:#800000; font-weight:bold;" align="left" width=""  nowrap>Grand Total</td>
-                    <td style=" border-right :1px dashed #DB8482;border-bottom :1px dashed #DB8482; color:#800000; font-weight:bold;" align="right" width=""  ><?php echo currency_symbol(); ?><?php //echo $tot1_grand_total;
-                    echo number_format($tot1_grand_total,2); ?>&nbsp;</td>
+                    <td style=" border-right :1px dashed #DB8482; " align="left" width=""  ><b>Grand Total </b></td>
+                    <td style=" border-right :1px dashed #DB8482;border-bottom :1px dashed #DB8482; " align="right" width=""  ><?php echo currency_symbol(); ?><b><?php //echo $tot1_grand_total;
+                    echo number_format($tot1_grand_total,2); ?>&nbsp;</b></td>
                 </tr>
                 
                
@@ -324,7 +325,7 @@ include_once("set_con.php");
         <td align="center">
          <div style="border: 0px solid #111111; width: 700;min-height:50px; color: #111111; font-size: 13px;  " align="center">
          <br>E & O.E&nbsp;&nbsp;&nbsp;&nbsp; Our Contact : <?php echo $select_issuer['display_name']; ?>
-         , Mobile: 9902012547<?php //echo $select_issuer['mobile']; ?>  & Email ID : <?php echo $select_issuer['email']; ?>
+         , Mobile: <?php echo $select_issuer['mobile']; ?>  & Email ID : <?php echo $select_issuer['email']; ?>
          </div>
         </td>
        </tr>
@@ -345,3 +346,81 @@ function print_data()
 
 
 </script>
+<?php
+
+
+function numberTowords($num)
+{ 
+$ones = array( 
+1 => "one", 
+2 => "two", 
+3 => "three", 
+4 => "four", 
+5 => "five", 
+6 => "six", 
+7 => "seven", 
+8 => "eight", 
+9 => "nine", 
+10 => "ten", 
+11 => "eleven", 
+12 => "twelve", 
+13 => "thirteen", 
+14 => "fourteen", 
+15 => "fifteen", 
+16 => "sixteen", 
+17 => "seventeen", 
+18 => "eighteen", 
+19 => "nineteen" 
+); 
+$tens = array( 
+1 => "ten",
+2 => "twenty", 
+3 => "thirty", 
+4 => "forty", 
+5 => "fifty", 
+6 => "sixty", 
+7 => "seventy", 
+8 => "eighty", 
+9 => "ninety" 
+); 
+$hundreds = array( 
+"hundred", 
+"thousand", 
+"million", 
+"billion", 
+"trillion", 
+"quadrillion" 
+); //limit t quadrillion 
+$num = number_format($num,2,".",","); 
+$num_arr = explode(".",$num); 
+$wholenum = $num_arr[0]; 
+$decnum = $num_arr[1]; 
+$whole_arr = array_reverse(explode(",",$wholenum)); 
+krsort($whole_arr); 
+$rettxt = ""; 
+foreach($whole_arr as $key => $i){ 
+if($i < 20){ 
+$rettxt .= $ones[$i]; 
+}elseif($i < 100){ 
+$rettxt .= $tens[substr($i,0,1)]; 
+$rettxt .= " ".$ones[substr($i,1,1)]; 
+}else{ 
+$rettxt .= $ones[substr($i,0,1)]." ".$hundreds[0]; 
+$rettxt .= " ".$tens[substr($i,1,1)]; 
+$rettxt .= " ".$ones[substr($i,2,1)]; 
+} 
+if($key > 0){ 
+$rettxt .= " ".$hundreds[$key]." "; 
+} 
+} 
+if($decnum > 0){ 
+$rettxt .= " and "; 
+if($decnum < 20){ 
+$rettxt .= $ones[$decnum]; 
+}elseif($decnum < 100){ 
+$rettxt .= $tens[substr($decnum,0,1)]; 
+$rettxt .= " ".$ones[substr($decnum,1,1)]; 
+} 
+} 
+return $rettxt; 
+}  ?>

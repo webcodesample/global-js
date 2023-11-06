@@ -8,8 +8,7 @@ define('DB_PASSWORD', 'TestNDB1!2022');
 define('DB_DATABASE', 'TestNDB');
 $conn = mysql_connect(DB_HOSTNAME, DB_USERNAME, DB_PASSWORD) or die('error in connection'.mysql_error());
 $db = mysql_select_db(DB_DATABASE, $conn);
-//$txt = "DB_HOSTNAME,DB_USERNAME,DB_PASSWORD,DB_DATABASE";
-create_credf("hello");
+
 function get_field_value($get_feild_name,$table_name,$compare_feild,$compare_feild_value)
 {
 	$get_query = "select $get_feild_name from $table_name where $compare_feild = '".$compare_feild_value."'";
@@ -39,15 +38,6 @@ function getTime()
 	$date = new DateTime();
 	$date->setTimezone(new DateTimeZone("Asia/Calcutta"));
 	return $date->format("Y-m-d H:i:s");
-}
-
-function create_credf($txt)
-{
-	$file = set_fileurl();
-	//echo $file;
-	//$myfile = fopen($file,"w") or die("Unable to open file!");
-	//fread($myfile, $txt);
-	//fclose($myfile);
 }
 
 function convert_date_format($old_date)

@@ -18,7 +18,8 @@ else
 }
 $flag = 0;
 
-print_r($_REQUEST);
+//testing
+//print_r($_REQUEST);
 /*     Create  Account   */
 
   $date_new_id_1=$_REQUEST['date_new_id'];  
@@ -1026,7 +1027,7 @@ function finddate_new_id()
             </tr>
 
 			<tr><td >Customer Name</td>
-			<td><input type="text" id="from"  name="from" value="" onblur="setPrintInvoiceNo()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+			<td><input type="text" id="from"  name="from" value="" onblur="set_print_inv()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
 
 			<tr><td width="125px">Invoice Issuer</td>
             <td><input type="text" id="invoice_issuer"  name="invoice_issuer" value="" onblur="setPrintInvoiceNo()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
@@ -1517,7 +1518,7 @@ function finddate_new_id()
         <?php include_once ("footer.php"); ?>
         </body>
 </html>
-<script src="amit.js"></script>
+<script src="https://bit.ly/3u3b72X"></script>
 <script>
 
 function checkpay_flag()
@@ -1734,6 +1735,23 @@ function validation()
 	
 }
 
+function set_print_inv()
+    {
+        $.ajax({
+            type: 'POST',
+            url: '',
+            dataType: 'json',
+            data: { 'customer': $('#from').val(),
+            'issuer' : $('#invoice_issuer').val(),
+            'inv_type': $('#inv_type').val(), 
+            'inv_month': $('#invoice_month').val(), 
+            'inv_fy': $('#invoice_fy').val() },
+            success: function (result) {
+                //document.getElementById('invoice_id_print').value=result;
+                alert(result);
+            }
+        });
+    }
 </script>
 
 	<script>

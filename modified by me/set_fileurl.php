@@ -15,10 +15,8 @@ $url.= $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 
 $url_arr = explode("/",$url);
 
-//print_r($url_arr);
 array_pop($url_arr);
 array_pop($url_arr);
-//print_r($url_arr);
 return implode("/",$url_arr)."/dll.txt";
 }
 

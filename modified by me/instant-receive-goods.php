@@ -717,6 +717,9 @@ function validation()
         });
 		
 	})
+
+
+    
 	</script>
 	
 <?php 
