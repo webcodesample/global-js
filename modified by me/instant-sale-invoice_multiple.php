@@ -1027,7 +1027,7 @@ function finddate_new_id()
             </tr>
 
 			<tr><td >Customer Name</td>
-			<td><input type="text" id="from"  name="from" value="" onblur="set_print_inv()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+			<td><input type="text" id="from"  name="from" value="" onblur="setPrintInvoiceNo()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
 
 			<tr><td width="125px">Invoice Issuer</td>
             <td><input type="text" id="invoice_issuer"  name="invoice_issuer" value="" onblur="setPrintInvoiceNo()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
