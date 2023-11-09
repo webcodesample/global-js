@@ -1,5 +1,5 @@
 <?php session_start();
-include_once("../connection.php");
+include_once("set_con.php");
 if($_REQUEST['msg'] != "")
 {
     $msg = $_REQUEST['msg'];
@@ -15,53 +15,6 @@ if($_REQUEST['error_msg'] != "")
 else
 {
     $error_msg = "";
-}
-
-
-/*     Create  Account   */
-
-
-if(trim($_REQUEST['action_perform']) == "add_user")
-{
-    /*echo '<pre>';
-    print_r($_REQUEST);
-    exit;*/
-    //issuer_name,display_name,email,mobile,address,gst_no,cin_no,pan_no
-    //,,email,mobile,address,,,
-    $issuer_name=mysql_real_escape_string(trim($_REQUEST['issuer_name']));
-    $display_name=mysql_real_escape_string(trim($_REQUEST['display_name']));
-    
-    $mobile=mysql_real_escape_string(trim($_REQUEST['mobile']));
-    $email=mysql_real_escape_string(trim($_REQUEST['email']));
-    $address=mysql_real_escape_string(trim($_REQUEST['address']));
-    
-    $gst_no=mysql_real_escape_string(trim($_REQUEST['gst_no']));
-   // $cin_no=base64_encode(mysql_real_escape_string(trim($_REQUEST['cin_no'])));
-    $pan_no=mysql_real_escape_string(trim($_REQUEST['pan_no']));
-     $cin_no=mysql_real_escape_string(trim($_REQUEST['cin_no']));
-     $company_name = mysql_real_escape_string(trim($_REQUEST['company_name']));
-    $reg_no=mysql_real_escape_string(trim($_REQUEST['reg_no']));
-    $vat_no=mysql_real_escape_string(trim($_REQUEST['vat_no']));
-    
-    
-        $query="insert into invoice_issuer set issuer_name = '".$issuer_name."', display_name = '".$display_name."', mobile = '".$mobile."', email = '".$email."', address = '".$address."', gst_no = '".$gst_no."', cin_no = '".$cin_no."',company_name = '".$company_name."', reg_no = '".$reg_no."', vat_no = '".$vat_no."', pan_no = '".$pan_no."', create_date = '".getTime()."'";
-        $result= mysql_query($query) or die('error in query '.mysql_error().$query);
-        $msg = "Invoice Issuer added successfully.";
-    
-    
-}
-
-/*     Deletion  Account   */
-
-if($_REQUEST['action_perform'] == "delete_user")
-{
-    $del_id = $_REQUEST['del_id'];
-    $del_query = "delete from invoice_issuer where id = '".$del_id."'";
-    //echo $del_query;
-    //exit;
-    $del_result = mysql_query($del_query) or die("error in delete query ".mysql_error());
-    $msg = "user Deleted Successfully.";
-    
 }
 
 if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")

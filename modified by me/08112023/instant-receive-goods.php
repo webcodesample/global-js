@@ -593,7 +593,7 @@ function findTotal()
 
 function setgstpaid()
 {
-    document.getElementById('pay_amount').value = Number.parseFloat(document.getElementById('pay_amount_gst').value) + Number.parseFloat(document.getElementById('pay_amount_wogst').value);
+    document.getElementById('pay_amount').value = Number.parseInt(document.getElementById('pay_amount_gst').value) + Number.parseInt(document.getElementById('pay_amount_wogst').value);
 }
 
 //checkno_create(),pay_check,pay_checkno,pay_method

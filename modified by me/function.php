@@ -24,5 +24,11 @@ function currency_symbol()
 	$currency = "<strong>&#8377;</strong>&nbsp;";
 	return $currency;
 }
-
+date_default_timezone_set("Asia/Calcutta");
+function getTime()
+{
+	$date = new DateTime();
+	$date->setTimezone(new DateTimeZone("Asia/Calcutta"));
+	return $date->format("Y-m-d H:i:s");
+}
 ?>

