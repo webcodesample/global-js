@@ -3,7 +3,6 @@ include_once("set_fileurl.php");
 include_once("advance_functions.php");
 include_once("function.php");
 
-
 $str = setfileURL(set_fileurl());
 
 $str_arr = explode(",",$str);

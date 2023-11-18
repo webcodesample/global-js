@@ -1,0 +1,5 @@
+ALTER TABLE `TestNDB`.`table_name` 
+ADD COLUMN `added_by` INT NULL,
+ADD COLUMN `added_on` INT NULL AFTER `added_by`,
+ADD COLUMN `updated_by` INT NULL AFTER `added_on`,
+ADD COLUMN `updated_on` INT NULL AFTER `updated_by`;

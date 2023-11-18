@@ -17,8 +17,8 @@ else
     $error_msg = "";
 }
 
+//print_r($_REQUEST);
 
-/*blocked by amit*/
 if(mysql_real_escape_string(trim($_REQUEST['search_action'])) == "enddate")
 { 
     $from_date = strtotime(mysql_real_escape_string(trim($_REQUEST['from_date'])));
@@ -280,8 +280,13 @@ if($totalPages > $numberOfPages)
                     <td width="280px;">
                         <input type="text" name="cust_id" id="cust_id" value="<?= $_REQUEST['cust_id'] ?>" style="width:250px; height: 25px;">
                     </td>
+
+                    <td width="80px;">Reciever</td>
+                    <td width="280px;">
+                        <input type="text" name="invoice_issuer_id" id="invoice_issuer_id" value="<?= $_REQUEST['invoice_issuer_id'] ?>" style="width:250px; height: 25px;">
+                    </td>
                     
-                    <td width="80">Project</td>
+                    <!--<td width="80">Project</td>
                     <td width="280px;">
                         <input type="text" name="project_id" id="project_id" value="<?= $_REQUEST['project_id'] ?>" style="width:250px; height: 25px;">
                     </td>
@@ -289,11 +294,11 @@ if($totalPages > $numberOfPages)
                     <td width="80px;">Subdivision</td>
                     <td width="280px;">
                         <input type="text" name="subdivision" id="subdivision" value="<?= $_REQUEST['subdivision'] ?>" style="width:250px; height: 25px;">
-                    </td>
+                    </td>-->
 
                 </tr>
                 
-                <tr>
+                <!--<tr>
                     <td width="80px;">Reciever</td>
                     <td width="280px;">
                         <input type="text" name="invoice_issuer_id" id="invoice_issuer_id" value="<?= $_REQUEST['invoice_issuer_id'] ?>" style="width:250px; height: 25px;">
@@ -310,13 +315,11 @@ if($totalPages > $numberOfPages)
                     </td>
 
                     
-                </tr>
+                </tr>-->
             </table>
-            </form>    
-
         <input type="hidden" name="search_action" id="search_action" value=""  />
         <input type="hidden" name="page" id="page" value=""/>
-
+    </form>    
   
   <?php include_once("main_search_close.php") ?>
  <!-------------->
@@ -359,8 +362,8 @@ if($totalPages > $numberOfPages)
             <td colspan="12" align="center"> Generated Date & Time : <?php echo getTime(); ?></td>
     </tr>
             <tr align="center">
-                <th class="data" width="30px" nowrap>S.No.</th>
-                <th class="data" width="75px" nowrap>Date</th>
+                <th class="data" nowrap>S.No.</th>
+                <th class="data" nowrap>Date</th>
                 <th class="data" nowrap>Invoice Id</th>
                 <th class="data" nowrap>Supplier Name</th>
                 <th class="data" nowrap>Supplier GSTIN</th>
@@ -369,10 +372,14 @@ if($totalPages > $numberOfPages)
                 <th class="data" nowrap>Sub Total</th>
                 <th class="data" nowrap>GST (%)</th>
                 <th class="data" nowrap>GST Amount</th>
-                <th class="data" width="50px" nowrap>Grand Total</th>
+                <th class="data" nowrap>Grand Total</th>
                 <th class="data" nowrap>Project Name</th>
                 <th class="data" nowrap>Subdivision Name</th>
                 <th class="data" nowrap>Trans ID</th>
+                <th class="data" nowrap>Added By</th>
+				<th class="data" nowrap>Added On</th>
+				<th class="data" nowrap>Updated By</th>
+				<th class="data" nowrap>Updated On</th>
                 <th class="data" nowrap>Action</th>
             </tr>
             <?php
@@ -384,45 +391,45 @@ if($totalPages > $numberOfPages)
                     $ii=$i+$startResults;    
                      ?>
                     <tr class="data">
-                        <td class="data" width="30px" align="center" nowrap><?php echo $ii; ?></td>
-                        <td class="data " align="center" nowrap><?php echo date("d-m-Y",$select_data['payment_date']); ?></td>
+                        <td class="data" align="center" nowrap>&nbsp;<?php echo $ii; ?>&nbsp;</td>
+                        <td class="data " align="center" nowrap>&nbsp;<?php echo date("d-m-Y",$select_data['payment_date']); ?>&nbsp;</td>
                         
-                        <td class="data" nowrap>
+                        <td class="data" nowrap>&nbsp;
                         <?php
                             if($select_data['invoice_id'])
                             echo $select_data['invoice_id'];
-                        ?>
+                        ?>&nbsp;
                         </td>
-                        <td class="data" nowrap>
-                        <?php //echo $select_data['cust_id'];
+                        <td class="data" nowrap>&nbsp;
+                        <?php
                         $customer_nm = get_field_value("full_name","customer","cust_id",$select_data['cust_id']); 
                         echo $customer_nm;
-                         ?>
+                         ?>&nbsp;
                          </td>
-                         <td class="data" nowrap><?php //echo $select_data['cust_id'];
+                         <td class="data" nowrap>&nbsp;<?php //echo $select_data['cust_id'];
                         $gst_nm = get_field_value("supply_gst_no","customer","cust_id",$select_data['cust_id']); 
                         echo $gst_nm;
-                         ?></td>
+                         ?>&nbsp;</td>
 
-                        <td class="data" nowrap>
+                        <td class="data" nowrap>&nbsp;
                         <?php
                             echo get_field_value("issuer_name","invoice_issuer","id",$select_data['invoice_issuer_id']);
-                        ?>
+                        ?>&nbsp;
                         </td>
 
-                        <td class="data" nowrap>
+                        <td class="data" nowrap>&nbsp;
                         <?php
                             echo get_field_value("gst_no","invoice_issuer","id",$select_data['invoice_issuer_id']);
-                        ?>
+                        ?>&nbsp;
                         </td>
 
-                        <td class="data" nowrap>
+                        <td class="data" nowrap>&nbsp;&#8377;&nbsp;
                         <?php 
                             $subtot= $select_data['debit']-$select_data['gst_amount'];
                             echo number_format((float)$subtot, 2,'.','');
-                        ?>
+                        ?>&nbsp;
                         </td>
-                        <td class="data" nowrap>
+                        <td class="data" nowrap>&nbsp;
                         <?php
                         if($select_data['gst_amount']>1)
                         {
@@ -430,43 +437,66 @@ if($totalPages > $numberOfPages)
                             $gstper = ($select_data['gst_amount']/$subtot)*100;
                             echo ceil($gstper).'%';
                         }
-                        ?>
+                        ?>&nbsp;
                         </td>
-                        <td style="" class="data" nowrap>
+                        <td style="" class="data" nowrap>&nbsp;&#8377;&nbsp;
                         <?php 
                         if($select_data['gst_amount']>1)
                         {
                          echo number_format((float)$select_data['gst_amount'], 2,'.','');
                         }
-                        ?>
+                        ?>&nbsp;
                         </td>
-                        <td class="data" nowrap style="color:red; text-align:justify; text-justify:inter-word;">
+                        <td class="data" nowrap style="color:red; text-align:justify; text-justify:inter-word;">&nbsp;
                         &#8377;&nbsp;
-                        <?php echo number_format(floatval($select_data['debit']),2,'.',''); ?>
+                        <?php echo number_format(floatval($select_data['debit']),2,'.',''); ?>&nbsp;
                         </td>
 
-                        <td class="data" nowrap><?php 
+                        <td class="data" nowrap>&nbsp;<?php 
                         $project_name = get_field_value("name","project","id",$select_data['on_project']); 
                          echo $project_name;
-                         ?></td>
+                         ?>&nbsp;</td>
                         
-                        <td class="data" nowrap>
+                        <td class="data" nowrap>&nbsp;
                         <?php 
                         $subdivision_name = get_field_value("name","subdivision","id",$select_data['subdivision']); 
                          echo $subdivision_name;
-                         ?>
+                         ?>&nbsp;
                         </td>
 
-                        <td class="data" nowrap align="center">
-                        <?= $select_data['trans_id'] ?>
+                        <td class="data" nowrap align="center">&nbsp;
+                        <?= $select_data['trans_id'] ?>&nbsp;
                         </td>
 
-                        <td class="data noExl" align="center">
+                        <td class="data" nowrap>&nbsp;
+                        <?php
+                        echo get_field_value("full_name","user","userid",$select_data['added_by']);							 
+                        ?>&nbsp;
+                        </td>
+                        <td class="data" nowrap>&nbsp;
+                        <?php
+                        if($select_data['added_on'])
+                        echo date('d-m-Y h:i:s A', $select_data['added_on']);	
+                        ?>&nbsp;
+                        </td>
+                        <td class="data" nowrap>&nbsp;
+                        <?php
+                        echo get_field_value("full_name","user","userid",$select_data['updated_by']); 
+                        ?>&nbsp;
+                        </td>
+                        <td class="data" nowrap>&nbsp;
+                        <?php
+                        if($select_data['updated_on'])
+                        echo date('d-m-Y h:i:s A', $select_data['updated_on']);							 
+                        ?>&nbsp;
+                        </td>
+
+                        <td class="data noExl" align="center">&nbsp;
                         <?php
                         if($select_data['trans_type_name']=="receive_goods" || $select_data['trans_type_name']=="inst_receive_goods")
                         {  ?>
                         <a href="edit-instant-receive-goods.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['link_id']-1; ?>&trsns_pname=<?php echo "supplier-ledger-inst-receive-goods"; ?>"><img src="mos-css/img/edit.png" style="height:15px; width:15px;" title="Edit"></a>
-                        <?php  } ?>
+                        <?php  } ?>&nbsp;
                         </td>
 
 
@@ -480,7 +510,7 @@ if($totalPages > $numberOfPages)
             {
                 ?>
                 <tr class="data" >
-                    <td align="center" colspan="14" class="record_not_found" >Sorry! No Record Available</td>
+                    <td align="center" colspan="19" class="record_not_found" >Sorry! No Record Available</td>
                 </tr>
                 <?php
             }

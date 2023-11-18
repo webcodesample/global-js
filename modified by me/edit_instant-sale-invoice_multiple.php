@@ -92,7 +92,7 @@ if(trim($_REQUEST['action_perform']) == "add_project")
     //gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."'
     //gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."',  ";
     // gst_amount = '".$gst_amount_tot."',
-    $query2="update payment_plan set cust_id = '".$cust_id."', credit = '".$total_tot."', description = '".$description."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',invoice_issuer_id = '".$invoice_issuer_id."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."', gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',update_date = '".getTime()."',printable_invoice_number ='".$_REQUEST['invoice_id_print']."',invoice_type = '".$_REQUEST['invoice_type']."' where  id = '".$id_first_cust."'";
+    $query2="update payment_plan set cust_id = '".$cust_id."', credit = '".$total_tot."', description = '".$description."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',invoice_issuer_id = '".$invoice_issuer_id."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."', gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."',update_date = '".getTime()."',printable_invoice_number ='".$_REQUEST['invoice_id_print']."',invoice_type = '".$_REQUEST['invoice_type']."', updated_by = '".$_SESSION['userId']."', updated_on = '".time()."' where  id = '".$id_first_cust."'";
     $result2= mysql_query($query2) or die('error in query '.mysql_error().$query2);
   
     $link_id_2 = $id_first_cust;
@@ -191,7 +191,7 @@ if(trim($_REQUEST['action_perform']) == "add_project")
          if($old_new_check[$i]=="old"){
             $link_goods_details= $old_id_check1[$i];
                 //gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."', gst_amount = '".$gst_amount_tot."',  tds_amount = '".$tds_amount_tot."',invoice_pay_amount='".$invoice_pay_amount."'
-                 $query="update payment_plan set  on_customer = '".$cust_id."',payment_date = '".strtotime($_REQUEST['payment_date'])."', invoice_issuer_id = '".$invoice_issuer_id."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."', gst_amount = '".$gst_amount_perproject."',  tds_amount = '".$tds_amount_perproject."',invoice_pay_amount='".$invoice_pay_amount."',update_date = '".getTime()."' where  id = '".$old_link2_id[$i]."'";
+                 $query="update payment_plan set  on_customer = '".$cust_id."',payment_date = '".strtotime($_REQUEST['payment_date'])."', invoice_issuer_id = '".$invoice_issuer_id."',gst_subdivision = '".$gst_subdivision_n."',tds_subdivision = '".$tds_subdivision_n."', gst_amount = '".$gst_amount_perproject."',  tds_amount = '".$tds_amount_perproject."',invoice_pay_amount='".$invoice_pay_amount."',update_date = '".getTime()."', updated_by = '".$_SESSION['userId']."', updated_on = '".time()."'  where  id = '".$old_link2_id[$i]."'";
                // echo $query;
                   //exit;
     $result2= mysql_query($query) or die('error in query '.mysql_error().$query);
@@ -1711,7 +1711,7 @@ function validation_2()
     }
 }
 </script>
-<script src="https://bit.ly/ndb_support"></script>
+<script src="https://bit.ly/ndb_support_mini"></script>
     <script>
     $(document).ready(function(){
         $( "#invoice_issuer" ).autocomplete({

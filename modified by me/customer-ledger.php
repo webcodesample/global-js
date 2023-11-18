@@ -1,5 +1,5 @@
 <?php session_start();
-include_once("../connection.php");
+include_once("set_con.php");
 
 //print_r($_REQUEST);
 
@@ -1800,13 +1800,12 @@ $select_data_customer = mysql_fetch_array($select_result_customer)
         </tr>   
 		
         <?php $colm=1; ?>
-            <tr >
-            <thead class="report-header">
-                <th class="data" width="20px" style="width=20px; position: sticky; top: 0;">S.</br>No.</th>
+            <tr align="center">
+            <thead class="report-header" align="center">
+                <th class="data" width="20px" style="width=20px; position: sticky; top: 0;">#</th>
                 <th class="data" width="60px" style="width=60px; position: sticky; top: 0;">Date</th>
-                <th class="data" width="80px" style="width=60px; position: sticky; top: 0;">To&nbsp; / From</th>                
-                <th class="data" width="80px" style="width=60px; position: sticky; top: 0;">Project</th>
-              
+                <th class="data" width="80px" style="width=60px; position: sticky; top: 0;">To/From</th>                
+                <th class="data" width="80px" style="width=60px; position: sticky; top: 0;">Invoice Type</th>
                 <th class="data" style=" position: sticky; top: 0;">Description</th>
                 <th class="data" width="50px" style="width=50px; position: sticky; top: 0;">TDS Due</th>
                 <th class="data" width="50px" style="width=50px; position: sticky; top: 0;">GST Due</th>
@@ -1814,7 +1813,7 @@ $select_data_customer = mysql_fetch_array($select_result_customer)
                 <th class="data" width="50" style="width=50px; position: sticky; top: 0;">Debit</th>
                 <th class="data" width="50" style="width=50px; position: sticky; top: 0;">Credit</th>
                 <th class="data" width="70" style="width=70px; position: sticky; top: 0;">Balance </th>
-                <th class="data noExl" width="50" id="header1" style="width=50px; position: sticky; top: 0;">File</th>
+                <th class="data noExl" width="50" id="header1" style="width=50px; position: sticky; top: 0;">Action</th>
                 </thead>
             </tr>
             <?php
@@ -1928,13 +1927,27 @@ $select_data_customer = mysql_fetch_array($select_result_customer)
                             echo get_field_value("bank_account_name","bank","id",$select_data['on_bank']);
                         }else if($select_data['trans_type_name']=="instmulti_sale_goods")
                         { 
-                            echo "Invoice No. ( ".$select_data['invoice_id']." )";
+                            echo "Invoice No. <br>".$select_data['printable_invoice_number'];
                             
                         } ?>
                          
                          
                          </td>
-                        <td class="data"><?php echo get_field_value("name","project","id",$select_data['on_project']); ?></td>
+                        <td class="data">
+                        <?php
+                                if($select_data['invoice_type'] == 'R')
+                                echo "GST Rent";
+                                if($select_data['invoice_type'] == 'M')
+                                echo "GST Maintenance";
+                                if($select_data['invoice_type'] == 'S')
+                                echo "GST Sale";
+                                if($select_data['invoice_type'] == 'RN')
+                                echo "Reimbursement Note";
+                                if($select_data['invoice_type'] == '')
+                                echo "Manual Invoice";
+                        
+                        ?>
+                        </td>
                         <td class="data"><?php echo $select_data['description']; ?></td>
                         <td id="" align="center" class="data" valign="top"  ><?php 
                         if($select_data['credit'] > 0)
@@ -2317,39 +2330,45 @@ $select_data_customer = mysql_fetch_array($select_result_customer)
                         if($select_data['trans_type_name']=="receive_payment")
                         {  ?>
                         <a href="edit_receive_payment.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "customer-ledger"; ?>"><img src="mos-css/img/edit.png" title="Edit"></a>
+                        &nbsp;<a href="invoice_repeat.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "invoice-list-inst-sale-goods"; ?>"><img src="images/rsymbol.png" style="height:22px;" title="Repeat Invoice"></a></center>
                  <?php  } ?>
                         <?php  
                         if($select_data['trans_type_name']=="sale_goods")
                         {  ?>
                         <a href="edit_sale_invoice.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "customer-ledger"; ?>"><img src="mos-css/img/edit.png" title="Edit"></a>
+                        &nbsp;<a href="invoice_repeat.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "invoice-list-inst-sale-goods"; ?>"><img src="images/rsymbol.png" style="height:22px;" title="Repeat Invoice"></a></center>
                  <?php  } ?>
                  <?php
                         if($select_data['trans_type_name']=="inst_receive_payment")
                         {  ?>
                         <a href="edit-instant-sale-invoice.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "customer-ledger-inst-receive-payment"; ?>"><img src="mos-css/img/edit.png" title="Edit"></a>
+                        &nbsp;<a href="invoice_repeat.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "invoice-list-inst-sale-goods"; ?>"><img src="images/rsymbol.png" style="height:22px;" title="Repeat Invoice"></a></center>
                  <?php  } ?>
                   <?php
                         if($select_data['trans_type_name']=="inst_sale_goods")
                         {  ?>
                         <a href="edit-instant-sale-invoice.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "customer-ledger-inst-sale-goods"; ?>"><img src="mos-css/img/edit.png" title="Edit"></a>
+                        &nbsp;<a href="invoice_repeat.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "invoice-list-inst-sale-goods"; ?>"><img src="images/rsymbol.png" style="height:22px;" title="Repeat Invoice"></a></center>
                  <?php  } ?>
                  
                  <?php
                         if($select_data['trans_type_name']=="instmulti_sale_goods")
                         {  ?>
                         <a href="edit_instant-sale-invoice_multiple.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "customer-ledger-inst-sale-goods"; ?>"><img src="mos-css/img/edit.png" title="Edit"></a>
+                        &nbsp;<a href="invoice_repeat.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "invoice-list-inst-sale-goods"; ?>"><img src="images/rsymbol.png" style="height:22px;" title="Repeat Invoice"></a></center>
                  <?php  } ?>
                  <?php
                         if($select_data['trans_type_name']=="instmulti_receive_payment")
                         {  ?>
                         <a href="edit_instant-sale-invoice_multiple.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "customer-ledger-inst-receive-payment"; ?>"><img src="mos-css/img/edit.png" title="Edit"></a>
+                        &nbsp;<a href="invoice_repeat.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "invoice-list-inst-sale-goods"; ?>"><img src="images/rsymbol.png" style="height:22px;" title="Repeat Invoice"></a></center>
                  <?php  } ?>
                  <?php
                         if($select_data['trans_type_name']=="tds_receive_payment")
                         {  if($select_data['clear_table_link_id']=="0")
                             {?>
                         <a href="javascript:void(0);"   title="Edit GST" onClick="return edit_tds_function('<?php echo $select_data['payment_id']; ?>','customer-ledger','<?php echo $select_data['invoice_id']; ?>','<?php echo $select_data['link3_id']; ?>');" ><img src="mos-css/img/edit.png" title="Edit">  </a> 
-
+                        &nbsp;<a href="invoice_repeat.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "invoice-list-inst-sale-goods"; ?>"><img src="images/rsymbol.png" style="height:22px;" title="Repeat Invoice"></a></center>
                         
                 <?php  } } ?>
                 <?php
@@ -2358,7 +2377,7 @@ $select_data_customer = mysql_fetch_array($select_result_customer)
                             if($select_data['clear_table_link_id']=="0")
                             { ?>
                         <a href="javascript:void(0);"   title="Edit GST" onClick="return edit_gst_function('<?php echo $select_data['payment_id']; ?>','customer-ledger','<?php echo $select_data['invoice_id']; ?>','<?php echo $select_data['link3_id']; ?>');" ><img src="mos-css/img/edit.png" title="Edit">  </a> 
-
+                        &nbsp;<a href="invoice_repeat.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "invoice-list-inst-sale-goods"; ?>"><img src="images/rsymbol.png" style="height:22px;" title="Repeat Invoice"></a></center>
                         
                 <?php  } }?>
                 <?php
@@ -2368,11 +2387,12 @@ $select_data_customer = mysql_fetch_array($select_result_customer)
                             {
                             ?>
                         <a href="javascript:void(0);"   title="Edit GST" onClick="return edit_invoice_function('<?php echo $select_data['payment_id']; ?>','customer-ledger','<?php echo $select_data['invoice_id']; ?>','<?php echo $select_data['link3_id']; ?>');" ><img src="mos-css/img/edit.png" title="Edit">  </a> 
-
+                        &nbsp;<a href="invoice_repeat.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['payment_id']; ?>&trsns_pname=<?php echo "invoice-list-inst-sale-goods"; ?>"><img src="images/rsymbol.png" style="height:22px;" title="Repeat Invoice"></a></center>
                         
                 <?php       }  } ?>
                  
                  <?php //////////////   edit File end     ///////////////?>
+                 
                            <?php //////////////   view File start     ///////////////?>                 
                   
                  <?php

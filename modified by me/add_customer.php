@@ -59,8 +59,9 @@ if(trim($_REQUEST['action_perform']) == "add_customer")
         $tenant_current_rent=mysql_real_escape_string(trim($_REQUEST['tenant_current_rent']));
         $tenant_nextrenawal_duedate=strtotime(mysql_real_escape_string(trim($_REQUEST['tenant_nextrenawal_duedate'])));
         $tenant_nextrenewal_rent=mysql_real_escape_string(trim($_REQUEST['tenant_nextrenewal_rent']));
-        $tenant_registered=mysql_real_escape_string(trim($_REQUEST['tenant_registered']));       
-        $tenant_info = " customer_type = '".$customer_type."', tenant_first_rent_agree_date = '".$tenant_first_rent_agree_date."', tenant_current_rent_agree_date = '".$tenant_current_rent_agree_date."', tenant_current_rent = '".$tenant_current_rent."', tenant_nextrenawal_duedate = '".$tenant_nextrenawal_duedate."', tenant_nextrenewal_rent = '".$tenant_nextrenewal_rent."', tenant_registered = '".$tenant_registered."', ";
+        $tenant_registered=mysql_real_escape_string(trim($_REQUEST['tenant_registered'])); 
+        $current_maintenance=mysql_real_escape_string(trim($_REQUEST['current_maintenance'])); 
+        $tenant_info = " customer_type = '".$customer_type."', tenant_first_rent_agree_date = '".$tenant_first_rent_agree_date."', tenant_current_rent_agree_date = '".$tenant_current_rent_agree_date."', tenant_current_rent = '".$tenant_current_rent."', tenant_nextrenawal_duedate = '".$tenant_nextrenawal_duedate."', tenant_nextrenewal_rent = '".$tenant_nextrenewal_rent."', tenant_registered = '".$tenant_registered."', current_maintenance = '".$current_maintenance."', ";
      }
      else
      {
@@ -102,7 +103,7 @@ if(trim($_REQUEST['action_perform']) == "add_customer")
         }
         
         
-        $query="insert into customer set cust_id = '".$cust_id."', fname = '".$fname."', lname = '".$lname."', full_name = '".$full_name."', mobile = '".$mobile."', email = '".$email."', current_address = '".$current_address."', same_address = '".$same_address."', permanent_address = '".$permanent_address."', type = 'customer',opening_balance = '".$opening_balance."', opening_balance_date = '".$opening_balance_date."',company_name = '".$company_name."', client_name = '".$client_name."', project_manager = '".$project_manager."', client_mobile = '".$client_mobile."', project_type = '".$project_type."', client_gst = '".$client_gst."', project = '".$project."', client_email = '".$client_email."', client_contact_per = '".$client_contact_per."',userid_create = '".$_SESSION['userId']."', bank_attachment = '".$bank_attachment."',".$tenant_info." create_date = '".getTime()."', short_name ='".$_REQUEST['short_name']."'";
+        $query="insert into customer set cust_id = '".$cust_id."', fname = '".$fname."', lname = '".$lname."', full_name = '".$full_name."', mobile = '".$mobile."', email = '".$email."', current_address = '".$current_address."', same_address = '".$same_address."', permanent_address = '".$permanent_address."', type = 'customer',opening_balance = '".$opening_balance."', opening_balance_date = '".$opening_balance_date."',company_name = '".$company_name."', client_name = '".$client_name."', project_manager = '".$project_manager."', client_mobile = '".$client_mobile."', project_type = '".$project_type."', client_gst = '".$client_gst."', project = '".$project."', client_email = '".$client_email."', client_contact_per = '".$client_contact_per."',userid_create = '".$_SESSION['userId']."', bank_attachment = '".$bank_attachment."',".$tenant_info." create_date = '".getTime()."', short_name ='".$_REQUEST['short_name']."', added_by = '".$_SESSION['userId']."', added_on = '".time()."'";
         $result= mysql_query($query) or die('error in query '.mysql_error().$query);
         
         $query2="insert into payment_plan set cust_id = '".$cust_id."', credit = '".$opening_balance."', description = 'Opening Balance', payment_date = '".$opening_balance_date."', create_date = '".getTime()."'";
@@ -286,22 +287,32 @@ if(trim($_REQUEST['action_perform']) == "add_customer")
             <td width="200px">Start Date Of Current Lease/Rent Agreement</td>
             <td><input type="text" id="tenant_current_rent_agree_date"  name="tenant_current_rent_agree_date" tabindex="22"  value="<?php echo $_REQUEST['tenant_current_rent_agree_date']; ?>" style="width: 250px;"autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('tenant_current_rent_agree_date')" style="cursor:pointer"/>&nbsp;</td></tr>
                   
-            <tr><td width="200px">Current Rent</td>
+            <tr>
+            <td width="200px">Current Rent</td>
             <td><input type="text" id="tenant_current_rent"  name="tenant_current_rent" tabindex="23"  value="<?php echo $_REQUEST['tenant_current_rent']; ?>" style="width: 250px;"/>&nbsp;</td>
-                    
+
+            <td width="200px">Current Maintenance</td>
+            <td><input type="text" id="current_maintenance"  name="current_maintenance" tabindex="23"  value="<?php echo $_REQUEST['current_maintenance']; ?>" style="width: 250px;"/>&nbsp;</td>
+            </tr>
+            
+            <tr>
+            <td width="200px">Next Renewal Rent</td>
+            <td><input type="text" id="tenant_nextrenewal_rent"  name="tenant_nextrenewal_rent" tabindex="25"  value="<?php echo $_REQUEST['tenant_nextrenewal_rent']; ?>" style="width: 250px;"/>&nbsp;</td>
+
             <td width="200px">Next Renewal due Date</td>
             <td><input type="text" id="tenant_nextrenawal_duedate"  name="tenant_nextrenawal_duedate" tabindex="24"  value="<?php echo $_REQUEST['tenant_nextrenawal_duedate']; ?>" style="width: 250px;"autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('tenant_nextrenawal_duedate')" style="cursor:pointer"/>&nbsp;</td></tr>
-                    
-            <tr><td width="200px">Next Renewal Rent</td>
-            <td><input type="text" id="tenant_nextrenewal_rent"  name="tenant_nextrenewal_rent" tabindex="25"  value="<?php echo $_REQUEST['tenant_nextrenewal_rent']; ?>" style="width: 250px;"/>&nbsp;</td>
-                    
+            
+            </tr>
+
+            <tr>
             <td width="200px">Registered / Unregistered</td>
             <td><select id="tenant_registered" name="tenant_registered" onchange="show_divtype();" tabindex="26"  style="width: 250px; height: 25px;">
                 <option value="Registered"  <?php if($_REQUEST['tenant_registered']=="Registered"){ echo "selected='selected'"; } ?>>Registered</option>
                 <option value="Unregistered"  <?php if($_REQUEST['tenant_registered']=="Unregistered"){ echo "selected='selected'"; } ?>>Unregistered</option>
  
             </select>
-        </td></tr>
+            </td>
+            </tr>
                     
         </table>
                 </div>

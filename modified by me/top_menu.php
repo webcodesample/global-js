@@ -7,7 +7,7 @@
       <ul id="main-menu" class="sm sm-blue">
       <li><a></a>
     <ul>
-    <li><a href="#">Money</a>
+    <li><a href="">Money</a>
     <ul>
         
                 <li><a href="bank.php">Bank</a></li>
@@ -91,6 +91,7 @@
                       <li><a href="purchase-report-new.php">Purchase Reports</a></li>
                       <!--<li><a href="gst-report.php">GST Reports</a></li>-->
                       <li><a href="testgstr.php">GST Return</a></li>
+                      <li><a href="tpr.php">Tenant Profile Report</a></li>
                   </ul>
               </li>
               
@@ -189,6 +190,7 @@
                       <li><a href="purchase-report-new.php">Purchase Reports</a></li>
                       <!--<li><a href="gst-report.php">GST Reports</a></li>-->
                       <li><a href="testgstr.php">GST Return</a></li>
+                      <li><a href="tpr.php">Tenant Profile Report</a></li>
                   </ul>
               </li>
               

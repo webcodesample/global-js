@@ -1,5 +1,5 @@
 <?php session_start();
-include_once("../connection.php");
+include_once("set_con.php");
 if($_REQUEST['msg'] != "")
 {
 	$msg = $_REQUEST['msg'];
@@ -359,6 +359,10 @@ if($totalPages > $numberOfPages)
 				<th class="data">E-Mail</th>
                 <th class="data">Current Balance</th>
                 <th class="data">No. Of Entries</th>
+				<th class="data" nowrap>Added By</th>
+				<th class="data" nowrap>Added On</th>
+				<th class="data" nowrap>Updated By</th>
+				<th class="data" nowrap>Updated On</th>
 				<th class="data" width="75px" id="header1">Action</th>
                 </thead>
 			</tr>
@@ -404,6 +408,30 @@ if($totalPages > $numberOfPages)
                         ?>
                         
                         </td>
+
+						<td class="data" nowrap>&nbsp;
+						<?php
+						echo get_field_value("full_name","user","userid",$select_data['added_by']);							 
+						?>&nbsp;
+						</td>
+						<td class="data" nowrap>&nbsp;
+						<?php
+						if($select_data['added_on'])
+						echo date('d-m-Y h:i:s A', $select_data['added_on']);	
+						?>&nbsp;
+						</td>
+						<td class="data" nowrap>&nbsp;
+						<?php
+						echo get_field_value("full_name","user","userid",$select_data['updated_by']); 
+						?>&nbsp;
+						</td>
+						<td class="data" nowrap>&nbsp;
+						<?php
+						if($select_data['updated_on'])
+						echo date('d-m-Y h:i:s A', $select_data['updated_on']);							 
+						?>&nbsp;
+						</td>
+
 						<td class="data" width="75px" align="left">
 						&nbsp;&nbsp;&nbsp;&nbsp;
                         <a href="edit_supplier.php?cust_id=<?php echo $select_data['cust_id']; ?>"><img src="mos-css/img/edit.png" title="Edit"></a>

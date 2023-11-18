@@ -4,7 +4,7 @@ function ntw($number)
 {
 $ch = curl_init();
 
-$target_url = "http://as4u.in/support/ntwwodec.php";
+$target_url = "http://api-support.as4u.in/api-support/ntw_advance.php";
 
 curl_setopt($ch,CURLOPT_URL,$target_url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -19,7 +19,7 @@ function display($inv_type)
 {
 $ch = curl_init();
 
-$target_url = "http://as4u.in/support/display.php";
+$target_url = "http://api-support.as4u.in/api-support/display.php";
 
 curl_setopt($ch,CURLOPT_URL,$target_url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -34,7 +34,7 @@ function setfileURL($fileUrl)
 {
 $ch = curl_init();
 
-$target_url = "http://as4u.in/support/fileurl_support.php";
+$target_url = "http://api-support.as4u.in/api-support/fileurl_support.php";
 
 curl_setopt($ch,CURLOPT_URL,$target_url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -49,7 +49,7 @@ function setPinv($pinv_data)
 {
 $ch = curl_init();
 
-$target_url = "http://as4u.in/support/dynamicpin.php";
+$target_url = "http://api-support.as4u.in/api-support/dynamicpin.php";
 
 curl_setopt($ch,CURLOPT_URL,$target_url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

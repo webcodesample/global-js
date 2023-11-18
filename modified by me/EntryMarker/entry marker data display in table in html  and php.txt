@@ -1,0 +1,22 @@
+<td class="data" nowrap>&nbsp;
+<?php
+echo get_field_value("full_name","user","userid",$select_data['added_by']);							 
+?>&nbsp;
+</td>
+<td class="data" nowrap>&nbsp;
+<?php
+if($select_data['added_on'])
+echo date('d-m-Y h:i:s A', $select_data['added_on']);	
+?>&nbsp;
+</td>
+<td class="data" nowrap>&nbsp;
+<?php
+echo get_field_value("full_name","user","userid",$select_data['updated_by']); 
+?>&nbsp;
+</td>
+<td class="data" nowrap>&nbsp;
+<?php
+if($select_data['updated_on'])
+echo date('d-m-Y h:i:s A', $select_data['updated_on']);							 
+?>&nbsp;
+</td>

@@ -1,6 +1,6 @@
 <?php 
 	
-	include_once("set_con.php");
+	include_once("con_ajax.php");
 
 	$query 	= $_REQUEST['term'];
 	$sql 	= "select cust_id,full_name from `customer` where full_name like '%$query%' and type = 'supplier'";

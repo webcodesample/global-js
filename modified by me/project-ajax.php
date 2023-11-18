@@ -1,6 +1,6 @@
 <?php
 
-include_once("set_con.php");
+include_once("con_ajax.php");
 
 $query 	= $_REQUEST['term'];
 $sql 	= "select * from `project` where name like '%$query%'";

@@ -1,4 +1,5 @@
 <?php
+
 // DB
 define('DB_DRIVER', 'mysql');
 define('DB_HOSTNAME', 'p3nlmysql83plsk.secureserver.net');

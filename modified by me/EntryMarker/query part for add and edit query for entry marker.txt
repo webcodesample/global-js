@@ -1,0 +1,8 @@
+addition
+
+, added_by = '".$_SESSION['userId']."', added_on = '".time()."'";
+
+
+updation
+
+, updated_by = '".$_SESSION['userId']."', updated_on = '".time()."' 

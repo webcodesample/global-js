@@ -1,6 +1,6 @@
 <?php 
 session_start();
-include_once("../connection.php");
+include_once("set_con.php");
 
 if($_REQUEST['msg'] != "")
 {

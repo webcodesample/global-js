@@ -259,8 +259,9 @@ if($totalPages > $numberOfPages)
    <input id="search_val1" name="search_val1" type="hidden" value="0" >
     </form>
 </td></tr><tr><td>
-		<input type="hidden" name="page" id="page" value=""  /><!-- by amit -->  
+		
     <form name="search_form" id="search_form" action="" method="post" onSubmit="return search_valid();" >
+    <input type="hidden" name="page" id="page" value=""  /><!-- by amit -->  
     <input type="hidden" name="search_check_val_1" id="search_check_val_1" value="<?php echo $sear_val_f;//echo $_REQUEST['search_check_val_1']; ?>" >
 
     <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
@@ -318,15 +319,19 @@ if($totalPages > $numberOfPages)
         </tr>    
            
             <tr >
-            <thead class="report-header">
-				<th class="data" width="30px" >S.No.</th>
-				<th class="data">First Name</th>
-				<th class="data">Last Name</th>
-				<th class="data">Project</th>
-				<th class="data">E-Mail</th>
-                <th class="data">Current Balance</th>
-                <th class="data">No. Of Entries</th>
-				<th class="data noExl" width="75px" id="header1">Action</th>
+            <thead class="report-header" style="text-align:center;">
+				<th class="data" nowrap>S.No.</th>
+				<th class="data" nowrap>First Name</th>
+				<th class="data" nowrap>Last Name</th>
+				<th class="data" nowrap>Project</th>
+				<th class="data" nowrap>E-Mail</th>
+                <th class="data" nowrap>Current Balance</th>
+                <th class="data" nowrap>No. Of Entries</th>
+				<th class="data" nowrap>Added By</th>
+				<th class="data" nowrap>Added On</th>
+				<th class="data" nowrap>Updated By</th>
+				<th class="data" nowrap>Updated On</th>
+				<th class="data noExl" nowrap width="75px" id="header1">Action</th>
                  </thead>
 			</tr>
 			<?php
@@ -338,16 +343,17 @@ if($totalPages > $numberOfPages)
 				    $ii=$i+$startResults;	
 					 ?>
 					<tr class="data">
-						<td class="data" width="30px" align="center"><?php echo $ii ?></td>
-						<td class="data">&nbsp;<a href="customer-ledger.php?cust_id=<?php echo $select_data['cust_id']; ?>" title="View Ledger"  ><?php echo $select_data['fname']; ?></a></td>
-						<td class="data">&nbsp;<?php echo $select_data['lname']; ?></td>
-						<td class="data">&nbsp;<?php //echo $select_data['mobile'];
+						<td class="data" nowrap align="center"><?php echo $ii ?></td>
+						<td class="data" nowrap>&nbsp;<a href="customer-ledger.php?cust_id=<?php echo $select_data['cust_id']; ?>" title="View Ledger"  ><?php echo $select_data['fname']; ?></a>&nbsp;</td>
+						<td class="data" nowrap>&nbsp;<?php echo $select_data['lname']; ?>&nbsp;</td>
+						<td class="data" nowrap>&nbsp;
+                        <?php
                         echo get_field_value("name","project","id",$select_data['project']);
+                         ?>&nbsp;
+                         </td>
+						<td class="data">&nbsp;<?php echo $select_data['email']; ?>&nbsp;</td>
                         
-                         ?></td>
-						<td class="data">&nbsp;<?php echo $select_data['email']; ?></td>
-                        
-                        <td class="data" <?php if(get_total($select_data['cust_id'],strtotime(date("d-m-Y")))<0) { ?> style="color:#FF0000;" <?php } ?>>&nbsp;<?php echo currency_symbol().number_format(get_total($select_data['cust_id'],strtotime(date("d-m-Y"))),2);
+                        <td class="data" nowrap <?php if(get_total($select_data['cust_id'],strtotime(date("d-m-Y")))<0) { ?> style="color:#FF0000;" <?php } ?>>&nbsp;<?php echo currency_symbol().number_format(get_total($select_data['cust_id'],strtotime(date("d-m-Y"))),2);
                         $get_total = get_total($select_data['cust_id'],strtotime(date("d-m-Y")));
                         if($get_total>=0)
                         {
@@ -359,7 +365,7 @@ if($totalPages > $numberOfPages)
                         }
                         
                         $grand_total = $grand_total+$get_total;
-                         ?></td>
+                         ?>&nbsp;</td>
                          <td class="data" align="center">
                          <?php 
                          $select_tot = "select SUM(debit) as total_debit,SUM(credit) as total_credit , count(id) as no_entry from payment_plan where description != 'Opening Balance' and cust_id='".$select_data['cust_id']."' and cust_id!='' and cust_id > 0 ";
@@ -370,15 +376,39 @@ if($totalPages > $numberOfPages)
                         
                         ?>
                          </td>
-						<td class="data noExl" width="75px" align="left">
-                        &nbsp;&nbsp;&nbsp;&nbsp;
+
+                         <td class="data" nowrap>&nbsp;
+						<?php
+							echo get_field_value("full_name","user","userid",$select_data['added_by']);							 
+						?>&nbsp;
+						</td>
+						<td class="data" nowrap>&nbsp;
+						<?php
+						if($select_data['added_on'])
+							echo date('d-m-Y h:i:s A', $select_data['added_on']);	
+						?>&nbsp;
+						</td>
+						<td class="data" nowrap>&nbsp;
+						<?php
+							echo get_field_value("full_name","user","userid",$select_data['updated_by']); 
+						?>&nbsp;
+						</td>
+						<td class="data" nowrap>&nbsp;
+						<?php
+						if($select_data['updated_on'])
+							echo date('d-m-Y h:i:s A', $select_data['updated_on']);							 
+						?>&nbsp;
+						</td>
+
+						<td class="data noExl" nowrap width="75px" align="left">
+                        &nbsp;
 						<a href="edit_customer.php?cust_id=<?php echo $select_data['cust_id']; ?>"><img src="mos-css/img/edit.png" title="Edit"></a>
                         <?php 
                             if($select_data3['no_entry']<1)
                             { ?>
                             <a href="javascript:account_delete(<?php echo $select_data['cust_id'] ?>);"><img src="mos-css/img/delete.png" title="Delete" ></a>&nbsp;&nbsp;&nbsp;    
                          <?php    }
-                         ?>
+                         ?>&nbsp;
 						<!--<a href="javascript:account_delete(<?php echo $select_data['cust_id'] ?>);"><img src="mos-css/img/delete.png" title="Delete" ></a>&nbsp;&nbsp;&nbsp;-->
 						
 						

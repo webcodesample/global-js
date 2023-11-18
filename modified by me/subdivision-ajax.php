@@ -1,6 +1,6 @@
 <?php 
 	
-	include_once("../connection.php");
+	include_once("con_ajax.php");
 	
     $query     = $_REQUEST['term'];
     $sql     = "select * from `subdivision` where name like '%$query%' ";

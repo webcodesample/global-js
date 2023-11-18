@@ -43,8 +43,8 @@ if(trim($_REQUEST['action_perform']) == "edit_invoice_issuer")
     //code by amit for logo
     $filename=$_FILES['invoice_issuer_logo']['tmp_name'];
     $imgData = mysql_escape_string(file_get_contents($filename));
-    //update invoice_issuer set issuer_name = '".$issuer_name."', display_name = '".$display_name."', mobile = '".$mobile."', email = '".$email."', address = '".$address."', company_name = '".$company_name."', reg_no = '".$reg_no."', vat_no = '".$vat_no."', gst_no = '".$gst_no."', cin_no = '".$cin_no."', pan_no = '".$pan_no."', logo = '".$imgData."' where id='".$issuer_id."'";
-    $query="update invoice_issuer set issuer_name = '".$issuer_name."', display_name = '".$display_name."', mobile = '".$mobile."', email = '".$email."', address = '".$address."', company_name = '".$company_name."', reg_no = '".$reg_no."', vat_no = '".$vat_no."', gst_no = '".$gst_no."', cin_no = '".$cin_no."', pan_no = '".$pan_no."' where id='".$issuer_id."'"; 
+    $query = "update invoice_issuer set issuer_name = '".$issuer_name."', display_name = '".$display_name."', mobile = '".$mobile."', email = '".$email."', address = '".$address."', company_name = '".$company_name."', reg_no = '".$reg_no."', vat_no = '".$vat_no."', gst_no = '".$gst_no."', cin_no = '".$cin_no."', pan_no = '".$pan_no."', logo = '".$imgData."' where id='".$issuer_id."'";
+    //$query="update invoice_issuer set issuer_name = '".$issuer_name."', display_name = '".$display_name."', mobile = '".$mobile."', email = '".$email."', address = '".$address."', company_name = '".$company_name."', reg_no = '".$reg_no."', vat_no = '".$vat_no."', gst_no = '".$gst_no."', cin_no = '".$cin_no."', pan_no = '".$pan_no."' where id='".$issuer_id."'"; 
     $result= mysql_query($query) or die('error in query '.mysql_error().$query.'<br>');
     $msg = "Invoice Issuer update successfully.";
 	header("Location:invoice-issuer.php?msg=invoice_issuer Updated successfully");

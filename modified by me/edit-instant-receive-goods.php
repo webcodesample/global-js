@@ -1,5 +1,5 @@
 <?php session_start();
-include_once("../connection.php");
+include_once("set_con.php");
 if($_REQUEST['msg'] != "")
 {
 	$msg = $_REQUEST['msg'];
@@ -17,289 +17,6 @@ else
 	$error_msg = "";
 }
 $flag = 0;
-
-/*     Create  Account   */
-
-
-if(trim($_REQUEST['action_perform']) == "add_project")
-{
-	/*echo '<pre>';
-	print_r($_REQUEST);
-	exit;*/
-	$from_arr = explode("- ",$_REQUEST['from']);
-	$cust_id = $from_arr[1];
-	$project_id = get_field_value("id","project","name",$_REQUEST['project']);
-	$amount=mysql_real_escape_string(trim($_REQUEST['amount']));
-	$amount_gst_amount=mysql_real_escape_string(trim($_REQUEST['amount_gst_amount']));
-
-    //add by amit
-    $invoice_receiver_data = explode(" - ", $_REQUEST['invoice_receiver']);
-	$invoice_receiver_id = $invoice_receiver_data[1];
-
-    //added by amit
-    if($_REQUEST['supplier_invoice_number'])
-    {$supplier_invoice_number = $_REQUEST['supplier_invoice_number'];}
-
-	$description=mysql_real_escape_string(trim($_REQUEST['description']));
-	//$subdivision=mysql_real_escape_string(trim($_REQUEST['subdivision']));
-    $subdivision = get_field_value("id","subdivision","name",$_REQUEST['subdivision']);
-	///////payment Fiels values ///////
-    $pay_from_arr = explode(" -",$_REQUEST['pay_form']);
-    $pay_bank_id = get_field_value("id","bank","bank_account_name",$pay_from_arr[0]);
-	$pay_amount=mysql_real_escape_string(trim($_REQUEST['pay_amount']));
-    
-    $pay_method=mysql_real_escape_string(trim($_REQUEST['pay_method']));
-    $pay_checkno=mysql_real_escape_string(trim($_REQUEST['pay_checkno']));
-    //////////////
-    ///  $id_first_cust,$id_second_proj,$id_third_bankpay,$id_four_cust_pay
-    $id_first_cust=mysql_real_escape_string(trim($_REQUEST['id_first_cust']));
-    $id_second_proj=mysql_real_escape_string(trim($_REQUEST['id_second_proj']));
-    $id_third_bankpay=mysql_real_escape_string(trim($_REQUEST['id_third_bankpay']));
-    $id_four_cust_pay=mysql_real_escape_string(trim($_REQUEST['id_four_cust_pay']));
-    
-    
-	$trans_id = mysql_real_escape_string(trim($_REQUEST['trans_id']));
-	
-	
-	$query="update payment_plan set  cust_id = '".$cust_id."', debit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',subdivision = '".$subdivision."',update_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."' where  id = '".$id_first_cust."'";
-	$result= mysql_query($query) or die('error in query '.mysql_error().$query);
-	
-	$link_id_1 = $id_first_cust;
-	
-	$query2="update payment_plan set  project_id = '".$project_id."', credit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_customer = '".$cust_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',subdivision = '".$subdivision."',update_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."' where  id = '".$id_second_proj."'";
-	$result2= mysql_query($query2) or die('error in query '.mysql_error().$query2);
-	
-	$link_id_2 = $id_second_proj;
-
-      /*       payment query start           */
-  
-    $payment_flag=$_REQUEST['payment_flag'];
-    if($payment_flag==1){
-        if($payment_flag==1){
-
-            $query_pay ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', debit = '".$pay_amount."', description = '".$description."', on_customer = '".$cust_id."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."', payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."', trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."',create_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."'";
-            $result_pay= mysql_query($query_pay) or die('error in query '.mysql_error().$query_pay);
-            
-            $link_id_1_pay = mysql_insert_id();
-            
-            $query2_pay="insert into payment_plan set payment_flag = '".$payment_flag."' ,trans_id = '".$trans_id."', cust_id = '".$cust_id."', credit = '".$pay_amount."', description = '".$description."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."',link_id = '".$link_id_1_pay."',trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."', create_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."'";
-            $result2_pay= mysql_query($query2_pay) or die('error in query '.mysql_error().$query2_pay);
-            
-            $link_id_2_pay = mysql_insert_id();
-            $query5_pay="update payment_plan set payment_flag = '".$payment_flag."', link_id = '".$link_id_2_pay."' where id = '".$link_id_1_pay."'";
-            $result5_pay= mysql_query($query5_pay) or die('error in query '.mysql_error().$query5_pay);
-            
-            $query5="update payment_plan set link2_id = '".$link_id_1_pay."',link3_id = '".$link_id_2_pay."' where id = '".$link_id_2."'";
-            $result5= mysql_query($query5) or die('error in query '.mysql_error().$query5);
-            
-            $query5="update payment_plan set payment_flag = '".$payment_flag."',link2_id = '".$link_id_1_pay."',link3_id = '".$link_id_2_pay."' where id = '".$link_id_1."'";
-            $result5= mysql_query($query5) or die('error in query '.mysql_error().$query5);
-            $query5="update payment_plan set payment_flag = '".$payment_flag."' where id = '".$link_id_2."'";
-            $result5= mysql_query($query5) or die('error in query '.mysql_error().$query5);
-           
-            
-            }    
-            
-    }
-
-    //,$id_third_bankpay,$id_four_cust_pay
-    $old_payment_flag=$_REQUEST['old_payment_flag'];
-    if($old_payment_flag=="1"){
-   
-    $query_pay ="update payment_plan set  bank_id = '".$pay_bank_id."', debit = '".$pay_amount."', description = '".$description."', on_customer = '".$cust_id."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."', payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."', update_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."' where  id = '".$id_third_bankpay."'";
-    $result_pay= mysql_query($query_pay) or die('error in query '.mysql_error().$query_pay);
-    
-    $link_id_1_pay = $id_third_bankpay;
-    
-    $query2_pay="update payment_plan set  cust_id = '".$cust_id."', credit = '".$pay_amount."', description = '".$description."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."', update_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."' where  id = '".$id_four_cust_pay."'";
-    $result2_pay= mysql_query($query2_pay) or die('error in query '.mysql_error().$query2_pay);
-    
-    $link_id_2_pay = $id_four_cust_pay;
-
-    //code added by amit
-    $query_gst_due_info = "update gst_due_info set received_amount = '".$_REQUEST['pay_amount_gst']."' where trans_id = '".$_REQUEST['trans_id']."'";
-    $result_gst_due_info = mysql_query($query_gst_due_info) or die('error in query '.mysql_error().$query_gst_due_info);
-    //code added by amit
-    $query_invoice_due_info = "update invoice_due_info set received_amount = '".$_REQUEST['pay_amount_wogst']."' where trans_id = '".$_REQUEST['trans_id']."'";
-    $result_invoice_due_info = mysql_query($query_invoice_due_info) or die('error in query '.mysql_error().$query_invoice_due_info);
-
-    }  
-    
-    /*       payment query end           */
-	
-	if($_FILES["attach_file"]["name"] != "")
-    {
-    $query3="insert into attach_file set attach_id = '".$link_id_1."', link_id = '".$link_id_2."',file_name = '".$new_file_name."'";
-    $result3= mysql_query($query3) or die('error in query '.mysql_error().$query3);
-    $link_id_4 = mysql_insert_id();
-    
-        $attach_file_name=mysql_real_escape_string(trim($_REQUEST['attach_file_name']));
-        $temp = explode(".", $_FILES["attach_file"]["name"]);
-        $arr_size = count($temp);
-        $extension = end($temp);
-        $new_file_name = $attach_file_name.'_'.$link_id_4.'_'.date("d_M_Y").'.'.$extension;
-        move_uploaded_file($_FILES["attach_file"]["tmp_name"],"transaction_files/" . $new_file_name);
-        
-        
-    $query4="insert into attach_file set attach_id = '".$link_id_2."', link_id = '".$link_id_1."',old_id = '".$link_id_4."',file_name = '".$new_file_name."'";
-    $result4= mysql_query($query4) or die('error in query '.mysql_error().$query4);
-    $link_id_5 = mysql_insert_id();
-    
-    
-    $query5_1="update attach_file set old_id = '".$link_id_5."',file_name = '".$new_file_name."' where id = '".$link_id_4."'";
-    $result5_1= mysql_query($query5_1) or die('error in query '.mysql_error().$query5_1);
-    //$link_id_1_pay,$link_id_2_pay
-    ///  payment start//
-    $query3_pay="insert into attach_file set attach_id = '".$link_id_1_pay."',old_id2 = '".$link_id_4."',old_id3 = '".$link_id_5."', link_id = '".$link_id_2_pay."',file_name = '".$new_file_name."'";
-    $result3_pay= mysql_query($query3_pay) or die('error in query '.mysql_error().$query3_pay);
-    $link_id_4_pay = mysql_insert_id();
-       
-    $query4_pay="insert into attach_file set attach_id = '".$link_id_2_pay."',old_id2 = '".$link_id_4."',old_id3 = '".$link_id_5."', link_id = '".$link_id_1_pay."',old_id = '".$link_id_4_pay."',file_name = '".$new_file_name."'";
-    
-    $result4_pay= mysql_query($query4_pay) or die('error in query '.mysql_error().$query4_pay);
-    $link_id_5_pay = mysql_insert_id();
-    
-    $query5_1_pay="update attach_file set old_id = '".$link_id_5_pay."',file_name = '".$new_file_name."' where id = '".$link_id_4_pay."'";
-    $result5_1_pay= mysql_query($query5_1_pay) or die('error in query '.mysql_error().$query5_1_pay);
-   
-     $query5_1="update attach_file set old_id2 = '".$link_id_4_pay."',old_id3 = '".$link_id_5_pay."' where id = '".$link_id_4."'";
-    $result5_1= mysql_query($query5_1) or die('error in query '.mysql_error().$query5_1);
-    
-     $query5_1="update attach_file set old_id2 = '".$link_id_4_pay."',old_id3 = '".$link_id_5_pay."' where id = '".$link_id_5."'";
-    $result5_1= mysql_query($query5_1) or die('error in query '.mysql_error().$query5_1);
-   
-   
-    
-    ///  payment end//
-    
-    }
-    else
-    {
-        $files = glob("drag uploads/*.*");
-        $new_file_name=mysql_real_escape_string(trim($_REQUEST['attach_file_name'])).'_'.$link_id_4.'_'.date("d_M_Y");
-        
-        if(count($files) > 0)
-        {
-                    $query3="insert into attach_file set attach_id = '".$link_id_1."', link_id = '".$link_id_2."',file_name = '".$new_file_name."'";
-    $result3= mysql_query($query3) or die('error in query '.mysql_error().$query3);
-    $link_id_4 = mysql_insert_id();
-    
-            foreach($files as $file)
-            {
-                $basename = basename($file);
-                $ext = substr(strrchr($basename,'.'),1);
-                rename ("$file", "transaction_files/$new_file_name.$ext");
-                
-            }
-
-                
-    $new_file_name = $new_file_name.'.'.$ext;
-    $query4="insert into attach_file set attach_id = '".$link_id_2."', link_id = '".$link_id_1."',old_id = '".$link_id_4."',file_name = '".$new_file_name."'";
-    $result4= mysql_query($query4) or die('error in query '.mysql_error().$query4);
-    $link_id_5 = mysql_insert_id();
-    
-    $query5_1="update attach_file set old_id = '".$link_id_5."',file_name = '".$new_file_name."' where id = '".$link_id_4."'";
-    $result5_1= mysql_query($query5_1) or die('error in query '.mysql_error().$query5_1);
-     ///  payment start//
-    $query3_pay="insert into attach_file set attach_id = '".$link_id_1_pay."',old_id2 = '".$link_id_4."',old_id3 = '".$link_id_5."', link_id = '".$link_id_2_pay."',file_name = '".$new_file_name."'";
-    $result3_pay= mysql_query($query3_pay) or die('error in query '.mysql_error().$query3_pay);
-    $link_id_4_pay = mysql_insert_id();
-       
-    $query4_pay="insert into attach_file set attach_id = '".$link_id_2_pay."',old_id2 = '".$link_id_4."',old_id3 = '".$link_id_5."', link_id = '".$link_id_1_pay."',old_id = '".$link_id_4_pay."',file_name = '".$new_file_name."'";
-    
-    $result4_pay= mysql_query($query4_pay) or die('error in query '.mysql_error().$query4_pay);
-    $link_id_5_pay = mysql_insert_id();
-    
-    $query5_1_pay="update attach_file set old_id = '".$link_id_5_pay."',file_name = '".$new_file_name."' where id = '".$link_id_4_pay."'";
-    $result5_1_pay= mysql_query($query5_1_pay) or die('error in query '.mysql_error().$query5_1_pay);
-   
-     $query5_1="update attach_file set old_id2 = '".$link_id_4_pay."',old_id3 = '".$link_id_5_pay."' where id = '".$link_id_4."'";
-    $result5_1= mysql_query($query5_1) or die('error in query '.mysql_error().$query5_1);
-    
-     $query5_1="update attach_file set old_id2 = '".$link_id_4_pay."',old_id3 = '".$link_id_5_pay."' where id = '".$link_id_5."'";
-    $result5_1= mysql_query($query5_1) or die('error in query '.mysql_error().$query5_1);
-   
-   
-    
-    ///  payment end//
-   
-                
-        }
-        else
-        {
-            $new_file_name = "";        
-        }
-        
-    }
-    
-    
-    
-	$msg = "Instant Receive Goods and Payment successfully.";
-	$flag = 1;
-    
-     $trsns_pname_1 = $_REQUEST['trsns_pname'];
-   
-    if($trsns_pname_1=="supplier-ledger-inst-receive-goods")
-    {
-         $msg = " Update successfully.";
-          $flag = 1;
-   // header(supplier-payment.php);
-      echo "<script> location.href='supplier.php'; </script>";
-        
-    }
-    
-    if($trsns_pname_1=="supplier-ledger-inst-make-payment")
-    {
-         $msg = " Update successfully.";
-          $flag = 1;
-   // header(supplier-payment.php);
-      echo "<script> location.href='supplier.php'; </script>";
-        
-    }
-    
-    if($trsns_pname_1=="project-ledger-inst-receive-goods")
-    {
-         $msg = " Update successfully.";
-          $flag = 1;
-   // header(supplier-payment.php);
-      echo "<script> location.href='project.php'; </script>";
-      //window.history.back();
-        
-    }
-    if($trsns_pname_1=="By subdivision")
-    {
-         $msg = " Update successfully.";
-          $flag = 1;
-   // header(supplier-payment.php);
-      echo "<script>  location.href='subdivision.php'; </script>";
-      //window.history.back();
-        
-    }
-    
-    if($trsns_pname_1=="bank-ledger-inst-make-payment")
-    {
-         $msg = " Update successfully.";
-          $flag = 1;
-   // header(supplier-payment.php);
-      echo "<script> location.href='bank.php'; </script>";
-        
-    }
-   
-    
-	
-}
-else
-{
-	$files = glob("drag uploads/*.*");
-	if(count($files) > 0)
-	{
-		foreach($files as $file)
-		{
-      		unlink($file);
-    	}
-	}
-}
-
 
 if($_REQUEST['trsns_pname']=="supplier-ledger-inst-receive-goods")
 {
@@ -463,7 +180,256 @@ if($_REQUEST['trsns_pname']=="bank-ledger-inst-make-payment")
     
 }
 
+/*     Create  Account   */
 
+
+if(trim($_REQUEST['action_perform']) == "add_project")
+{
+	/*echo '<pre>';
+	print_r($_REQUEST);
+	exit;*/
+	$from_arr = explode("- ",$_REQUEST['from']);
+	$cust_id = $from_arr[1];
+	$project_id = get_field_value("id","project","name",$_REQUEST['project']);
+	$amount=mysql_real_escape_string(trim($_REQUEST['amount']));
+	$amount_gst_amount=mysql_real_escape_string(trim($_REQUEST['amount_gst_amount']));
+
+    //add by amit
+    $invoice_receiver_data = explode(" - ", $_REQUEST['invoice_receiver']);
+	$invoice_receiver_id = $invoice_receiver_data[1];
+
+    //added by amit
+    if($_REQUEST['supplier_invoice_number'])
+    {$supplier_invoice_number = $_REQUEST['supplier_invoice_number'];}
+
+	$description=mysql_real_escape_string(trim($_REQUEST['description']));
+	//$subdivision=mysql_real_escape_string(trim($_REQUEST['subdivision']));
+    $subdivision = get_field_value("id","subdivision","name",$_REQUEST['subdivision']);
+	///////payment Fiels values ///////
+    $pay_from_arr = explode(" -",$_REQUEST['pay_form']);
+    $pay_bank_id = get_field_value("id","bank","bank_account_name",$pay_from_arr[0]);
+	$pay_amount=mysql_real_escape_string(trim($_REQUEST['pay_amount']));
+    
+    $pay_method=mysql_real_escape_string(trim($_REQUEST['pay_method']));
+    $pay_checkno=mysql_real_escape_string(trim($_REQUEST['pay_checkno']));
+    //////////////
+    ///  $id_first_cust,$id_second_proj,$id_third_bankpay,$id_four_cust_pay
+    $id_first_cust=mysql_real_escape_string(trim($_REQUEST['id_first_cust']));
+    $id_second_proj=mysql_real_escape_string(trim($_REQUEST['id_second_proj']));
+    $id_third_bankpay=mysql_real_escape_string(trim($_REQUEST['id_third_bankpay']));
+    $id_four_cust_pay=mysql_real_escape_string(trim($_REQUEST['id_four_cust_pay']));
+    
+    
+	$trans_id = mysql_real_escape_string(trim($_REQUEST['trans_id']));
+	
+	
+	$query="update payment_plan set  cust_id = '".$cust_id."', debit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',subdivision = '".$subdivision."',update_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."', updated_by = '".$_SESSION['userId']."', updated_on = '".time()."'  where  id = '".$id_first_cust."'";
+	$result= mysql_query($query) or die('error in query '.mysql_error().$query);
+	
+	$link_id_1 = $id_first_cust;
+	
+	$query2="update payment_plan set  project_id = '".$project_id."', credit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_customer = '".$cust_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',subdivision = '".$subdivision."',update_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."', updated_by = '".$_SESSION['userId']."', updated_on = '".time()."'  where  id = '".$id_second_proj."'";
+	$result2= mysql_query($query2) or die('error in query '.mysql_error().$query2);
+	
+	$link_id_2 = $id_second_proj;
+
+      /*       payment query start           */
+  
+    $payment_flag=$_REQUEST['payment_flag'];
+    if($payment_flag==1){
+        if($payment_flag==1){
+
+            $query_pay ="insert into payment_plan set trans_id = '".$trans_id."', bank_id = '".$pay_bank_id."', debit = '".$pay_amount."', description = '".$description."', on_customer = '".$cust_id."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."', payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."', trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."',create_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."'";
+            $result_pay= mysql_query($query_pay) or die('error in query '.mysql_error().$query_pay);
+            
+            $link_id_1_pay = mysql_insert_id();
+            
+            $query2_pay="insert into payment_plan set payment_flag = '".$payment_flag."' ,trans_id = '".$trans_id."', cust_id = '".$cust_id."', credit = '".$pay_amount."', description = '".$description."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."',link2_id = '".$link_id_1."',link3_id = '".$link_id_2."',link_id = '".$link_id_1_pay."',trans_type = '".$trans_type_pay."', trans_type_name = '".$trans_type_name_pay."', create_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."'";
+            $result2_pay= mysql_query($query2_pay) or die('error in query '.mysql_error().$query2_pay);
+            
+            $link_id_2_pay = mysql_insert_id();
+            $query5_pay="update payment_plan set payment_flag = '".$payment_flag."', link_id = '".$link_id_2_pay."' where id = '".$link_id_1_pay."'";
+            $result5_pay= mysql_query($query5_pay) or die('error in query '.mysql_error().$query5_pay);
+            
+            $query5="update payment_plan set link2_id = '".$link_id_1_pay."',link3_id = '".$link_id_2_pay."' where id = '".$link_id_2."'";
+            $result5= mysql_query($query5) or die('error in query '.mysql_error().$query5);
+            
+            $query5="update payment_plan set payment_flag = '".$payment_flag."',link2_id = '".$link_id_1_pay."',link3_id = '".$link_id_2_pay."' where id = '".$link_id_1."'";
+            $result5= mysql_query($query5) or die('error in query '.mysql_error().$query5);
+            $query5="update payment_plan set payment_flag = '".$payment_flag."' where id = '".$link_id_2."'";
+            $result5= mysql_query($query5) or die('error in query '.mysql_error().$query5);
+           
+            
+            }    
+            
+    }
+
+    //,$id_third_bankpay,$id_four_cust_pay
+    $old_payment_flag=$_REQUEST['old_payment_flag'];
+    if($old_payment_flag=="1"){
+   
+    $query_pay ="update payment_plan set  bank_id = '".$pay_bank_id."', debit = '".$pay_amount."', description = '".$description."', on_customer = '".$cust_id."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."', payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."', update_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."' where  id = '".$id_third_bankpay."'";
+    $result_pay= mysql_query($query_pay) or die('error in query '.mysql_error().$query_pay);
+    
+    $link_id_1_pay = $id_third_bankpay;
+    
+    $query2_pay="update payment_plan set  cust_id = '".$cust_id."', credit = '".$pay_amount."', description = '".$description."', on_project = '".$project_id."', on_bank = '".$pay_bank_id."', payment_date = '".strtotime($_REQUEST['pay_payment_date'])."' ,payment_method = '".$pay_method."',payment_checkno = '".$pay_checkno."', update_date = '".getTime()."', invoice_issuer_id = '".$invoice_receiver_id."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."' where  id = '".$id_four_cust_pay."'";
+    $result2_pay= mysql_query($query2_pay) or die('error in query '.mysql_error().$query2_pay);
+    
+    $link_id_2_pay = $id_four_cust_pay;
+
+    //code added by amit
+    $query_gst_due_info = "update gst_due_info set received_amount = '".$_REQUEST['pay_amount_gst']."' where trans_id = '".$_REQUEST['trans_id']."'";
+    $result_gst_due_info = mysql_query($query_gst_due_info) or die('error in query '.mysql_error().$query_gst_due_info);
+    //code added by amit
+    $query_invoice_due_info = "update invoice_due_info set received_amount = '".$_REQUEST['pay_amount_wogst']."' where trans_id = '".$_REQUEST['trans_id']."'";
+    $result_invoice_due_info = mysql_query($query_invoice_due_info) or die('error in query '.mysql_error().$query_invoice_due_info);
+
+    }  
+    
+    /*       payment query end           */
+	
+	if($_FILES["attach_file"]["name"] != "")
+    {
+    $query3="insert into attach_file set attach_id = '".$link_id_1."', link_id = '".$link_id_2."',file_name = '".$new_file_name."'";
+    $result3= mysql_query($query3) or die('error in query '.mysql_error().$query3);
+    $link_id_4 = mysql_insert_id();
+    
+    $attach_file_name=mysql_real_escape_string(trim($_REQUEST['attach_file_name']));
+    $temp = explode(".", $_FILES["attach_file"]["name"]);
+    $arr_size = count($temp);
+    $extension = end($temp);
+    $new_file_name = $attach_file_name.'_'.$link_id_4.'_'.date("d_M_Y").'.'.$extension;
+    move_uploaded_file($_FILES["attach_file"]["tmp_name"],"transaction_files/" . $new_file_name);
+        
+        
+    $query4="insert into attach_file set attach_id = '".$link_id_2."', link_id = '".$link_id_1."',old_id = '".$link_id_4."',file_name = '".$new_file_name."'";
+    $result4= mysql_query($query4) or die('error in query '.mysql_error().$query4);
+    $link_id_5 = mysql_insert_id();
+    
+    
+    $query5_1="update attach_file set old_id = '".$link_id_5."',file_name = '".$new_file_name."' where id = '".$link_id_4."'";
+    $result5_1= mysql_query($query5_1) or die('error in query '.mysql_error().$query5_1);
+    //$link_id_1_pay,$link_id_2_pay
+    ///  payment start//
+    $query3_pay="insert into attach_file set attach_id = '".$link_id_1_pay."',old_id2 = '".$link_id_4."',old_id3 = '".$link_id_5."', link_id = '".$link_id_2_pay."',file_name = '".$new_file_name."'";
+    $result3_pay= mysql_query($query3_pay) or die('error in query '.mysql_error().$query3_pay);
+    $link_id_4_pay = mysql_insert_id();
+       
+    $query4_pay="insert into attach_file set attach_id = '".$link_id_2_pay."',old_id2 = '".$link_id_4."',old_id3 = '".$link_id_5."', link_id = '".$link_id_1_pay."',old_id = '".$link_id_4_pay."',file_name = '".$new_file_name."'";
+    
+    $result4_pay= mysql_query($query4_pay) or die('error in query '.mysql_error().$query4_pay);
+    $link_id_5_pay = mysql_insert_id();
+    
+    $query5_1_pay="update attach_file set old_id = '".$link_id_5_pay."',file_name = '".$new_file_name."' where id = '".$link_id_4_pay."'";
+    $result5_1_pay= mysql_query($query5_1_pay) or die('error in query '.mysql_error().$query5_1_pay);
+   
+     $query5_1="update attach_file set old_id2 = '".$link_id_4_pay."',old_id3 = '".$link_id_5_pay."' where id = '".$link_id_4."'";
+    $result5_1= mysql_query($query5_1) or die('error in query '.mysql_error().$query5_1);
+    
+     $query5_1="update attach_file set old_id2 = '".$link_id_4_pay."',old_id3 = '".$link_id_5_pay."' where id = '".$link_id_5."'";
+    $result5_1= mysql_query($query5_1) or die('error in query '.mysql_error().$query5_1);
+    }
+    else
+    {
+        $files = glob("drag uploads/*.*");
+        $new_file_name=mysql_real_escape_string(trim($_REQUEST['attach_file_name'])).'_'.$link_id_4.'_'.date("d_M_Y");
+        
+        if(count($files) > 0)
+        {
+        $query3="insert into attach_file set attach_id = '".$link_id_1."', link_id = '".$link_id_2."',file_name = '".$new_file_name."'";
+        $result3= mysql_query($query3) or die('error in query '.mysql_error().$query3);
+        $link_id_4 = mysql_insert_id();
+    
+            foreach($files as $file)
+            {
+                $basename = basename($file);
+                $ext = substr(strrchr($basename,'.'),1);
+                rename ("$file", "transaction_files/$new_file_name.$ext");
+            }
+                
+    $new_file_name = $new_file_name.'.'.$ext;
+    $query4="insert into attach_file set attach_id = '".$link_id_2."', link_id = '".$link_id_1."',old_id = '".$link_id_4."',file_name = '".$new_file_name."'";
+    $result4= mysql_query($query4) or die('error in query '.mysql_error().$query4);
+    $link_id_5 = mysql_insert_id();
+    
+    $query5_1="update attach_file set old_id = '".$link_id_5."',file_name = '".$new_file_name."' where id = '".$link_id_4."'";
+    $result5_1= mysql_query($query5_1) or die('error in query '.mysql_error().$query5_1);
+     ///  payment start//
+    $query3_pay="insert into attach_file set attach_id = '".$link_id_1_pay."',old_id2 = '".$link_id_4."',old_id3 = '".$link_id_5."', link_id = '".$link_id_2_pay."',file_name = '".$new_file_name."'";
+    $result3_pay= mysql_query($query3_pay) or die('error in query '.mysql_error().$query3_pay);
+    $link_id_4_pay = mysql_insert_id();
+       
+    $query4_pay="insert into attach_file set attach_id = '".$link_id_2_pay."',old_id2 = '".$link_id_4."',old_id3 = '".$link_id_5."', link_id = '".$link_id_1_pay."',old_id = '".$link_id_4_pay."',file_name = '".$new_file_name."'";
+    
+    $result4_pay= mysql_query($query4_pay) or die('error in query '.mysql_error().$query4_pay);
+    $link_id_5_pay = mysql_insert_id();
+    
+    $query5_1_pay="update attach_file set old_id = '".$link_id_5_pay."',file_name = '".$new_file_name."' where id = '".$link_id_4_pay."'";
+    $result5_1_pay= mysql_query($query5_1_pay) or die('error in query '.mysql_error().$query5_1_pay);
+   
+    $query5_1="update attach_file set old_id2 = '".$link_id_4_pay."',old_id3 = '".$link_id_5_pay."' where id = '".$link_id_4."'";
+    $result5_1= mysql_query($query5_1) or die('error in query '.mysql_error().$query5_1);
+    
+    $query5_1="update attach_file set old_id2 = '".$link_id_4_pay."',old_id3 = '".$link_id_5_pay."' where id = '".$link_id_5."'";
+    $result5_1= mysql_query($query5_1) or die('error in query '.mysql_error().$query5_1);
+        }
+        else
+        {
+            $new_file_name = "";        
+        }
+    }
+    
+	$msg = "Instant Receive Goods and Payment successfully.";
+	$flag = 1;
+    
+    $trsns_pname_1 = $_REQUEST['trsns_pname'];
+   
+    if($trsns_pname_1=="supplier-ledger-inst-receive-goods")
+    {
+        $msg = " Update successfully.";
+        $flag = 1;
+        echo "<script> location.href='supplier.php'; </script>";
+    }
+    
+    if($trsns_pname_1=="supplier-ledger-inst-make-payment")
+    {
+        $msg = " Update successfully.";
+        $flag = 1;
+        echo "<script> location.href='supplier.php'; </script>";
+    }
+    
+    if($trsns_pname_1=="project-ledger-inst-receive-goods")
+    {
+        $msg = " Update successfully.";
+        $flag = 1;
+        echo "<script> location.href='project.php'; </script>";
+    }
+    if($trsns_pname_1=="By subdivision")
+    {
+        $msg = " Update successfully.";
+        $flag = 1;
+        echo "<script>  location.href='subdivision.php'; </script>";
+    }
+    
+    if($trsns_pname_1=="bank-ledger-inst-make-payment")
+    {
+        $msg = " Update successfully.";
+        $flag = 1;
+        echo "<script> location.href='bank-ledger.php?bank_id=".$select_data_pay['bank_id']."'; </script>";
+    }
+}
+else
+{
+	$files = glob("drag uploads/*.*");
+	if(count($files) > 0)
+	{
+		foreach($files as $file)
+		{
+      		unlink($file);
+    	}
+	}
+}
 ?>
 
 <!DOCTYPE html>
@@ -601,7 +567,7 @@ function findTotal()
     
     if($trsns_pname=="bank-ledger-inst-make-payment")
     {
-            ?> <a href="bank.php" title="Back" ><input type="button" name="back_button" id="back_button" value="" class="button_back"  /></a>  <?php   
+            ?> <a href="bank-ledger.php?bank_id=<?= $select_data_pay['bank_id']?>" title="Back" ><input type="button" name="back_button" id="back_button" value="" class="button_back"  /></a>  <?php   
      }
       ?></td>
     </tr>
@@ -641,12 +607,7 @@ function findTotal()
         
         <!-- The main script file -->
         <script src="js/script.js"></script>        
-<?php
-    
-   //$old_trans_id,$old_cust_id,$old_project_id,$old_amount,$old_description,$old_payment_date,$old_payment_subdivision,$id_first_cust,$id_second_proj,$id_third_bankpay,$id_four_cust_pay
-   //$old_pay_bank_id,$old_pay_amount,$old_pay_method,$old_pay_checkno
-    
-?>
+
     <table width="98%">
         <tr style="width: 50%;" >
             <td>
@@ -657,8 +618,8 @@ function findTotal()
             <tr><td width="125px">Supplier Name</td>
             <td>
              <?php
-             $sql_cus     = "select cust_id,full_name from `customer` where cust_id=".$old_cust_id." and type = 'supplier'";
-             $query_cus     = mysql_query($sql_cus);
+             $sql_cus = "select cust_id,full_name from `customer` where cust_id=".$old_cust_id." and type = 'supplier'";
+             $query_cus = mysql_query($sql_cus);
              $select_cus = mysql_fetch_array($query_cus);
             ?>
             <input type="text" id="from"  name="from" value="<?php echo $select_cus['full_name'].' - '.$select_cus['cust_id']; ?>" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
@@ -736,15 +697,6 @@ function findTotal()
             <td><input type="text" id="attach_file_name"  name="attach_file_name" value="" autocomplete="off"/></td></tr>
             
             <tr><td valign="top" colspan="2" >
-            <!--<div id="drag_div" style="border:1px solid #CCCCCC; width:100%; background-color:#FFFFFF; border-radius:10px; ">
-                    
-                    
-                    <div style="height:20px; width:100%; background-color:#F9F9F9; border-top-left-radius:10px; border-top-right-radius:10px; color:#FF0000; text-align:left; float:right; " >&nbsp;&nbsp;&nbsp;&nbsp;<strong>Drag Files To Upload</strong>
-                            </div>
-                            <div id="dropbox" >
-            <span class="message" >Drop Files here to upload.</span>
-        </div>
-                        </div>-->
             </td></tr>
             
             
@@ -860,8 +812,26 @@ function findTotal()
                 </td>
             </tr>            
             
+            <!--<tr><td align="left" valign="top" >Net Amount Paid</td>
+            <td><input type="text"  name="pay_amount" id="pay_amount" value="" />&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>-->
+
+            <?php
+            //added by amit
+            $select_query_gst = "select * from gst_due_info where trans_id = '".$_REQUEST['trans_id']."'";
+            $select_result_gst = mysql_query($select_query_gst) or die('error in query select supplier query '.mysql_error().$select_query_gst);
+            $select_data_gst = mysql_fetch_array($select_result_gst);
+            $old_gst_paid_amount = $select_data_gst['received_amount'];
+            $old_net_amount = $old_pay_amount - $old_gst_paid_amount;
+            ?>
             <tr><td align="left" valign="top" >Net Amount Paid</td>
-            <td><input type="text"  name="pay_amount" id="pay_amount" value="" />&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+            <td><input type="text"  name="pay_amount_wogst" id="pay_amount_wogst" onblur="setTotalAmountPaid()" value="<?php echo $old_net_amount; ?>" />&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+            
+            <tr><td align="left" valign="top" >GST Paid</td>
+            <td><input type="text"  name="pay_amount_gst" id="pay_amount_gst" onblur="setTotalAmountPaid()" value="<?php echo $old_gst_paid_amount; ?>" />&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+
+            <tr><td align="left" valign="top" >Total Amount Paid</td>
+            <td><input type="text"  name="pay_amount" id="pay_amount" value="<?php echo $old_pay_amount; ?>" />&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+
 
             <input type="hidden" name="payment_flag" id="payment_flag" value="0">
         </table></div>
@@ -892,7 +862,10 @@ function findTotal()
 
 function setTotalAmountPaid()
 {
-    document.getElementById('pay_amount').value = Number.parseInt(document.getElementById('pay_amount_gst').value) + Number.parseInt(document.getElementById('pay_amount_wogst').value);
+    if(document.getElementById('pay_amount_gst').value)
+    document.getElementById('pay_amount').value = Number.parseFloat(document.getElementById('pay_amount_gst').value) + Number.parseFloat(document.getElementById('pay_amount_wogst').value);
+    else
+    document.getElementById('pay_amount').value = Number.parseFloat(document.getElementById('pay_amount_wogst').value);
 }
 
 //checkno_create(),pay_check,pay_checkno,pay_method

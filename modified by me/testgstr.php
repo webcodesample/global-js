@@ -1,29 +1,13 @@
 <?php session_start();
 include_once("set_con.php");
 
-
 //current date & time
 date_default_timezone_set('Asia/Calcutta');
 echo $current_datentime = date('d-m-Y h:i:s A', time());
-//echo "<br>";
-//print_r($_REQUEST);
 
-if(isset($_REQUEST['msg']) != "")
-{
-    $msg = $_REQUEST['msg'];
-}
-else
-{
-    $msg = "";
-}
-if(isset($_REQUEST['error_msg']) != "")
-{
-    $error_msg = $_REQUEST['error_msg'];
-}
-else
-{
-    $error_msg = "";
-}
+//echo "<br>";
+//echo $new_datentime = date('Y', time());
+//print_r($_REQUEST);
 
 if(isset($_SESSION['userId'])) 
 $userId=$_SESSION['userId'];
@@ -32,8 +16,6 @@ $userId='2';
 
 echo $cutoff_date = strtotime("1 september 2023");
 $startResults = 0;
-//echo "<br>";
-//echo mysql_real_escape_string(($_REQUEST['search_action']))."<br>";
 
 if(mysql_real_escape_string(($_REQUEST['search_action'])) == "ledger_search")
 {
@@ -150,7 +132,6 @@ else
 <form name="search_form" id="search_form" action="" method="post">
     <input type="hidden" name="search_check_val" id="search_check_val" value="<?= $_REQUEST['search_check_val']?>" >
      
-    <input type="hidden" name="gst_subdivision_id" id="gst_subdivision_id" value="<?php echo $_REQUEST['gst_subdivision_id']; ?>">
     <table width="" border="1" align="left" cellpadding="0" cellspacing="0">
         <tr>
             <td width="80px">From Date</td>
@@ -200,28 +181,6 @@ else
   
 <?php include_once("main_search_close.php"); ?>
 <?php include_once("main_body_open.php"); ?>
-   
-<?php 
-if($msg != "") 
-{ ?>
-<div class="sukses">
-<?php echo $msg; ?>
-</div>
-<?php } else if($error_msg != "") { ?>
-<div class="gagal">
-<?php echo $error_msg; ?>
-</div>
-<?php } ?>
-
-<div id="adddiv" style="display:<?php if($error_msg != "") { ?>block<?php } else { ?>none<?php } ?>;">
-</div>
-        
-
-<form name="user_form" id="user_form" action="" method="post" >
-    <input type="hidden" name="action_perform" id="action_perform" value="" >
-    <input type="hidden" name="del_id" id="del_id" value="" >
-    <input type="hidden" name="count" id="count" value="<?php if(isset($i)) echo $i; ?>"  />    
-</form>
 
 <div id="ledger_data" style="width:98%; padding-right: 10px;">
 

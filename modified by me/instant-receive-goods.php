@@ -61,12 +61,12 @@ if(trim($_REQUEST['action_perform']) == "add_project")
 	$trans_id = mysql_real_escape_string(trim($_REQUEST['trans_id']));
 	   //amount_sub,amount_gstper,amount_gst_amount, amount_grand, amount
 	
-	$query="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."', debit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',subdivision = '".$subdivision."',trans_type = '".$trans_type."', trans_type_name = '".$trans_type_name."', create_date = '".getTime()."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."', invoice_pay_amount = '".$sub_amount."', invoice_issuer_id = '".$invoice_receiver_id."'";
+	$query="insert into payment_plan set trans_id = '".$trans_id."', cust_id = '".$cust_id."', debit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_project = '".$project_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',subdivision = '".$subdivision."',trans_type = '".$trans_type."', trans_type_name = '".$trans_type_name."', create_date = '".getTime()."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."', invoice_pay_amount = '".$sub_amount."', invoice_issuer_id = '".$invoice_receiver_id."', added_by = '".$_SESSION['userId']."', added_on = '".time()."'";
 	$result= mysql_query($query) or die('error in query '.mysql_error().$query);
 	
 	$link_id_1 = mysql_insert_id();
 	
-	$query2="insert into payment_plan set trans_id = '".$trans_id."', project_id = '".$project_id."', credit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_customer = '".$cust_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',link_id = '".$link_id_1."',subdivision = '".$subdivision."',trans_type = '".$trans_type."', trans_type_name = '".$trans_type_name."', create_date = '".getTime()."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."', invoice_pay_amount = '".$sub_amount."', invoice_issuer_id = '".$invoice_receiver_id."'";
+	$query2="insert into payment_plan set trans_id = '".$trans_id."', project_id = '".$project_id."', credit = '".$amount."', gst_amount = '".$amount_gst_amount."', description = '".$description."', on_customer = '".$cust_id."', payment_date = '".strtotime($_REQUEST['payment_date'])."',link_id = '".$link_id_1."',subdivision = '".$subdivision."',trans_type = '".$trans_type."', trans_type_name = '".$trans_type_name."', create_date = '".getTime()."', supplier_invoice_number = '".$supplier_invoice_number."', invoice_id = '".$supplier_invoice_number."', invoice_pay_amount = '".$sub_amount."', invoice_issuer_id = '".$invoice_receiver_id."', added_by = '".$_SESSION['userId']."', added_on = '".time()."'";
 	$result2= mysql_query($query2) or die('error in query '.mysql_error().$query2);
 	
 	$link_id_2 = mysql_insert_id();
@@ -593,7 +593,10 @@ function findTotal()
 
 function setgstpaid()
 {
+    if(document.getElementById('pay_amount_gst').value)
     document.getElementById('pay_amount').value = Number.parseFloat(document.getElementById('pay_amount_gst').value) + Number.parseFloat(document.getElementById('pay_amount_wogst').value);
+    else
+    document.getElementById('pay_amount').value = Number.parseFloat(document.getElementById('pay_amount_wogst').value);
 }
 
 //checkno_create(),pay_check,pay_checkno,pay_method
