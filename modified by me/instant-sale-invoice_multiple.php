@@ -1088,9 +1088,13 @@ function finddate_new_id()
             </td>
             </tr>
 
-            <tr><td align="left" valign="top" >Date</td>
-        
-            <td><input type="text"  name="payment_date" id="payment_date" style="width:250px;" onchange="finddate_new_id();" onblur="finddate_new_id();" value="<?php echo $_REQUEST['payment_date']; ?>" autocomplete="off" placeholder="DD-MM-YYYY"/>&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('payment_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>          
+            <tr>
+            <td align="left" valign="top" >Date</td>
+            <td>
+            <input type="date" name="payment_date" id="payment_date" style="width:250px;" onchange="finddate_new_id();" onblur="finddate_new_id();" value="<?php echo date('Y-m-d',time()) ?>" max="<?php echo date('Y-m-d',time()) ?>">
+            <!--<input type="date" name="payment_date" id="payment_date" style="width:250px;" onchange="finddate_new_id();" onblur="finddate_new_id();" value="<?php echo $_REQUEST['payment_date']; ?>" autocomplete="off" placeholder="DD-MM-YYYY"/>&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('payment_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span>-->
+            </td>
+            </tr>
   			<tr><td align="left" valign="top" >Amount</td>
 			<td><input type="text"  name="amount" id="amount" value="" readonly="readonly" style="width:250px;" />&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
 			
@@ -1152,9 +1156,13 @@ function finddate_new_id()
             <td style="color:#FF0000; font-weight:bold;">&nbsp;</td></tr>
             <tr><td width="225px">Paid Into</td>
             <td width="400"><input type="text" id="pay_form"  name="pay_form" value="" style="width:190px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
-            <tr><td align="left" valign="top" >Payment Date</td>
-        
-            <td><input type="text"  name="pay_payment_date" id="pay_payment_date" value="<?php echo $_REQUEST['payment_date']; ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('pay_payment_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+            <tr>
+            <td align="left" valign="top" >Payment Date</td>
+            <td>
+            <input type="date"  name="pay_payment_date" id="pay_payment_date" value="<?= date('Y-m-d',time()) ?>" max="<?= date('Y-m-d',time()) ?>">
+            <!--<input type="text"  name="pay_payment_date" id="pay_payment_date" value="<?php echo $_REQUEST['payment_date']; ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('pay_payment_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span>-->
+            </td>
+            </tr>
             
             <tr><td >Payment Method</td>
             <td><br>
@@ -1458,9 +1466,10 @@ function finddate_new_id()
             <tr>
             
             <td >&nbsp;<b>Add Additional Date</b> </td>
-            <td>          <input type="text"  name="invoice_repeat_date" id="invoice_repeat_date" value="<?php echo $_REQUEST['invoice_repeat_date']; ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('invoice_repeat_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span>
-            
-                         &nbsp;
+            <td>
+            <input type="date"  name="invoice_repeat_date" id="invoice_repeat_date" value="<?php echo $_REQUEST['invoice_repeat_date']; ?>">
+            <!---<input type="text"  name="invoice_repeat_date" id="invoice_repeat_date" value="<?php echo $_REQUEST['invoice_repeat_date']; ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('invoice_repeat_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span>-->
+            &nbsp;
             </td>
             <td colspan="2" align="center"><input type="button" class="add-date" value="Add Date">
             

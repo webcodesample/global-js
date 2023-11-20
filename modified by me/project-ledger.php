@@ -242,12 +242,14 @@ $i=0;
 					
                 <td width="50">From</td>
                 <td width="150" nowrap>
-                <input type="text"  name="from_date" id="from_date" value="<?php echo $_REQUEST['from_date']; ?>" style="width:100px;" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('from_date')" style="cursor:pointer"/>
+                <input type="date"  name="from_date" id="from_date" value="<?php if($_REQUEST['from_date']) echo $_REQUEST['from_date']; else echo '2020-04-01';?>" style="width:100px;" min="2020-04-01" max="<?php echo date('Y-m-d',time()) ?>">
+                <!--<input type="text"  name="from_date" id="from_date" value="<?php echo $_REQUEST['from_date']; ?>" style="width:100px;" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('from_date')" style="cursor:pointer"/>-->
                 </td>
 				
                 <td width="50">To</td>
                 <td width="150" nowrap>
-                <input type="text"  name="to_date" id="to_date" value="<?php echo $_REQUEST['to_date']; ?>" style="width:100px;" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('to_date')" style="cursor:pointer"/>
+                <input type="date"  name="to_date" id="to_date" value="<?php if($_REQUEST['to_date']) echo $_REQUEST['to_date']; else echo date('Y-m-d',time()); ?>" style="width:100px;" min="2020-04-01" max="<?php echo date('Y-m-d',time()) ?>">
+                <!--<input type="text"  name="to_date" id="to_date" value="<?php echo $_REQUEST['to_date']; ?>" style="width:100px;" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('to_date')" style="cursor:pointer"/>-->
                 </td>
 				 
 				<td align="left" valign="top" >&nbsp;&nbsp;<input type="submit" name="search_button" id="search_button" value="Search" class="button"  />&nbsp;&nbsp;<input type="button" name="refresh" id="refresh" value="Refresh" class="button" onClick="window.location='project-ledger.php?project_id=<?php echo $_REQUEST['project_id']; ?>';"  /></td>
@@ -478,7 +480,7 @@ $i=0;
 			{
 				?>
 				<tr class="data" >
-					<td  width="30px" colspan="9" class="record_not_found" >Record Not Found</td>
+					<td width="30px" colspan="9" class="record_not_found" align="center">Sorry! No Record Available</td>
 				</tr>
 				<?php
 			}

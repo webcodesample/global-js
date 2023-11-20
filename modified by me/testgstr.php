@@ -37,15 +37,15 @@ if(mysql_real_escape_string(($_REQUEST['search_action'])) == "ledger_search")
     else{$querypart_rcvr = "";}
 
     
-    if($from_date!="")
+    if($from_date)
     {
         $from_datedata ="and payment_date >= '".$from_date."'";
-        $from_dt = "From : ".$_REQUEST['from_date'];
+        $from_dt = "From : ".date('d-m-Y',$from_date);
     }else { $from_datedata ="and payment_date >= '".$cutoff_date."'";}
     
-    if($to_date!=""){
+    if($to_date){
         $to_datedata ="and payment_date <= '".$to_date."'";
-        $to_dt = " To : ".$_REQUEST['to_date'];
+        $to_dt = " To : ".date('d-m-Y',$to_date);
     }else { $to_datedata=""; }
 
     
@@ -55,7 +55,7 @@ if(mysql_real_escape_string(($_REQUEST['search_action'])) == "ledger_search")
     $select_result = mysql_query($select_query) or die('error in query select bank query '.mysql_error().$select_query);
     $select_total = mysql_num_rows($select_result);
 
-    $paid_amout_query = "SELECT SUM(invoice_pay_amount) AS amount_paid, SUM(gst_amount) AS gst_paid FROM payment_plan where trans_id > '0' and trans_type_name in('receive_goods','inst_receive_goods')".$querypart_rcvr.$from_datedata.$to_datedata;
+    $paid_amout_query = "SELECT SUM(debit) AS amount_paid, SUM(gst_amount) AS gst_paid FROM payment_plan where trans_id > '0' and trans_type_name in('receive_goods','inst_receive_goods')".$querypart_rcvr.$from_datedata.$to_datedata;
     $paid_amout_result = mysql_query($paid_amout_query) or die('error in query select user query '.mysql_error().$paid_amout_query);
     $paid_amount = mysql_fetch_array($paid_amout_result);
 
@@ -64,7 +64,7 @@ if(mysql_real_escape_string(($_REQUEST['search_action'])) == "ledger_search")
     $sales_result = mysql_query($sales_query) or die('error in query select bank query '.mysql_error().$sales_query);
     $sales_total_row = mysql_num_rows($sales_result);
 
-    $rcvd_amout_query = "SELECT SUM(invoice_pay_amount) AS amount_paid, SUM(gst_amount) AS gst_paid FROM payment_plan where trans_id > '0' and trans_type_name='instmulti_sale_goods' ".$querypart_rcvr.$from_datedata.$to_datedata;
+    $rcvd_amout_query = "SELECT SUM(credit) AS amount_paid, SUM(gst_amount) AS gst_paid FROM payment_plan where trans_id > '0' and trans_type_name='instmulti_sale_goods' ".$querypart_rcvr.$from_datedata.$to_datedata;
     $rcvd_amout_result = mysql_query($rcvd_amout_query) or die('error in query select user query '.mysql_error().$rcvd_amout_query);
     $rcvd_amount = mysql_fetch_array($rcvd_amout_result);
 }
@@ -75,7 +75,7 @@ else
     $select_result = mysql_query($select_query) or die('error in query select user query '.mysql_error().$select_query);
     $select_total = mysql_num_rows($select_result);
 
-    $paid_amout_query = "SELECT SUM(invoice_pay_amount) AS amount_paid, SUM(gst_amount) AS gst_paid FROM payment_plan where trans_id > '0' and trans_type_name in('receive_goods','inst_receive_goods') and payment_date >= '".$cutoff_date."'";
+    $paid_amout_query = "SELECT SUM(debit) AS amount_paid, SUM(gst_amount) AS gst_paid FROM payment_plan where trans_id > '0' and trans_type_name in('receive_goods','inst_receive_goods') and payment_date >= '".$cutoff_date."'";
     $paid_amout_result = mysql_query($paid_amout_query) or die('error in query select user query '.mysql_error().$paid_amout_query);
     $paid_amount = mysql_fetch_array($paid_amout_result);
     
@@ -84,7 +84,7 @@ else
     $sales_result = mysql_query($sales_query) or die('error in query select bank query '.mysql_error().$sales_query);
     $sales_total_row = mysql_num_rows($sales_result);
 
-    $rcvd_amout_query = "SELECT SUM(invoice_pay_amount) AS amount_paid, SUM(gst_amount) AS gst_paid FROM payment_plan where trans_id > '0' and trans_type_name='instmulti_sale_goods' and payment_date >= '".$cutoff_date."'";
+    $rcvd_amout_query = "SELECT SUM(credit) AS amount_paid, SUM(gst_amount) AS gst_paid FROM payment_plan where trans_id > '0' and trans_type_name='instmulti_sale_goods' and payment_date >= '".$cutoff_date."'";
     $rcvd_amout_result = mysql_query($rcvd_amout_query) or die('error in query select user query '.mysql_error().$rcvd_amout_query);
     $rcvd_amount = mysql_fetch_array($rcvd_amout_result);
 }
@@ -136,11 +136,11 @@ else
         <tr>
             <td width="80px">From Date</td>
             <td width="180px">
-            <input type="text"  name="from_date" id="from_date" value="<?php echo $_REQUEST['from_date']; ?>" style="width:120px; height: 25px;" autocomplete="off" placeholder="DD-MM-YYYY" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('from_date')" style="cursor:pointer"/>
+            <input type="date"  name="from_date" id="from_date" value="<?php if($_REQUEST['from_date']) echo $_REQUEST['from_date']; else echo '2023-09-01'; ?>" style="width:120px; height: 25px;" min="2023-09-01" max="<?= date('Y-m-d',time()) ?>">
             </td>
             <td width="80px">To Date</td>
             <td width="180px">
-            <input type="text"  name="to_date" id="to_date" value="<?php echo $_REQUEST['to_date']; ?>" style="width:120px; height: 25px;" autocomplete="off" placeholder="DD-MM-YYYY"/>&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('to_date')" style="cursor:pointer"/>
+            <input type="date"  name="to_date" id="to_date" value="<?php if($_REQUEST['to_date']) echo $_REQUEST['to_date']; else echo date('Y-m-d',time()); ?>" style="width:120px; height: 25px;" min="2023-09-01" max="<?= date('Y-m-d',time()) ?>">
             </td>
             <td width="80px;">Company</td>
             <td width="180px;">
@@ -182,7 +182,7 @@ else
 <?php include_once("main_search_close.php"); ?>
 <?php include_once("main_body_open.php"); ?>
 
-<div id="ledger_data" style="width:98%; padding-right: 10px;">
+<div id="ledger_data" style="width:98%; height:450px; overflow-y: scroll; overflow-x: scroll; padding-right: 10px;">
 
     <div style="width:100%; font-weight:bold; color:#800000; font-size:13px; text-align:center;">
         <?php
@@ -198,7 +198,7 @@ else
         }
         else 
         {
-        echo "GST Return : All";
+        echo "GST Return : All <br> From : 01-09-2023 To : ".date('d-m-Y',time());
         }
         ?>
     </div>
@@ -229,6 +229,7 @@ else
             <th class="data" nowrap>GST Amount</th>
             <th class="data" nowrap>GST Rate</th>
             <th class="data" width="50px" nowrap>Total Amount</th>
+            <th class="data noExl" width="50px" nowrap>Action</th>
         </tr>
             <?php
             if($select_total > 0)
@@ -263,14 +264,15 @@ else
                         <td class="data" nowrap>&#8377;&nbsp;
                         <?php 
                             $subtot= $select_data['debit']-$select_data['gst_amount'];
+                            $paid_amount['amount_paid'] -=$select_data['gst_amount'];
                             echo number_format((float)$subtot, 2,'.','');
                         ?>
                         </td>
-                        <td style="" class="data" nowrap>&#8377;&nbsp;
+                        <td style="" class="data" nowrap>
                         <?php 
                         if($select_data['gst_amount']>1)
                         {
-                         echo number_format((float)$select_data['gst_amount'], 2,'.','');
+                         echo "&#8377;&nbsp;".number_format((float)$select_data['gst_amount'], 2,'.','');
                         }
                         ?>
                         </td>
@@ -287,6 +289,12 @@ else
                         <td class="data" nowrap>
                         <?php echo "<div style='width:100%; color:red;'>&#8377;&nbsp;".number_format(floatval($select_data['debit']),2,'.','')."</div>"; ?>
                         </td>
+                        </td>
+                        <td class="data" align="center" nowrap>&nbsp;
+                        <a href="edit-instant-receive-goods.php?trans_id=<?= $select_data['trans_id'] ?>&id=<?= $select_data['id'] ?>&trsns_pname=supplier-ledger-inst-receive-goods&returnto=testgstr.php" style="cursor:hand;"><img src="mos-css/img/edit.png" style="height:12px;" title="Edit"></a>
+                        &nbsp;
+                        <a href="supplier-ledger.php?cust_id=<?= $select_data['cust_id']?>&trans_id=<?= $select_data['trans_id'] ?>&returnto=testgstr.php" style="cursor:hand;"><img src="mos-css/img/delete.png" style="height:12px;" title="Delete" ></a>
+                        &nbsp;</td>
                     </tr>
                 <?php
                     $i++;
@@ -308,14 +316,14 @@ else
         Total Paid
         </td>
         <td class="data" style="color:#800000;">&#8377;&nbsp;
-        <?php echo number_format(floatval($paid_amount['amount_paid']/2),2,'.',''); ?>
+        <?php echo number_format($paid_amount['amount_paid'],2,'.',''); ?>
         </td>
         <td class="data" style="color:#800000;">&#8377;&nbsp;
         <?php echo number_format(floatval($paid_amount['gst_paid']/2),2,'.',''); ?>
         </td>
-        <td colspan="2" class="data"></td>
+        <td colspan="3" class="data"></td>
         </tr>
-        <tr><td colspan="9" class="data" style="border:none;">&nbsp;</td></tr>
+        <tr><td colspan="10" class="data" style="border:none;">&nbsp;</td></tr>
 
         <tr style="display:none;">
             <td></td>
@@ -343,6 +351,7 @@ else
             <th class="data" nowrap>GST Amount</th>
             <th class="data" nowrap>GST Rate</th>
             <th class="data" width="50px" nowrap>Total Amount</th>
+            <th class="data noExl" width="50px" nowrap>Action</th>
         </tr>
 
             <?php
@@ -380,6 +389,7 @@ else
                         <td class="data" nowrap>&#8377;&nbsp;
                         <?php 
                             $subtot= $sales_data['credit']-$sales_data['gst_amount'];
+                            $rcvd_amount['amount_paid'] -= $sales_data['gst_amount'];
                             echo number_format((float)$subtot, 2,'.','');
                         ?>
                         </td>
@@ -402,9 +412,13 @@ else
                         ?>
                         </td>
                         <td class="data" nowrap>
-                        
                         <?php echo "<div style='width:100%; color:green;'>&#8377;&nbsp;".number_format(floatval($sales_data['credit']),2,'.','')."</div>"; ?>
                         </td>
+                        <td class="data" nowrap align="center">&nbsp;
+                        <a href="edit_instant-sale-invoice_multiple.php?trans_id=<?= $sales_data['trans_id']?>&id=<?= $sales_data['id'] ?>&trsns_pname=invoice-list-inst-sale-goods&returnto=testgstr.php"style="cursor:hand;"><img src="mos-css/img/edit.png" style="height:12px;" title="Edit"></a>
+                        &nbsp;
+                        <a href="customer-ledger.php?cust_id=<?= $sales_data['cust_id'] ?>&invoice_id=<?= $sales_data['invoice_id'] ?>&trans_t_name=instmulti_sale_goods&returnto=testgstr.php" style="cursor:hand;"><img src="mos-css/img/delete.png" style="height:12px;" title="Delete" ></a>
+                        &nbsp;</td>
                     </tr>
                 <?php
                     $i++;
@@ -425,12 +439,12 @@ else
         Total Received
         </td>
         <td class="data" style="color:#800000;">&#8377;&nbsp;
-        <?php echo number_format(floatval($rcvd_amount['amount_paid']/2),2,'.',''); ?>
+        <?php echo number_format($rcvd_amount['amount_paid'],2,'.',''); ?>
         </td>
         <td class="data" style="color:#800000;">&#8377;&nbsp;
         <?php echo number_format(floatval($rcvd_amount['gst_paid']/2),2,'.',''); ?>
         </td>
-        <td colspan="2" class="data"></td>
+        <td colspan="3" class="data"></td>
         </tr>
         <tr><td colspan="9" class="data" style="border:none;">&nbsp;</td></tr>
         <tr style="display:none;">

@@ -401,10 +401,10 @@ if(mysql_real_escape_string(trim($_REQUEST['file_button_invoice'])) == "Submit")
 
 
 
-if(isset($_POST['trans_id_combind']) && $_POST['trans_id_combind'] != "")
+if(isset($_REQUEST['trans_id_combind']) && $_REQUEST['trans_id_combind'] != "")
 {
-    $trans_id = $_POST['trans_id_combind'];
-    $payment_id = $_POST['payment_id'];
+    $trans_id = $_REQUEST['trans_id_combind'];
+    $payment_id = $_REQUEST['payment_id'];
     $del_query = "delete from payment_plan where trans_id = '".$trans_id."'";
     $del_result = mysql_query($del_query) or die("error in Transaction delete query ".mysql_error());
     
@@ -417,16 +417,19 @@ if(isset($_POST['trans_id_combind']) && $_POST['trans_id_combind'] != "")
     $msg = "Combined Transaction Deleted Successfully.";
 }
 
-if(isset($_POST['trans_id']) && $_POST['trans_id'] != "")
+if(isset($_REQUEST['trans_id']) && $_REQUEST['trans_id'] != "")
 {
-	$trans_id = $_POST['trans_id'];
+	$trans_id = $_REQUEST['trans_id'];
 	$del_query = "delete from payment_plan where trans_id = '".$trans_id."'";
 	$del_result = mysql_query($del_query) or die("error in Transaction delete query ".mysql_error());
 	$msg = "Transaction Deleted Successfully.";
+
+    if($_REQUEST['returnto'])
+        header("Location: ".$_REQUEST['returnto']);
 }
-if(isset($_POST['trans_id_1']) && $_POST['trans_id_1'] != "")
+if(isset($_REQUEST['trans_id_1']) && $_REQUEST['trans_id_1'] != "")
 {
-    $trans_id_1 = $_POST['trans_id_1'];
+    $trans_id_1 = $_REQUEST['trans_id_1'];
     
     $query_del="select *  from attach_file where id = '".$trans_id_1."'";
     $result_del= mysql_query($query_del) or die('error in query '.mysql_error().$query_del);
@@ -1258,23 +1261,31 @@ else
 		</table>
 		</div>
 				
-		<?php include_once("main_body_close.php") ?>
-         <!-------------->  
-         <?php include_once ("footer.php"); ?>  
+<?php include_once("main_body_close.php") ?>
+<?php include_once ("footer.php"); ?>  
 
 <div id="attach_div" style="position:absolute;top:50%; left:40%; width:500px; height:150px; margin:-100px 0 0 -50px;z-index:100; display:none; background-color:#FFFFFF; border:8px solid #999999;" >
 <form name="attach_form" id="attach_form" method="post" action="" onSubmit="return attach_validation();" enctype="multipart/form-data" >
 <table cellpadding="0" cellspacing="0" border="1" width="100%" >
-<tr><td valign="top" align="right" colspan="2" ><img src="images/close.gif" onClick="return close_div();" ></td></tr>
-<tr><td valign="top" >Attach File</td>
-			<td><input type="file" name="attach_file" id="attach_file" value="" ></td></tr>
-			
-			<tr><td valign="top" >Attach File Name</td>
-			<td><input type="text" id="attach_file_name"  name="attach_file_name" value="" autocomplete="off"/></td></tr>
-			
-			<tr><td></td><td>
-			<input type="submit" class="button" name="file_button" id="file_button" value="Submit" >
-			</td></tr>
+<tr>
+<td valign="top" align="right" colspan="2">
+<img src="images/close.gif" onClick="return close_div();" >
+</td>
+</tr>
+<tr>
+<td valign="top" >Attach File</td>
+<td><input type="file" name="attach_file" id="attach_file" value="" ></td>
+</tr>
+<tr>
+<td valign="top" >Attach File Name</td>
+<td>
+<input type="text" id="attach_file_name"  name="attach_file_name" value="" autocomplete="off"/>
+</td>
+</tr>
+<tr><td></td><td>
+<input type="submit" class="button" name="file_button" id="file_button" value="Submit" >
+</td>
+</tr>
 </table>
 <input type="hidden" id="attach_file_id"  name="attach_file_id" value="" />
 </form>
@@ -1283,22 +1294,19 @@ else
 
 </div>
 <form name="trans_form" id="trans_form" action="" method="post" >
-		
-		<input type="hidden" name="trans_id" id="trans_id" value="" >
-		</form>
+<input type="hidden" name="trans_id" id="trans_id" value="" >
+</form>
 
 <form name="trans_form_combind" id="trans_form_combind" action="" method="post" >        
-        <input type="hidden" name="trans_id_combind" id="trans_id_combind" value="" >
-        <input type="hidden" name="payment_id" id="payment_id" value="" >
+<input type="hidden" name="trans_id_combind" id="trans_id_combind" value="" >
+<input type="hidden" name="payment_id" id="payment_id" value="" >
 </form>
         
 <form name="trans_form_1" id="trans_form_1" action="" method="post" >
-        
-        <input type="hidden" name="trans_id_1" id="trans_id_1" value="" >
-        </form>
+<input type="hidden" name="trans_id_1" id="trans_id_1" value="" >
+</form>
 
         <!---  Due GST Attchment Div   -->
- <!-- /// attach_div  ,attach_form ,  attach_form ,  attach_validation , attach_file_id   , invoice_flag  -->    
 <div id="gst_due_div" style="position:absolute;top:30%; left:40%; width:580px; height:480px; margin:-100px 0 0 -50px;z-index:100; display:none; background-color:#FFFFFF; border:8px solid #999999;" >
 <form name="gst_due_form" id="gst_due_form" method="post" action="" onSubmit="return gst_validation();" enctype="multipart/form-data" >
 <table cellpadding="0" cellspacing="0" border="1px" width="100%" >

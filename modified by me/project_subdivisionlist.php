@@ -242,9 +242,9 @@ if($totalPages > $numberOfPages)
 
 			<tr class="data">
 				<td class="data" width="30px"></td>
-				<td class="data" align="right">Total</td>
-                <td class="data"><?php echo currency_symbol().$total_dr ?></td>
-                <td class="data"><?php echo currency_symbol().$total_cr ?></td>
+				<td class="data" align="right" style="color:black; font-weight:bold;">Total</td>
+                <td class="data" style="color:red; font-weight:bold;"><?php echo currency_symbol().number_format($total_dr,2,'.',''); ?></td>
+                <td class="data" style="color:green; font-weight:bold;"><?php echo currency_symbol().number_format($total_cr,2,'.',''); ?></td>
                 <td class="data"></td>
 			</tr>
 			

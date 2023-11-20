@@ -218,10 +218,11 @@ $select_data = mysql_fetch_array($select_result)
 			<td><input type="text" name="email" id="email" value="<?php echo $select_data['email']; ?>"  tabindex="4" style="width: 250px;" ></td></tr>
 
 			<tr>
-			<td >Date</td>
+			<td>Date</td>
             <td>
-            <input type="text"  name="opening_balance_date"  style="width: 250px;" id="opening_balance_date" value="<?php echo date("d-m-Y",$select_data['opening_balance_date']); ?>" onkeydown="setDateFormat(event,this.id)" tabindex="6" autocomplete="off" maxlength="10" placeholder="DD-MM-YY"/>&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
-            &nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span>
+			<input type="date" name="opening_balance_date"  style="width: 250px;" id="opening_balance_date" onkeydown="setDateFormat(event,this.id)" tabindex="6" value="<?= date('Y-m-d',$select_data['opening_balance_date']) ?>" max="<?= date('Y-m-d',time()) ?>">
+            <!--<input type="text"  name="opening_balance_date"  style="width: 250px;" id="opening_balance_date" value="<?php echo date("d-m-Y",$select_data['opening_balance_date']); ?>" onkeydown="setDateFormat(event,this.id)" tabindex="6" autocomplete="off" maxlength="10" placeholder="DD-MM-YY"/>&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
+            &nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span>-->
 			</td>
 			</tr>
 

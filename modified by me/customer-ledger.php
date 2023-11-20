@@ -21,16 +21,16 @@ else
 }
 
  //invoice_id,invoice_form          
-if(isset($_POST['invoice_id']) && $_POST['invoice_id'] != "")
+if(isset($_REQUEST['invoice_id']) && $_REQUEST['invoice_id'] != "")
 {
      //trans_t_name , invoice_id, del_payment_id, del_type  ,  instmulti_receive_gst_tds
-    $trans_t_name = $_POST['trans_t_name'];
-    $invoice_id = $_POST['invoice_id'];
+    $trans_t_name = $_REQUEST['trans_t_name'];
+    $invoice_id = $_REQUEST['invoice_id'];
     if($trans_t_name=="instmulti_receive_gst_tds")
     {
-        $payment_id_tb = $_POST['del_payment_id'];
-        $payment_type = $_POST['del_type'];
-      // $id_dueinfo_tb = $_POST['id_dueinfo_tb'];
+        $payment_id_tb = $_REQUEST['del_payment_id'];
+        $payment_type = $_REQUEST['del_type'];
+      // $id_dueinfo_tb = $_REQUEST['id_dueinfo_tb'];
        
         if($payment_type=="Invoice")
     {
@@ -206,7 +206,7 @@ $result5_pay= mysql_query($query5_pay) or die('error in query '.mysql_error().$q
 
     }
     else
-    {
+    { 
         $del_query = "delete from payment_plan where invoice_id = '".$invoice_id."'";
         $del_result = mysql_query($del_query) or die("error in invoice delete query ".mysql_error());
         
@@ -226,8 +226,16 @@ $result5_pay= mysql_query($query5_pay) or die('error in query '.mysql_error().$q
             unlink("transaction_files/".$fnm);
             
         }
-            $detail_info ="detete Customer Invoice id ".$invoice_id."  ";
+
+    if($_REQUEST['returnto'])
+        header("Location: ".$_REQUEST['returnto']);
+
+//blocked by amit
+
+            /*$detail_info ="detete Customer Invoice id ".$invoice_id."  ";
             get_user_info('',$trans_t_name,$detail_info);
+
+            
 
         if($trans_t_name=="instmulti_sale_goods")
         {
@@ -239,7 +247,6 @@ $result5_pay= mysql_query($query5_pay) or die('error in query '.mysql_error().$q
                 $del_query_gst = "delete from gst_due_info where id = '".$data_del_gst['id']."'";
                 $del_result_gst = mysql_query($del_query_gst) or die("error in gst payment delete query ".mysql_error());
                 unlink("gst_files/".$fnm);
-               // unlink($file_folder."/".$data_del_file['cert_file_name']);
             }
 
             $query_del_tds="select *  from tds_due_info where invoice_id = '".$invoice_id."' and cert_file_name!='' ";
@@ -272,18 +279,20 @@ $result5_pay= mysql_query($query5_pay) or die('error in query '.mysql_error().$q
             $del_query_clear_due = "delete from clear_due_amount where invoice_id = '".$invoice_id."'";
             $del_result_clear_due = mysql_query($del_query_clear_due) or die("error in clear due payment delete query ".mysql_error());
             $detail_info ="delete Customer Invoice id ".$invoice_id." and also Delete all GST TDS & Invoice ";
-            get_user_info('24','instmulti_sale_goods',$detail_info);
-        }
+            //get_user_info('24','instmulti_sale_goods',$detail_info);
+            //echo "testdel";
+            die();
+        }*/
     }           
     $msg = "Customer Invoice Deleted Successfully.";
 }
 
 
-if(isset($_POST['trans_id_combind']) && $_POST['trans_id_combind'] != "")
+if(isset($_REQUEST['trans_id_combind']) && $_REQUEST['trans_id_combind'] != "")
 {
 
-    $trans_id = $_POST['trans_id_combind'];
-    $payment_id = $_POST['payment_id'];
+    $trans_id = $_REQUEST['trans_id_combind'];
+    $payment_id = $_REQUEST['payment_id'];
     $del_query = "delete from payment_plan where trans_id = '".$trans_id."'";
     $del_result = mysql_query($del_query) or die("error in Transaction delete query ".mysql_error());
     
@@ -300,20 +309,20 @@ if(isset($_POST['trans_id_combind']) && $_POST['trans_id_combind'] != "")
 }
 
 
- if(isset($_POST['trans_id']) && $_POST['trans_id'] != "")
+ if(isset($_REQUEST['trans_id']) && $_REQUEST['trans_id'] != "")
 {
 
-    $trans_id = $_POST['trans_id'];
+    $trans_id = $_REQUEST['trans_id'];
     $del_query = "delete from payment_plan where trans_id = '".$trans_id."'";
     $del_result = mysql_query($del_query) or die("error in Transaction delete query ".mysql_error());
     $msg = "Transaction Deleted Successfully.";
 }
-if(isset($_POST['trans_id_invoice']) && $_POST['trans_id_invoice'] != "")
+if(isset($_REQUEST['trans_id_invoice']) && $_REQUEST['trans_id_invoice'] != "")
 { 
     //  echo "hello";
 //exit;
 
-    $trans_id_gst = $_POST['trans_id_invoice'];
+    $trans_id_gst = $_REQUEST['trans_id_invoice'];
     
     $query_del="select *  from invoice_due_info where id = '".$trans_id_gst."'";
     $result_del= mysql_query($query_del) or die('error in query '.mysql_error().$query_del);
@@ -329,11 +338,11 @@ if(isset($_POST['trans_id_invoice']) && $_POST['trans_id_invoice'] != "")
     $msg = "Attach file Deleted Successfully.";
 }
 
-if(isset($_POST['trans_id_gst']) && $_POST['trans_id_gst'] != "")
+if(isset($_REQUEST['trans_id_gst']) && $_REQUEST['trans_id_gst'] != "")
 { //  echo "hello";
 //exit;
 
-    $trans_id_gst = $_POST['trans_id_gst'];
+    $trans_id_gst = $_REQUEST['trans_id_gst'];
     
     $query_del="select *  from gst_due_info where id = '".$trans_id_gst."'";
     $result_del= mysql_query($query_del) or die('error in query '.mysql_error().$query_del);
@@ -349,11 +358,11 @@ if(isset($_POST['trans_id_gst']) && $_POST['trans_id_gst'] != "")
     $msg = "Attach file Deleted Successfully.";
 }
 
-if(isset($_POST['trans_id_tds']) && $_POST['trans_id_tds'] != "")
+if(isset($_REQUEST['trans_id_tds']) && $_REQUEST['trans_id_tds'] != "")
 { //  echo "hello";
 //exit;
 
-    $trans_id_tds = $_POST['trans_id_tds'];
+    $trans_id_tds = $_REQUEST['trans_id_tds'];
     
     $query_del="select *  from tds_due_info where id = '".$trans_id_tds."'";
     $result_del= mysql_query($query_del) or die('error in query '.mysql_error().$query_del);
@@ -366,12 +375,12 @@ if(isset($_POST['trans_id_tds']) && $_POST['trans_id_tds'] != "")
     
     $msg = "Attach file Deleted Successfully.";
 }
-if(isset($_POST['trans_id_1']) && $_POST['trans_id_1'] != "")
+if(isset($_REQUEST['trans_id_1']) && $_REQUEST['trans_id_1'] != "")
 { 
     //  echo "hello";
     //exit;
 
-    $trans_id_1 = $_POST['trans_id_1'];
+    $trans_id_1 = $_REQUEST['trans_id_1'];
     $query_del="select *  from attach_file where id = '".$trans_id_1."'";
     $result_del= mysql_query($query_del) or die('error in query '.mysql_error().$query_del);
     $data_del = mysql_fetch_array($result_del);
@@ -2595,17 +2604,28 @@ $select_data_customer = mysql_fetch_array($select_result_customer)
 <div id="attach_div" style="position:absolute;top:40%; left:40%; width:500px; height:180px; margin:-100px 0 0 -50px;z-index:100; display:none; background-color:#FFFFFF; border:8px solid #999999;" >
 <form name="attach_form" id="attach_form" method="post" action="" onSubmit="return attach_validation();" enctype="multipart/form-data" >
 <table cellpadding="0" cellspacing="0" border="1" width="100%" >
-<tr><td valign="top" align="right" colspan="2" ><img src="images/close.gif" onClick="return close_div();" ></td></tr>
-<tr><td valign="top" >Attach File</td>
-            <td><input type="file" name="attach_file" id="attach_file" value="" class="w_250" ></td></tr>
+<tr>
+<td valign="top" align="right" colspan="2" >
+<img src="images/close.gif" onClick="return close_div();" ></td>
+</tr>
+<tr>
+<td valign="top" >Attach File</td>
+<td><input type="file" name="attach_file" id="attach_file" value="" class="w_250" ></td>
+</tr>
             
-            <tr><td valign="top" >Attach File Name</td>
-            <td><input type="text" id="attach_file_name"  name="attach_file_name" value="" class="w_250" autocomplete="off"/></td></tr>
+<tr><td valign="top" >Attach File Name</td>
+<td><input type="text" id="attach_file_name"  name="attach_file_name" value="" class="w_250" autocomplete="off"/>
+</td>
+</tr>
             
-            <tr><td></td><td>
-            <input type="submit" class="button" name="file_button" id="file_button" value="Submit" >
-            </td></tr>
+<tr>
+<td></td>
+<td>
+<input type="submit" class="button" name="file_button" id="file_button" value="Submit" >
+</td>
+</tr>
 </table>
+
 <input type="hidden" id="attach_file_id"  name="attach_file_id" value="" />
 <input type="hidden" id="invoice_flag"  name="invoice_flag" value="" />
 </form>
@@ -2614,48 +2634,44 @@ $select_data_customer = mysql_fetch_array($select_result_customer)
 
 </div>
 <form name="trans_form" id="trans_form" action="" method="post" >        
-        <input type="hidden" name="trans_id" id="trans_id" value="" >
+<input type="hidden" name="trans_id" id="trans_id" value="" >
 </form>
 
 <form name="trans_form_combind" id="trans_form_combind" action="" method="post" >        
-        <input type="hidden" name="trans_id_combind" id="trans_id_combind" value="" >
-        <input type="hidden" name="payment_id" id="payment_id" value="" >
+<input type="hidden" name="trans_id_combind" id="trans_id_combind" value="" >
+<input type="hidden" name="payment_id" id="payment_id" value="" >
 </form>
 
 <form name="trans_form_1" id="trans_form_1" action="" method="post" >
-        
-        <input type="hidden" name="trans_id_1" id="trans_id_1" value="" >
-        </form>
+<input type="hidden" name="trans_id_1" id="trans_id_1" value="" >
+</form>
+
 <form name="trans_form_gst" id="trans_form_gst" action="" method="post" >
-        
-        <input type="hidden" name="trans_id_gst" id="trans_id_gst" value="" >
+<input type="hidden" name="trans_id_gst" id="trans_id_gst" value="" >
 </form>
+
 <form name="trans_form_tds" id="trans_form_tds" action="" method="post" >
-        
-    <input type="hidden" name="trans_id_tds" id="trans_id_tds" value="" >
+<input type="hidden" name="trans_id_tds" id="trans_id_tds" value="" >
 </form>
+
 <form name="trans_form_invoice" id="trans_form_invoice" action="" method="post" >
-        
-    <input type="hidden" name="trans_id_invoice" id="trans_id_invoice" value="" >
+<input type="hidden" name="trans_id_invoice" id="trans_id_invoice" value="" >
 </form>
 
             
 <form name="invoice_form" id="invoice_form" action="" method="post" >
-        
-        <input type="hidden" name="invoice_id" id="invoice_id" value="" >
-        <input type="hidden" name="trans_t_name" id="trans_t_name" value="" >
-        
-        <input type="hidden" name="del_payment_id" id="del_payment_id" value="" >
-        <input type="hidden" name="del_type" id="del_type" value="" >
-       
-        </form>
+<input type="hidden" name="invoice_id" id="invoice_id" value="" >
+<input type="hidden" name="trans_t_name" id="trans_t_name" value="" >
+<input type="hidden" name="del_payment_id" id="del_payment_id" value="" >
+<input type="hidden" name="del_type" id="del_type" value="" >
+</form>
 
         <!---  Due TDs Attchment Div   -->
  <!-- /// attach_div  ,attach_form ,  attach_form ,  attach_validation , attach_file_id   , invoice_flag  -->    
  <div id="tds_due_div" style="position:absolute; top:28%; left:40%; width:590px; height:480px; margin:-100px 0 0 -50px;z-index:100; display:none; background-color:#FFFFFF; border:8px solid #999999;" >
  <!--<div id="tds_due_div" style="background:#e1e1e1; display:none; top:100px;left:50%; width:820px;position:absolute; z-index:41;padding:30px;" >-->
 
- <form name="tds_due_form" id="tds_due_form" method="post" action="" onSubmit="return tds_validation();" enctype="multipart/form-data" >
+<form name="tds_due_form" id="tds_due_form" method="post" action="" onSubmit="return tds_validation();" enctype="multipart/form-data" >
 <table cellpadding="0" cellspacing="0" border="1px" width="100%" >
 <tr><td valign="top" align="right"  ><img src="images/close.gif" onClick="return close_tds_div();" ></td></tr>
 <tr>

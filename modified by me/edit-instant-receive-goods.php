@@ -16,6 +16,7 @@ else
 {
 	$error_msg = "";
 }
+
 $flag = 0;
 
 if($_REQUEST['trsns_pname']=="supplier-ledger-inst-receive-goods")
@@ -51,9 +52,8 @@ if($_REQUEST['trsns_pname']=="supplier-ledger-inst-receive-goods")
     $old_pay_method = $select_data_pay['payment_method'];
     $old_pay_checkno = $select_data_pay['payment_checkno'];
     $old_pay_payment_date = $select_data_pay['payment_date'];
-     $old_payment_flag =  $select_data['payment_flag'];
-   
-       
+    $old_payment_flag =  $select_data['payment_flag'];
+
 }else 
 if($_REQUEST['trsns_pname']=="supplier-ledger-inst-make-payment")
 {
@@ -389,6 +389,9 @@ if(trim($_REQUEST['action_perform']) == "add_project")
     {
         $msg = " Update successfully.";
         $flag = 1;
+        if($_REQUEST['returnto'])
+            header("Location: ".$_REQUEST['returnto']);
+        else
         echo "<script> location.href='supplier.php'; </script>";
     }
     
@@ -547,7 +550,7 @@ function findTotal()
         <?php
                      if($trsns_pname=="supplier-ledger-inst-receive-goods")
     {
-         ?> <a href="supplier.php" title="Back" ><input type="button" name="back_button" id="back_button" value="" class="button_back"  /></a>  <?php 
+         ?> <a href="<?php if($_REQUEST['returnto']) echo $_REQUEST['returnto']; else supplier.php;?>" title="Back" ><input type="button" name="back_button" id="back_button" value="" class="button_back"  /></a>  <?php 
    
     }
     

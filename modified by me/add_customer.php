@@ -210,10 +210,14 @@ if(trim($_REQUEST['action_perform']) == "add_customer")
             <td><input type="text" id="lname"  name="lname"  style="width: 250px;" value="<?php echo $_REQUEST['lname']; ?>" tabindex="2"/></td></tr>
             <tr><td >E-Mail Id</td>
             <td><input type="text" id="email" name="email"  style="width: 250px;" value="<?php echo $_REQUEST['email']; ?>" tabindex="4"/></td></tr>
-            <tr><td >Date</td>
+            <tr>
+            <td >Date</td>
             <td>
-            <input type="text"  name="opening_balance_date"  style="width: 250px;" id="opening_balance_date" onkeydown="setDateFormat(event,this.id)" tabindex="6" autocomplete="off" maxlength="10" placeholder="DD-MM-YY"/>&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
-            &nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+            <input type="date" name="opening_balance_date"  style="width: 250px;" id="opening_balance_date" onkeydown="setDateFormat(event,this.id)" tabindex="6" value="<?= date('Y-m-d',time()) ?>" max="<?= date('Y-m-d',time()) ?>">
+            <!--<input type="text" name="opening_balance_date"  style="width: 250px;" id="opening_balance_date" onkeydown="setDateFormat(event,this.id)" tabindex="6" autocomplete="off" maxlength="10" placeholder="DD-MM-YY"/>&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
+            &nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span>-->
+            </td>
+            </tr>
             
             <tr><td >Same as Current</td>
             <td><input type="checkbox" name="same_current" id="same_current" value="yes" onClick="return same_address();"  tabindex="8" /></td></tr>
