@@ -686,10 +686,12 @@ function findTotal()
            <!-- <tr><td align="left" valign="top" >Amount</td>
             <td><input type="text"  name="amount" id="amount" value="<?php echo $old_amount ; ?>" />&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
             -->
-            <tr><td align="left" valign="top" >Date</td>
-            
-        
-            <td><input type="text"  name="payment_date" id="payment_date" value="<?php echo date("d-m-Y",$old_payment_date); ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('payment_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+            <tr>
+            <td align="left" valign="top" >Date</td>
+            <td>
+            <input type="date"  name="payment_date" id="payment_date" value="<?php echo date('Y-m-d',$old_payment_date); ?>" max="<?= date('Y-m-d',time()) ?>">
+            </td>
+            </tr>
             <tr><td valign="top" >Description</td>
             <td><textarea name="description" id="description" style="width:250px; height:100px;"><?php echo $old_description; ?></textarea>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
             
@@ -729,9 +731,11 @@ function findTotal()
             ?>
             <td><input type="text" id="pay_form"  name="pay_form" value="<?php echo $select_bank['bank_account_name'].' - '.$select_bank['bank_account_number']; ?>" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
             
-            <tr><td align="left" valign="top" >Date</td>
-        
-            <td><input type="text"  name="pay_payment_date" id="pay_payment_date" value="<?php echo date("d-m-Y",$old_pay_payment_date); ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('pay_payment_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+            <tr>
+            <td align="left" valign="top" >Date</td>
+            <td><input type="date"  name="pay_payment_date" id="pay_payment_date" value="<?php echo date('Y-m-d',$old_pay_payment_date); ?>" max="<?= date('Y-m-d',time()) ?>">
+            </td>
+            </tr>
             <tr><td >Payment Mothod</td>
             <td><br>
             <input type="radio" id="pay_method" name="pay_method" <?php if($old_pay_method=='check'){ echo "checked='checked'"; } ?>   onchange=" return checkno_create();" value="check">

@@ -1053,9 +1053,12 @@ var desc_total="";
             
             <tr><td align="left" valign="top" >Amount</td>
             <td><input type="text"  name="amount" id="amount" value="<?php echo $old_amount ; ?>" />&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
-            <tr><td align="left" valign="top" >Date</td>
-        
-            <td><input type="text"  name="payment_date" id="payment_date" value="<?php echo date("d-m-Y",$old_payment_date); ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('payment_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+            <tr>
+            <td align="left" valign="top" >Date</td>
+            <td>
+            <input type="date"  name="payment_date" id="payment_date" value="<?php echo date('Y-m-d',$old_payment_date); ?>" max="<?= date('Y-m-d',time()) ?>">
+            </td>
+            </tr>
             <tr><td valign="top" >Description</td>
             
             <td><textarea name="description" id="description" style="width:250px; height:100px;"><?php echo $old_description; ?></textarea>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>

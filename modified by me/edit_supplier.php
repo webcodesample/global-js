@@ -53,10 +53,8 @@ if(trim($_REQUEST['action_perform']) == "edit_supplier")
 	$sql=mysql_query($quuerrr) or die('error in query '.mysql_error().$quuerrr);
 	$no=mysql_num_rows($sql);
 	if($no > 0)
-	{
-		
-			$error_msg = "E-Mail ID already exist try another";
-		
+	{	
+		$error_msg = "E-Mail ID already exist try another";
 	}
 	else
 	{
@@ -69,21 +67,16 @@ if(trim($_REQUEST['action_perform']) == "edit_supplier")
             if($tot_rw1 == 0)
             {
                 $query2="insert into payment_plan set cust_id = '".$_REQUEST['cust_id']."', credit = '".$opening_balance."', description = 'Opening Balance', payment_date = '".$opening_balance_date."', create_date = '".getTime()."'";
-        $result2= mysql_query($query2) or die('error in query '.mysql_error().$query2);
+				$result2= mysql_query($query2) or die('error in query '.mysql_error().$query2);
                                                    
-            } else
+            } 
+			else
             {   
-         $query2="update payment_plan set credit = '".$opening_balance."',payment_date = '".$opening_balance_date."' where cust_id = '".$_REQUEST['cust_id']."' and description = 'Opening Balance'";
-    $result2= mysql_query($query2) or die('error in query Cash query '.mysql_error().$query2);
+				$query2="update payment_plan set credit = '".$opening_balance."',payment_date = '".$opening_balance_date."' where cust_id = '".$_REQUEST['cust_id']."' and description = 'Opening Balance'";
+				$result2= mysql_query($query2) or die('error in query Cash query '.mysql_error().$query2);
             }
-   
-    
-    
-    
 		header("Location:supplier.php?msg=supplier Updated successfully");
 	}
-	
-	
 }
 
 
@@ -150,9 +143,9 @@ $select_data = mysql_fetch_array($select_result)
 			<td><input type="text" name="lname" id="lname" value="<?php echo $select_data['lname']; ?>" ></td></tr>
 			<tr><td >E-Mail Id</td>
 			<td><input type="text" name="email" id="email" value="<?php echo $select_data['email']; ?>" ></td></tr>
-			<tr><td >Opening Date</td>
+			<tr><td>Opening Date</td>
             <td>
-            <input type="text"  name="opening_balance_date" id="opening_balance_date" value="<?php echo date("d-m-Y",$select_data['opening_balance_date']); ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
+            <input type="date"  name="opening_balance_date" id="opening_balance_date" value="<?php echo date("d-m-Y",$select_data['opening_balance_date']); ?>" max="<?= date('Y-m-d',time()) ?>">
             &nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
             <tr><td >Same as Current</td>
 			<td><input type="checkbox" name="same_current" id="same_current" value="yes" onClick="return same_address();" <?php if($select_data['same_address'] == 'yes') { echo 'checked="checked"'; } ?>   /></td></tr>

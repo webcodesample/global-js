@@ -147,17 +147,26 @@ if(trim($_REQUEST['action_perform']) == "add_supplier")
             </td>
             <td valign="top">
             <table width="100%">
-            <tr><td >Last Name</td>
-            <td><input type="text" id="lname"  name="lname" value="<?php echo $_REQUEST['lname']; ?>"/></td></tr>
-            <tr><td >E-Mail Id</td>
-            <td><input type="text" id="email" name="email" value="<?php echo $_REQUEST['email']; ?>"/></td></tr>
-            <tr><td >Opening Balance Date</td>
+            <tr>
+            <td>Last Name</td>
+            <td><input type="text" id="lname"  name="lname" value="<?php echo $_REQUEST['lname']; ?>"/></td>
+            </tr>
+            <tr>
+            <td>E-Mail Id</td>
+            <td><input type="text" id="email" name="email" value="<?php echo $_REQUEST['email']; ?>"/></td>
+            </tr>
+            <tr>
+            <td>Opening Balance Date</td>
             <td>
-            <input type="text"  name="opening_balance_date" id="opening_balance_date" value="<?php echo $_REQUEST['opening_balance_date']; ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
-
-                &nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
-                <tr><td >Same as Current</td>
-            <td><input type="checkbox" name="same_current" id="same_current" value="yes" onClick="return same_address();"   /></td></tr>
+            <input type="date"  name="opening_balance_date" id="opening_balance_date" value="<?php echo $_REQUEST['opening_balance_date']; ?>" max="<?= date('Y-m-d',time()) ?>">
+            </td>
+            </tr>
+            <tr>
+            <td>Same as Current</td>
+            <td>
+            <input type="checkbox" name="same_current" id="same_current" value="yes" onClick="return same_address();"   />
+            </td>
+            </tr>
             
             <tr><td align="left" valign="top" >Permanent Address</td>
             <td><textarea name="permanent_address" id="permanent_address" style="width:250px; height:100px;"><?php echo $_REQUEST['permanent_address']; ?></textarea></td></tr>

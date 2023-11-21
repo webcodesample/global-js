@@ -218,30 +218,23 @@ if($totalPages > $numberOfPages)
 		
         <table width="" border="1" align="left" cellpadding="0" cellspacing="0">
                 <tr>
+                <td width="40">From</td>
+                <td width="180">
+                <input type="date"  name="from_date" id="from_date" value="<?php if($_REQUEST['from_date']) echo $_REQUEST['from_date']; else echo '2020-04-01'?>" style="width:150px; height: 25px;" min="2020-04-01" max="<?= date('Y-m-d',time())?>">
+                </td>
                 
-                    <td width="80">
-                    &nbsp;&nbsp;From Date
-                    </td>
-                    <td width="280">
-                    <input type="text"  name="from_date" id="from_date" value="<?php echo $_REQUEST['from_date']; ?>" style="width:250px; height: 25px;" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('from_date')" style="cursor:pointer"/>
-                 </td>
-                
-                 <td width="80">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To Date
-                    </td>
-                    <td width="280">
-                    <input type="text"  name="to_date" id="to_date" value="<?php echo $_REQUEST['to_date']; ?>" style="width:250px; height: 25px;" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('to_date')" style="cursor:pointer"/>
-                 </td>
-                </tr>
-                <tr>
-                    <td valign="top"> Name</td>
-                    <td valign="top">
-                     <input type="text" id="loan_client"  name="loan_client" value="" style="width:250px;"/>
-                                        </td>
-                    <td></td>
-                    <td ><br>&nbsp;&nbsp;<input type="submit" name="search_button" id="search_button" value="Search" class="button"  />&nbsp;&nbsp;<input type="button" name="refresh" id="refresh" value="Refresh" class="button" onClick="window.location='loan_advance.php';"  />
-                     
-                    </td>
+                <td width="40">To</td>
+                <td width="180">
+                <input type="date"  name="to_date" id="to_date" value="<?php if($_REQUEST['to_date']) echo $_REQUEST['to_date']; else echo date('Y-m-d',time()); ?>" style="width:150px; height: 25px;"  min="2020-04-01" max="<?= date('Y-m-d',time())?>">
+                </td>
+                <td>Name</td>
+                <td>
+                <input type="text" id="loan_client"  name="loan_client" value="" style="width:250px;"/>
+                </td>
+                <td></td>
+                <td>
+                <input type="submit" name="search_button" id="search_button" value="Search" class="button">
+                </td>
                 </tr>
                
                 </table>

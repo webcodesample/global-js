@@ -470,10 +470,12 @@ function findTotal()
             <tr><td align="left" valign="top" >Grand Total</td>
             <td><input type="hidden"  name="amount_grand" id="amount_grand" value="" />
             <input type="text"  name="amount" id="amount" value="" />&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
-            <tr><td align="left" valign="top" >Date</td>
-            
-        
-            <td><input type="text"  name="payment_date" id="payment_date" value="<?php echo $_REQUEST['payment_date']; ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('payment_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+            <tr>
+            <td align="left" valign="top" >Date</td>
+            <td>
+            <input type="date" name="payment_date" id="payment_date" max="<?= date('Y-m-d',time()) ?>">
+            </td>
+            </tr>
             <tr><td valign="top" >Description</td>
             <td><textarea name="description" id="description" style="width:250px; height:100px;"></textarea>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
             
@@ -522,7 +524,7 @@ function findTotal()
             
             <tr><td align="left" valign="top" >Payment Date</td>
         
-            <td><input type="text"  name="pay_payment_date" id="pay_payment_date" value="<?php echo $_REQUEST['payment_date']; ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('pay_payment_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+            <td><input type="date"  name="pay_payment_date" id="pay_payment_date" max="<?= date('Y-m-d',time()) ?>"></td></tr>
             
             <tr><td >Payment Method</td>
             <td><br>

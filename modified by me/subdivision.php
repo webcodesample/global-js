@@ -238,13 +238,13 @@ if($totalPages > $numberOfPages)
               
 <table width="" border="1" align="left" cellpadding="0" cellspacing="0">
     <tr>
-        <td width="80">From Date</td>
+        <td width="80">From</td>
         <td width="180">
-            <input type="text"  name="from_date" id="from_date" value="<?php echo $_REQUEST['from_date']; ?>" style="width:150px; height: 25px;" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('from_date')" style="cursor:pointer"/>
+            <input type="date"  name="from_date" id="from_date" value="<?php if($_REQUEST['from_date']) echo $_REQUEST['from_date']; else echo '2020-04-01' ?>" style="width:150px; height: 25px;" max="<?= date('Y-m-d',time()) ?>">
         </td>
         <td width="80">To Date</td>
         <td width="180">
-            <input type="text"  name="to_date" id="to_date" value="<?php echo $_REQUEST['to_date']; ?>" style="width:150px; height: 25px;" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('to_date')" style="cursor:pointer"/>
+            <input type="date"  name="to_date" id="to_date" value="<?php if($_REQUEST['to_date']) echo $_REQUEST['to_date']; else echo date('Y-m-d',time()); ?>" style="width:150px; height: 25px;" max="<?= date('Y-m-d',time()) ?>">
         </td>
         <td width="80px">Subdivision</td>
         <td width="250px">

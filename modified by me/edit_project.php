@@ -117,15 +117,17 @@ $select_data = mysql_fetch_array($select_result)
 			
 			<tr><td >Opening Balance</td>
 			<td><input type="text" name="opening_balance" id="opening_balance" value="<?php echo $select_data['opening_balance']; ?>" ></td></tr>
-			<tr><td >Date</td>
+			<tr><td>Date</td>
             <td>
-            <input type="text"  name="opening_balance_date" id="opening_balance_date" value="<?php echo date("d-m-Y",$select_data['opening_balance_date']); ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
-            &nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
-            
-			<tr><td></td><td><br><br><br>
+			<input type="date"  name="opening_balance_date" id="opening_balance_date" value="<?php echo date('Y-m-d',$select_data['opening_balance_date']); ?>" max="<?= date('Y-m-d',time()) ?>">
+			</td>
+			</tr>
+			<tr>
+			<td></td>
+			<td>
 			<input type="button" class="button" name="submit_button" id="submit_button" value="Submit" onClick="return validation();">
-            
-			</td></tr>
+			</td>
+			</tr>
             <tr><td colspan="2"><br><br><br><h3></h3></td></tr>
 		</table>
 		<input type="hidden" name="action_perform" id="action_perform" value="" >

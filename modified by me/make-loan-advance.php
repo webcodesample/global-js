@@ -220,9 +220,12 @@ $loan_id_new ="M-".($advance_loan_counter[advance_loan_count]+1000);
 			<tr><td colspan="2">&nbsp;</td></tr>
 						<tr><td >To</td>
 			<td><input type="text" id="to"  name="to" value="" style="width:250px;"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
-			<tr><td align="left" valign="top" >Date</td>
-			<script src="js/datetimepicker_css.js"></script>
-			<td><input type="text"  name="payment_date" id="payment_date" value="<?php echo $_REQUEST['payment_date']; ?>" autocomplete="off" style="width:250px;" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('payment_date')" style="cursor:pointer"/>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
+			<tr>
+			<td align="left" valign="top">Date</td>
+			<td>
+			<input type="date"  name="payment_date" id="payment_date" style="width:250px;" min="2020-04-01" max="<?= date('Y-m-d',time()) ?>">
+			</td>
+			</tr>
 			<tr><td valign="top" >Description</td>
 			<td><textarea name="description" id="description" style="width:250px; height:100px;"></textarea>&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
 			

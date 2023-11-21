@@ -107,9 +107,9 @@ if(trim($_REQUEST['action_perform']) == "add_project")
             <tr><td >Opening Balance</td>
             <td><input type="text" name="opening_balance" id="opening_balance" value="<?php echo $_REQUEST['opening_balance']; ?>" >&nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
             
-            <tr><td >Date</td>
+            <tr><td>Date</td>
             <td>
-            <input type="text"  name="opening_balance_date" id="opening_balance_date" value="<?php echo $_REQUEST['opening_balance_date']; ?>" autocomplete="off" />&nbsp;<img src="js/images2/cal.gif" onClick="javascript:NewCssCal('opening_balance_date')" style="cursor:pointer"/>
+            <input type="date"  name="opening_balance_date" id="opening_balance_date" max="<?= date('Y-m-d',time()) ?>">
             &nbsp;<span style="color:#FF0000; font-weight:bold;"  >*</span></td></tr>
             
             

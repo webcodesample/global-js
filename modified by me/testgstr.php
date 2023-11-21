@@ -289,12 +289,18 @@ else
                         <td class="data" nowrap>
                         <?php echo "<div style='width:100%; color:red;'>&#8377;&nbsp;".number_format(floatval($select_data['debit']),2,'.','')."</div>"; ?>
                         </td>
+                        <td class="data" nowrap align="center">&nbsp;
+                        <a href="javascript:gstrEntry_action('Edit','edit-instant-receive-goods.php','testgstr.php','<?= $select_data['trans_id']?>','<?= $select_data['id'] ?>','supplier-ledger-inst-receive-goods','','')"><img src="mos-css/img/edit.png" style="height:12px;" title="Edit"></a>
+                        &nbsp;
+                        <a href="javascript:gstrEntry_action('Delete','supplier-ledger.php','testgstr.php','<?= $select_data['trans_id'] ?>','','','<?= $select_data['cust_id'] ?>','')"><img src="mos-css/img/delete.png" style="height:12px;" title="Delete" ></a>
+                        &nbsp;
                         </td>
-                        <td class="data" align="center" nowrap>&nbsp;
+
+                        <!--<td class="data" align="center" nowrap>&nbsp;
                         <a href="edit-instant-receive-goods.php?trans_id=<?= $select_data['trans_id'] ?>&id=<?= $select_data['id'] ?>&trsns_pname=supplier-ledger-inst-receive-goods&returnto=testgstr.php" style="cursor:hand;"><img src="mos-css/img/edit.png" style="height:12px;" title="Edit"></a>
                         &nbsp;
                         <a href="supplier-ledger.php?cust_id=<?= $select_data['cust_id']?>&trans_id=<?= $select_data['trans_id'] ?>&returnto=testgstr.php" style="cursor:hand;"><img src="mos-css/img/delete.png" style="height:12px;" title="Delete" ></a>
-                        &nbsp;</td>
+                        &nbsp;</td>-->
                     </tr>
                 <?php
                     $i++;
@@ -415,10 +421,11 @@ else
                         <?php echo "<div style='width:100%; color:green;'>&#8377;&nbsp;".number_format(floatval($sales_data['credit']),2,'.','')."</div>"; ?>
                         </td>
                         <td class="data" nowrap align="center">&nbsp;
-                        <a href="edit_instant-sale-invoice_multiple.php?trans_id=<?= $sales_data['trans_id']?>&id=<?= $sales_data['id'] ?>&trsns_pname=invoice-list-inst-sale-goods&returnto=testgstr.php"style="cursor:hand;"><img src="mos-css/img/edit.png" style="height:12px;" title="Edit"></a>
+                        <a href="javascript:gstrEntry_action('Edit','edit_instant-sale-invoice_multiple.php','testgstr.php','<?= $sales_data['trans_id']?>','<?= $sales_data['id'] ?>','invoice-list-inst-sale-goods','','')"><img src="mos-css/img/edit.png" style="height:12px;" title="Edit"></a>
                         &nbsp;
-                        <a href="customer-ledger.php?cust_id=<?= $sales_data['cust_id'] ?>&invoice_id=<?= $sales_data['invoice_id'] ?>&trans_t_name=instmulti_sale_goods&returnto=testgstr.php" style="cursor:hand;"><img src="mos-css/img/delete.png" style="height:12px;" title="Delete" ></a>
-                        &nbsp;</td>
+                        <a href="javascript:gstrEntry_action('Delete','customer-ledger.php','testgstr.php','','','instmulti_sale_goods','<?= $sales_data['cust_id'] ?>','<?= $sales_data['invoice_id'] ?>')"><img src="mos-css/img/delete.png" style="height:12px;" title="Delete" ></a>
+                        &nbsp;
+                        </td>
                     </tr>
                 <?php
                     $i++;
@@ -502,6 +509,16 @@ else
 <div class="clear"></div>
 <?php include_once("footer.php"); ?>
 </div>
+
+<form name="frm_gstr_entry" id="frm_gstr_entry" method="post">
+<input type="hidden" name="returnto" id="returnto">
+<input type="hidden" name="trans_id" id="trans_id">
+<input type="hidden" name="id" id="id">
+<input type="hidden" name="trsns_pname" id="trsns_pname">
+<input type="hidden" name="cust_id" id="cust_id">
+<input type="hidden" name="invoice_id" id="invoice_id">
+</form>
+
 </body>
 </html>
 <script src="js/jquery-ui.js"></script>
@@ -559,5 +576,18 @@ newWin.close();
    
 }
 
-
+function gstrEntry_action(act,requestUrl,callbackUrl,transId,Id,trsnsPname,custId,invoiceId)
+{
+	if(window.confirm("Are you sure to "+act+" this entry?..."))
+	{
+		document.getElementById('frm_gstr_entry').action = requestUrl;
+		document.getElementById('returnto').value = callbackUrl;
+		document.getElementById('trans_id').value = transId;
+		document.getElementById('id').value = Id;
+		document.getElementById('trsns_pname').value = trsnsPname;
+		document.getElementById('cust_id').value = custId;
+        document.getElementById('invoice_id').value = invoiceId;
+		document.getElementById('frm_gstr_entry').submit();
+	}
+}
 </script>

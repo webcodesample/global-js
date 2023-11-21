@@ -376,11 +376,11 @@ if($totalPages > $numberOfPages)
                 <th class="data" nowrap>Project Name</th>
                 <th class="data" nowrap>Subdivision Name</th>
                 <th class="data" nowrap>Trans ID</th>
+                <th class="data" nowrap>Action</th>
                 <th class="data" nowrap>Added By</th>
 				<th class="data" nowrap>Added On</th>
 				<th class="data" nowrap>Updated By</th>
 				<th class="data" nowrap>Updated On</th>
-                <th class="data" nowrap>Action</th>
             </tr>
             <?php
             if($select_total > 0)
@@ -468,6 +468,14 @@ if($totalPages > $numberOfPages)
                         <?= $select_data['trans_id'] ?>&nbsp;
                         </td>
 
+                        <td class="data noExl" align="center">&nbsp;
+                        <?php
+                        if($select_data['trans_type_name']=="receive_goods" || $select_data['trans_type_name']=="inst_receive_goods")
+                        {  ?>
+                        <a href="edit-instant-receive-goods.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['link_id']-1; ?>&trsns_pname=<?php echo "supplier-ledger-inst-receive-goods"; ?>"><img src="mos-css/img/edit.png" style="height:15px; width:15px;" title="Edit"></a>
+                        <?php  } ?>&nbsp;
+                        </td>
+
                         <td class="data" nowrap>&nbsp;
                         <?php
                         echo get_field_value("full_name","user","userid",$select_data['added_by']);							 
@@ -490,15 +498,6 @@ if($totalPages > $numberOfPages)
                         echo date('d-m-Y h:i:s A', $select_data['updated_on']);							 
                         ?>&nbsp;
                         </td>
-
-                        <td class="data noExl" align="center">&nbsp;
-                        <?php
-                        if($select_data['trans_type_name']=="receive_goods" || $select_data['trans_type_name']=="inst_receive_goods")
-                        {  ?>
-                        <a href="edit-instant-receive-goods.php?trans_id=<?php echo $select_data['trans_id']; ?>&id=<?php echo $select_data['link_id']-1; ?>&trsns_pname=<?php echo "supplier-ledger-inst-receive-goods"; ?>"><img src="mos-css/img/edit.png" style="height:15px; width:15px;" title="Edit"></a>
-                        <?php  } ?>&nbsp;
-                        </td>
-
 
                     </tr>
                 <?php
