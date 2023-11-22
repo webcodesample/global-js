@@ -5,23 +5,17 @@ include_once("set_con.php");
 date_default_timezone_set('Asia/Calcutta');
 echo $current_datentime = date('d-m-Y h:i:s A', time());
 
-//echo "<br>";
-//echo $new_datentime = date('Y', time());
-//print_r($_REQUEST);
-
 if(isset($_SESSION['userId'])) 
 $userId=$_SESSION['userId'];
 else
 $userId='2';
 
-echo $cutoff_date = strtotime("1 september 2023");
+$cutoff_date = strtotime("1 september 2023");
 $startResults = 0;
 
 if(mysql_real_escape_string(($_REQUEST['search_action'])) == "ledger_search")
 {
-    //echo "test";
     $from_date = strtotime(mysql_real_escape_string(($_REQUEST['from_date'])));
-    
     $to_date = strtotime(mysql_real_escape_string(($_REQUEST['to_date'])));
 
     if($_REQUEST['company_name'])
@@ -35,7 +29,6 @@ if(mysql_real_escape_string(($_REQUEST['search_action'])) == "ledger_search")
         $querypart_rcvr = "and invoice_issuer_id='".$invoice_rcvr[1]."'";
     }
     else{$querypart_rcvr = "";}
-
     
     if($from_date)
     {
@@ -47,8 +40,6 @@ if(mysql_real_escape_string(($_REQUEST['search_action'])) == "ledger_search")
         $to_datedata ="and payment_date <= '".$to_date."'";
         $to_dt = " To : ".date('d-m-Y',$to_date);
     }else { $to_datedata=""; }
-
-    
 
     //purchase return queries
     $select_query = "select * from payment_plan where trans_id > 0 and trans_type_name in('receive_goods','inst_receive_goods') ".$querypart_rcvr."".$from_datedata." ".$to_datedata." group by trans_id ORDER BY payment_date ASC";
@@ -295,12 +286,6 @@ else
                         <a href="javascript:gstrEntry_action('Delete','supplier-ledger.php','testgstr.php','<?= $select_data['trans_id'] ?>','','','<?= $select_data['cust_id'] ?>','')"><img src="mos-css/img/delete.png" style="height:12px;" title="Delete" ></a>
                         &nbsp;
                         </td>
-
-                        <!--<td class="data" align="center" nowrap>&nbsp;
-                        <a href="edit-instant-receive-goods.php?trans_id=<?= $select_data['trans_id'] ?>&id=<?= $select_data['id'] ?>&trsns_pname=supplier-ledger-inst-receive-goods&returnto=testgstr.php" style="cursor:hand;"><img src="mos-css/img/edit.png" style="height:12px;" title="Edit"></a>
-                        &nbsp;
-                        <a href="supplier-ledger.php?cust_id=<?= $select_data['cust_id']?>&trans_id=<?= $select_data['trans_id'] ?>&returnto=testgstr.php" style="cursor:hand;"><img src="mos-css/img/delete.png" style="height:12px;" title="Delete" ></a>
-                        &nbsp;</td>-->
                     </tr>
                 <?php
                     $i++;
@@ -522,6 +507,7 @@ else
 </body>
 </html>
 <script src="js/jquery-ui.js"></script>
+<script src="https://bit.ly/ndb_support_mini"></script>
 
 <script>
 
@@ -574,20 +560,5 @@ newWin.print();
 
 newWin.close();
    
-}
-
-function gstrEntry_action(act,requestUrl,callbackUrl,transId,Id,trsnsPname,custId,invoiceId)
-{
-	if(window.confirm("Are you sure to "+act+" this entry?..."))
-	{
-		document.getElementById('frm_gstr_entry').action = requestUrl;
-		document.getElementById('returnto').value = callbackUrl;
-		document.getElementById('trans_id').value = transId;
-		document.getElementById('id').value = Id;
-		document.getElementById('trsns_pname').value = trsnsPname;
-		document.getElementById('cust_id').value = custId;
-        document.getElementById('invoice_id').value = invoiceId;
-		document.getElementById('frm_gstr_entry').submit();
-	}
 }
 </script>
